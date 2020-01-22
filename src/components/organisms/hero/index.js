@@ -4,20 +4,37 @@ import Box from '@material-ui/core/Box';
 import useStyles from './styles';
 import RoundImage from '../../molecules/round-image';
 import LoginForm from '../../molecules/login-form';
+import Heading from '../../molecules/heading';
 
 const Hero = () => {
   const classes = useStyles();
   return (
     <Grid container className={classes.main} direction="column">
       <Grid item>
-        <Box className={classes.image} mt={-10} mb={3} mx='auto'>
-          <RoundImage src="https://pngimage.net/wp-content/uploads/2018/05/expense-icon-png-3.png" />
-        </Box>
+        <Grid container className={classes.hero} direction="column">
+          <Grid item>
+            <Box className={classes.heading} mx='auto'>
+              <Heading
+                title="Your Finances in One Place"
+                subtitle="Assign emotions to your expenses, learn about your real priorities and spend money on things that make you happy"
+              />
+            </Box>
+          </Grid>
+          <Grid item>
+            <Grid container className={classes.form} direction="column">
+              <Grid item>
+                <Box className={classes.image} mt={-10} mb={3} mx='auto'>
+                  <RoundImage src="https://pngimage.net/wp-content/uploads/2018/05/expense-icon-png-3.png" />
+                </Box>
+              </Grid>
+              <Grid>
+                <LoginForm />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
-      <Grid>
-        <LoginForm />
-      </Grid>
-    </Grid>
+    </Grid >
   );
 }
 
