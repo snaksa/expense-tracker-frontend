@@ -6,7 +6,7 @@ const useStyles = makeStyles(theme => ({
     },
     hero: {
         width: '100%',
-        background: `linear-gradient(0deg, rgba(91,227,255,1) 32%, ${theme.palette.primary.main} 81%)`,
+        background: `linear-gradient(0deg, rgba(200, 246, 255, 1) 32%, ${theme.palette.primary.main} 81%)`,
         padding: 200,
         [theme.breakpoints.down('md')]: {
             padding: 10,
