@@ -1,9 +1,10 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
+import TextField from '../../atoms/text-field';
+import Button from '../../atoms/button';
 import useStyles from './styles';
 import RoundImage from '../../molecules/round-image';
-import LoginForm from '../../molecules/login-form';
 import Heading from '../../molecules/heading';
 
 const Hero = () => {
@@ -27,8 +28,20 @@ const Hero = () => {
                   <RoundImage src="https://pngimage.net/wp-content/uploads/2018/05/expense-icon-png-3.png" />
                 </Box>
               </Grid>
-              <Grid>
-                <LoginForm />
+              <Grid item>
+                <Grid container direction="column">
+                  <Grid item>
+                    <TextField label='Email' variant="outlined" />
+                  </Grid>
+                  <Grid>
+                    <TextField label='Password' type="password" variant="outlined" />
+                  </Grid>
+                  <Grid>
+                    <Box mt={1}>
+                      <Button>Login</Button>
+                    </Box>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

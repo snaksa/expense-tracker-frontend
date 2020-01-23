@@ -9,12 +9,14 @@ import TableBody from '../../molecules/table-body';
 
 const columns = [
   {
+    type: 'text',
     id: 'description',
     label: 'Description',
     minWidth: 100,
     align: 'left'
   },
   {
+    type: 'number',
     id: 'amount',
     label: 'Amount',
     minWidth: 50,
@@ -22,18 +24,21 @@ const columns = [
     format: value => value.toFixed(2),
   },
   {
+    type: 'object',
     id: 'category',
     label: 'Category',
     minWidth: 100,
     align: 'left',
   },
   {
+    type: 'number',
     id: 'type',
     label: 'Type',
     minWidth: 100,
     align: 'left',
   },
   {
+    type: 'text',
     id: 'wallet',
     label: 'Wallet',
     minWidth: 100,
