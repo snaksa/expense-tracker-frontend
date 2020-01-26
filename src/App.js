@@ -21,7 +21,7 @@ theme = responsiveFontSizes(theme);
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      <HomePage />
+      <AdminPage />
     </MuiThemeProvider>
   );
 }
