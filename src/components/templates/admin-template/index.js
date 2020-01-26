@@ -1,11 +1,21 @@
 import React from 'react'
-import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import useStyles from './styles';
 
-const AdminTemplate = ({ menu, content }) => {
+const AdminTemplate = ({ header, sidebar, content }) => {
+    const classes = useStyles();
     return (
-        <Box width={1}>
-            {content}
-        </Box>
+        <Grid container direction='row'>
+            <Grid item xs={12} sm={12} md={12} lg={12}>
+                {header}
+            </Grid>
+            <Grid item xs={12} sm={12} md={2} lg={1} className={classes.sidebar}>
+                {sidebar}
+            </Grid>
+            <Grid item xs={12} sm={12} md={10} lg={11}>
+                {content}
+            </Grid>
+        </Grid>
     );
 }
 

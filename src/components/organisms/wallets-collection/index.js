@@ -9,7 +9,7 @@ const WalletsCollection = ({ wallets }) => {
   return (
     <Grid container direction="column">
       <Grid item>
-        <Grid container spacing={1} direction="row">
+        <Grid container direction="row">
           {
             wallets.map((wallet) => <Grid item className={classes.walletItem}>
               <WalletSummary name={wallet.name} color={wallet.color} amount={wallet.amount} />

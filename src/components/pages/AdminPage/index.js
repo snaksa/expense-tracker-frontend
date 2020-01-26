@@ -5,6 +5,8 @@ import useStyles from './styles';
 import AdminTemplate from '../../templates/admin-template';
 import ExpenseTable from '../../organisms/expense-table';
 import WalletsCollection from '../../organisms/wallets-collection';
+import Sidebar from '../../molecules/sidebar';
+import HeaderMenu from '../../organisms/admin-header-menu';
 
 const wallets = [
     {
@@ -28,8 +30,10 @@ const AdminPage = () => {
     const classes = useStyles();
     return (
         <AdminTemplate
+            header={<HeaderMenu />}
+            sidebar={<Sidebar options={[{ label: 'Home' }, { label: 'Categories' }, { label: 'Stats' }, { label: 'Settings' }]} />}
             content={
-                <Box className={classes.main} p={10} mx="auto">
+                <Box className={classes.main} p={2}>
                     <Grid direction="column">
                         <Grid item>
                             <WalletsCollection wallets={wallets} />

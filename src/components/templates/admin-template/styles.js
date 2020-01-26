@@ -1,13 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-    walletItem: {
-        minWidth: '200px',
-        margin: 5,
+    sidebar: {
         [theme.breakpoints.down('sm')]: {
+            display: 'none',
+            position: 'absolute',
+            top: 0,
+            left: 0,
             width: '100%',
-            minWidth: 0,
-            margin: '5px auto'
+            height: '100%'
         }
     },
 }));

@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import useStyles from './styles';
 import Box from '@material-ui/core/Box';
 import Table from '@material-ui/core/Table';

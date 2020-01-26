@@ -1,13 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-    walletItem: {
-        minWidth: '200px',
-        margin: 5,
+    main: {
+        borderRight: `1px solid ${theme.palette.primary.main}`,
+        backgroundColor: '#262626',
+        width: '200px',
+        height: '100%',
         [theme.breakpoints.down('sm')]: {
-            width: '100%',
-            minWidth: 0,
-            margin: '5px auto'
+            width: '100%'
         }
     },
 }));

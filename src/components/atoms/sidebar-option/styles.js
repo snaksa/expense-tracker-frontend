@@ -2,13 +2,12 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
     main: {
-        width: '100%',
-        color: '#000',
-        backgroundColor: '#FFF',
-        borderRadius: 5,
-        border: '1px solid #ccc',
-        overflow: 'hidden',
+        borderBottom: `1px solid ${theme.palette.primary.main}`,
         cursor: 'pointer',
+        color: '#FFF',
+        "&:hover": {
+            color: theme.palette.primary.main
+        }
     },
 }));
 
