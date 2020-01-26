@@ -7,7 +7,7 @@ import useStyles from './styles';
 import RoundImage from '../../molecules/round-image';
 import Heading from '../../molecules/heading';
 
-const Hero = () => {
+const Register = () => {
   const classes = useStyles();
   return (
     <Grid container className={classes.main} direction="column">
@@ -33,12 +33,15 @@ const Hero = () => {
                   <Grid item>
                     <TextField label='Email' variant="outlined" />
                   </Grid>
-                  <Grid>
+                  <Grid item>
                     <TextField label='Password' type="password" variant="outlined" />
+                  </Grid>
+                  <Grid item>
+                    <TextField label='Confirm Password' type="password" variant="outlined" />
                   </Grid>
                   <Grid>
                     <Box mt={1}>
-                      <Button>Login</Button>
+                      <Button>Register</Button>
                     </Box>
                   </Grid>
                 </Grid>
@@ -51,4 +54,4 @@ const Hero = () => {
   );
 }
 
-export default Hero;
+export default Register;

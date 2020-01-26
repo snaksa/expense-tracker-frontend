@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
     hero: {
         width: '100%',
         background: `linear-gradient(0deg, rgba(200, 246, 255, 1) 32%, ${theme.palette.primary.main} 81%)`,
-        padding: 200,
+        padding: 100,
         [theme.breakpoints.down('sm')]: {
             padding: 10,
             paddingTop: 100,
@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     },
     heading: {
         width: '50%',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             width: '90%'
         }
     },
