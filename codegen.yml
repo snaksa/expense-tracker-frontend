@@ -1,0 +1,17 @@
+overwrite: true
+schema: "http://localhost:8080"
+documents: "src/**/*.{js,tsx}"
+generates:
+  src/api.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      declarationKind: "interface"
+      withHOC: false
+      withComponent: false
+      withHooks: true
+      hooksImportFrom: "@apollo/react-hooks"
+      avoidOptionals: true
+      maybeValue: "T | null"

@@ -27,8 +27,10 @@ const wallets = [
 ];
 
 const AdminPage = () => {
+
     const classes = useStyles();
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    
     return (
         <AdminTemplate
             header={<HeaderMenu setSidebarVisibility={() => setIsSidebarVisible(!isSidebarVisible)} />}

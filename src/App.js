@@ -3,8 +3,10 @@ import { createMuiTheme, responsiveFontSizes, MuiThemeProvider } from '@material
 import pink from '@material-ui/core/colors/pink';
 import red from '@material-ui/core/colors/red';
 import orange from '@material-ui/core/colors/orange';
-import HomePage from './components/pages/HomePage';
-import AdminPage from './components/pages/AdminPage';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from '@apollo/react-hooks';
+import Register from './components/organisms/register';
+
 
 let theme = createMuiTheme({
   palette: {
@@ -18,11 +20,19 @@ let theme = createMuiTheme({
 
 theme = responsiveFontSizes(theme);
 
+const client = new ApolloClient({
+  uri: 'http://localhost:8080',
+});
+
+
+
 function App() {
   return (
-    <MuiThemeProvider theme={theme}>
-      <AdminPage />
-    </MuiThemeProvider>
+    <ApolloProvider client={client}>
+      <MuiThemeProvider theme={theme}>
+        <Register />
+      </MuiThemeProvider>
+    </ApolloProvider>
   );
 }
 
