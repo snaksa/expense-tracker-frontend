@@ -5,7 +5,7 @@ import red from '@material-ui/core/colors/red';
 import orange from '@material-ui/core/colors/orange';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
-import Register from './components/organisms/register';
+import HomePage from './components/pages/HomePage';
 
 
 let theme = createMuiTheme({
@@ -30,7 +30,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={theme}>
-        <Register />
+        <HomePage />
       </MuiThemeProvider>
     </ApolloProvider>
   );
