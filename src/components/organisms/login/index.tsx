@@ -10,6 +10,8 @@ import { useLoginMutation } from "../../../api";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
+import { useHistory } from 'react-router';
+import { useAuthDataContext } from '../../../services/auth-provider';
 
 export interface FormFields {
   email: string;
@@ -19,9 +21,15 @@ export interface FormFields {
 const Login = () => {
   const classes = useStyles();
 
+  const history = useHistory();
+
+  const context: any = useAuthDataContext();
+
   const [login] = useLoginMutation({
     onCompleted(data) {
       localStorage.setItem('token', data?.loginUser ?? '');
+      context!.onLogin(data.loginUser);
+      history.push('/admin');
     },
     onError(error) {
       // TODO: show error notification

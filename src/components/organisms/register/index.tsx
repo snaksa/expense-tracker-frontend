@@ -9,6 +9,7 @@ import { useRegisterMutation } from "../../../api";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
+import { useHistory } from 'react-router';
 
 export interface FormFields {
   email: string;
@@ -19,9 +20,11 @@ export interface FormFields {
 const Register = () => {
   const classes = useStyles({});
 
+  const history = useHistory();
+
   const [register] = useRegisterMutation({
     onCompleted(data) {
-      // TODO: redirect to login
+      history.push('/');
       console.log(data);
     },
     onError(error) {

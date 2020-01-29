@@ -4,11 +4,19 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import useStyles from './styles';
 import Button from '../../atoms/button';
+import { useAuthDataContext } from '../../../services/auth-provider';
 
-const AdminHeaderMenu = ({setSidebarVisibility}) => {
+const AdminHeaderMenu = ({ setSidebarVisibility }) => {
   const classes = useStyles();
+
+  const { onLogout } = useAuthDataContext();
+
+  const logout = () => {
+    onLogout();
+  }
+
   return (
-    <Grid container justify='flex-end' className={classes.main} justify='space-between'>
+    <Grid container className={classes.main} justify='space-between'>
       <Grid item>
         <Box className={classes.mobileMenuIcon}>
           <Button onClick={setSidebarVisibility}>
@@ -23,7 +31,7 @@ const AdminHeaderMenu = ({setSidebarVisibility}) => {
       </Grid>
       <Grid item>
         <Box>
-          <Button>
+          <Button onClick={logout}>
             <ExitToAppIcon fontSize={'large'} />
           </Button>
         </Box>

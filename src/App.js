@@ -6,6 +6,13 @@ import orange from '@material-ui/core/colors/orange';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import HomePage from './components/pages/HomePage';
+import AdminPage from './components/pages/AdminPage';
+import AuthDataProvider from "./services/auth-provider";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
 
 let theme = createMuiTheme({
@@ -24,13 +31,22 @@ const client = new ApolloClient({
   uri: 'http://localhost:8080',
 });
 
-
-
-function App() {
+const App = () => {
   return (
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={theme}>
-        <HomePage />
+        <Router>
+          <AuthDataProvider>
+            <Switch>
+              <Route path="/admin">
+                <AdminPage />
+              </Route>
+              <Route path="/">
+                <HomePage />
+              </Route>
+            </Switch>
+          </AuthDataProvider>
+        </Router>
       </MuiThemeProvider>
     </ApolloProvider>
   );
