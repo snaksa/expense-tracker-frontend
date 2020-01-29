@@ -245,6 +245,17 @@ export type RegisterMutation = (
   )> }
 );
 
+export type WalletsQueryVariables = {};
+
+
+export type WalletsQuery = (
+  { __typename?: 'Query' }
+  & { wallets: Maybe<Array<Maybe<(
+    { __typename?: 'Wallet' }
+    & Pick<Wallet, 'id' | 'name' | 'color'>
+  )>>> }
+);
+
 
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
@@ -312,3 +323,37 @@ export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookO
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const WalletsDocument = gql`
+    query Wallets {
+  wallets {
+    id
+    name
+    color
+  }
+}
+    `;
+
+/**
+ * __useWalletsQuery__
+ *
+ * To run a query within a React component, call `useWalletsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWalletsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWalletsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useWalletsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WalletsQuery, WalletsQueryVariables>) {
+        return ApolloReactHooks.useQuery<WalletsQuery, WalletsQueryVariables>(WalletsDocument, baseOptions);
+      }
+export function useWalletsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WalletsQuery, WalletsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<WalletsQuery, WalletsQueryVariables>(WalletsDocument, baseOptions);
+        }
+export type WalletsQueryHookResult = ReturnType<typeof useWalletsQuery>;
+export type WalletsLazyQueryHookResult = ReturnType<typeof useWalletsLazyQuery>;
+export type WalletsQueryResult = ApolloReactCommon.QueryResult<WalletsQuery, WalletsQueryVariables>;

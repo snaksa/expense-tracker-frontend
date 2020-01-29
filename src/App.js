@@ -5,8 +5,8 @@ import red from '@material-ui/core/colors/red';
 import orange from '@material-ui/core/colors/orange';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
-import HomePage from './components/pages/HomePage';
-import AdminPage from './components/pages/AdminPage';
+import HomePages from './components/pages/UserPages';
+import AdminPages from './components/pages/AdminPages';
 import AuthDataProvider from "./services/auth-provider";
 import {
   BrowserRouter as Router,
@@ -29,6 +29,9 @@ theme = responsiveFontSizes(theme);
 
 const client = new ApolloClient({
   uri: 'http://localhost:8080',
+  headers: {
+    'Authorization': localStorage.getItem('token') ?? null
+  }
 });
 
 const App = () => {
@@ -39,10 +42,10 @@ const App = () => {
           <AuthDataProvider>
             <Switch>
               <Route path="/admin">
-                <AdminPage />
+                <AdminPages />
               </Route>
               <Route path="/">
-                <HomePage />
+                <HomePages />
               </Route>
             </Switch>
           </AuthDataProvider>
