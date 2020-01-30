@@ -29,9 +29,13 @@ theme = responsiveFontSizes(theme);
 
 const client = new ApolloClient({
   uri: 'http://localhost:8080',
-  headers: {
-    'Authorization': localStorage.getItem('token') ?? null
-  }
+  request: (operation) => {
+    operation.setContext({
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    });
+  },
 });
 
 const App = () => {

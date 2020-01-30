@@ -4,7 +4,7 @@ import Box from '@material-ui/core/Box';
 import useStyles from './styles';
 import Title from '../../atoms/title';
 
-const WalletSummary = ({ name, amount, color }) => {
+const WalletSummary = ({ id, name, amount, color, onClick }) => {
   const classes = useStyles();
 
   const [checked, setChecked] = useState(true);
@@ -14,7 +14,12 @@ const WalletSummary = ({ name, amount, color }) => {
       container
       className={classes.main}
       direction="column"
-      onClick={() => setChecked(!checked)}
+      onClick={
+        () => {
+          onClick(id, !checked);
+          setChecked(!checked);
+        }
+      }
       style={{ opacity: checked ? 1 : 0.3 }}
     >
       <Grid item>

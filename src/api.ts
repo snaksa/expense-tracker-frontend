@@ -122,7 +122,7 @@ export interface Query {
 
 
 export interface QueryTransactionsArgs {
-  walletId: Scalars['Int']
+  input: TransactionRecordsRequestInput
 }
 
 
@@ -160,6 +160,10 @@ export interface TransactionCreateRequestInput {
 
 export interface TransactionDeleteRequestInput {
   id: Scalars['Int'],
+}
+
+export interface TransactionRecordsRequestInput {
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
 }
 
 export enum TransactionType {
@@ -219,6 +223,26 @@ export interface WalletUpdateRequestInput {
   color: Maybe<Scalars['String']>,
 }
 
+export type TransactionsQueryVariables = {
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>
+};
+
+
+export type TransactionsQuery = (
+  { __typename?: 'Query' }
+  & { transactions: Maybe<Array<Maybe<(
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id' | 'description' | 'type' | 'value'>
+    & { wallet: Maybe<(
+      { __typename?: 'Wallet' }
+      & Pick<Wallet, 'id' | 'name' | 'color'>
+    )>, category: Maybe<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'name' | 'color'>
+    )> }
+  )>>> }
+);
+
 export type LoginMutationVariables = {
   email: Scalars['String'],
   password: Scalars['String']
@@ -257,6 +281,52 @@ export type WalletsQuery = (
 );
 
 
+export const TransactionsDocument = gql`
+    query Transactions($walletIds: [Int]) {
+  transactions(input: {walletIds: $walletIds}) {
+    id
+    description
+    type
+    value
+    wallet {
+      id
+      name
+      color
+    }
+    category {
+      id
+      name
+      color
+    }
+  }
+}
+    `;
+
+/**
+ * __useTransactionsQuery__
+ *
+ * To run a query within a React component, call `useTransactionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransactionsQuery({
+ *   variables: {
+ *      walletIds: // value for 'walletIds'
+ *   },
+ * });
+ */
+export function useTransactionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TransactionsQuery, TransactionsQueryVariables>) {
+        return ApolloReactHooks.useQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, baseOptions);
+      }
+export function useTransactionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TransactionsQuery, TransactionsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TransactionsQuery, TransactionsQueryVariables>(TransactionsDocument, baseOptions);
+        }
+export type TransactionsQueryHookResult = ReturnType<typeof useTransactionsQuery>;
+export type TransactionsLazyQueryHookResult = ReturnType<typeof useTransactionsLazyQuery>;
+export type TransactionsQueryResult = ApolloReactCommon.QueryResult<TransactionsQuery, TransactionsQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   loginUser(input: {email: $email, password: $password})
