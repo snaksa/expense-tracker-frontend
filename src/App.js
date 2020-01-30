@@ -32,7 +32,7 @@ const client = new ApolloClient({
   request: (operation) => {
     operation.setContext({
       headers: {
-        Authorization: localStorage.getItem('token'),
+        Authorization: localStorage.getItem('token') ?? '',
       },
     });
   },

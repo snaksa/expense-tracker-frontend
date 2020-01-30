@@ -44,6 +44,13 @@ const columns = [
     label: "Wallet",
     minWidth: 100,
     align: "left"
+  },
+  {
+    type: "text",
+    id: "date",
+    label: "Date",
+    minWidth: 100,
+    align: "left"
   }
 ];
 
@@ -81,6 +88,7 @@ ExpenseTable.fragment = gql`
       description
       type
       value
+      date
       wallet {
         id
         name

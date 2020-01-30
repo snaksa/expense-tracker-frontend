@@ -9,6 +9,7 @@ export interface Scalars {
   Boolean: boolean,
   Int: number,
   Float: number,
+  DateTime: any,
 }
 
 export interface Category {
@@ -37,6 +38,7 @@ export interface CategoryUpdateRequestInput {
   color: Maybe<Scalars['String']>,
   icon: Maybe<Scalars['Int']>,
 }
+
 
 export interface Mutation {
    __typename?: 'Mutation',
@@ -146,6 +148,7 @@ export interface Transaction {
   description: Scalars['String'],
   value: Scalars['Float'],
   type: TransactionType,
+  date: Maybe<Scalars['DateTime']>,
   wallet: Maybe<Wallet>,
   category: Maybe<Category>,
 }
@@ -232,7 +235,7 @@ export type TransactionsQuery = (
   { __typename?: 'Query' }
   & { transactions: Maybe<Array<Maybe<(
     { __typename?: 'Transaction' }
-    & Pick<Transaction, 'id' | 'description' | 'type' | 'value'>
+    & Pick<Transaction, 'id' | 'description' | 'type' | 'value' | 'date'>
     & { wallet: Maybe<(
       { __typename?: 'Wallet' }
       & Pick<Wallet, 'id' | 'name' | 'color'>
@@ -288,6 +291,7 @@ export const TransactionsDocument = gql`
     description
     type
     value
+    date
     wallet {
       id
       name
