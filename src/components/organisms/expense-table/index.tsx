@@ -32,7 +32,7 @@ const columns = [
     align: "left"
   },
   {
-    type: "number",
+    type: "icon",
     id: "type",
     label: "Type",
     minWidth: 100,
