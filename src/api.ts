@@ -207,6 +207,7 @@ export interface Wallet {
   id: Scalars['Int'],
   name: Scalars['String'],
   color: Scalars['String'],
+  amount: Scalars['Float'],
   user: Maybe<User>,
   transactions: Maybe<Array<Maybe<Transaction>>>,
 }
@@ -214,6 +215,7 @@ export interface Wallet {
 export interface WalletCreateRequestInput {
   name: Scalars['String'],
   color: Scalars['String'],
+  amount: Maybe<Scalars['Float']>,
 }
 
 export interface WalletDeleteRequestInput {
@@ -272,6 +274,21 @@ export type RegisterMutation = (
   )> }
 );
 
+export type CreateWalletMutationVariables = {
+  name: Scalars['String'],
+  amount: Maybe<Scalars['Float']>,
+  color: Scalars['String']
+};
+
+
+export type CreateWalletMutation = (
+  { __typename?: 'Mutation' }
+  & { createWallet: Maybe<(
+    { __typename?: 'Wallet' }
+    & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+  )> }
+);
+
 export type WalletsQueryVariables = {};
 
 
@@ -279,7 +296,7 @@ export type WalletsQuery = (
   { __typename?: 'Query' }
   & { wallets: Maybe<Array<Maybe<(
     { __typename?: 'Wallet' }
-    & Pick<Wallet, 'id' | 'name' | 'color'>
+    & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
   )>>> }
 );
 
@@ -397,12 +414,50 @@ export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookO
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CreateWalletDocument = gql`
+    mutation CreateWallet($name: String!, $amount: Float, $color: String!) {
+  createWallet(input: {name: $name, amount: $amount, color: $color}) {
+    id
+    name
+    color
+    amount
+  }
+}
+    `;
+export type CreateWalletMutationFn = ApolloReactCommon.MutationFunction<CreateWalletMutation, CreateWalletMutationVariables>;
+
+/**
+ * __useCreateWalletMutation__
+ *
+ * To run a mutation, you first call `useCreateWalletMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateWalletMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createWalletMutation, { data, loading, error }] = useCreateWalletMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      amount: // value for 'amount'
+ *      color: // value for 'color'
+ *   },
+ * });
+ */
+export function useCreateWalletMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateWalletMutation, CreateWalletMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateWalletMutation, CreateWalletMutationVariables>(CreateWalletDocument, baseOptions);
+      }
+export type CreateWalletMutationHookResult = ReturnType<typeof useCreateWalletMutation>;
+export type CreateWalletMutationResult = ApolloReactCommon.MutationResult<CreateWalletMutation>;
+export type CreateWalletMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateWalletMutation, CreateWalletMutationVariables>;
 export const WalletsDocument = gql`
     query Wallets {
   wallets {
     id
     name
     color
+    amount
   }
 }
     `;

@@ -53,7 +53,8 @@ MainPage.fragment = gql`
     wallets {
       id
       name
-      color
+      color,
+      amount
     }
   }
 `;

@@ -4,6 +4,7 @@ import pink from '@material-ui/core/colors/pink';
 import red from '@material-ui/core/colors/red';
 import orange from '@material-ui/core/colors/orange';
 import ApolloClient from 'apollo-boost';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 import HomePages from './components/pages/UserPages';
 import AdminPages from './components/pages/AdminPages';
@@ -29,6 +30,7 @@ theme = responsiveFontSizes(theme);
 
 const client = new ApolloClient({
   uri: 'http://localhost:8080',
+  cache: new InMemoryCache(),
   request: (operation) => {
     operation.setContext({
       headers: {
