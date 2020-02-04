@@ -6,10 +6,36 @@ const useStyles = makeStyles(theme => ({
         color: '#000',
         backgroundColor: '#FFF',
         borderRadius: 5,
-        border: '1px solid #ccc',
+        border: '1px solid #CCC',
         overflow: 'hidden',
         cursor: 'pointer',
+        '&:hover': {
+            '& $icon': {
+                visibility: 'visible'
+            }
+        }
     },
+    header: {
+        borderBottom: '1px solid #CCC'
+    },
+    headerGrid: {
+        alignItems: 'center'
+    },
+    icon: {
+        marginLeft: 5,
+        visibility: 'hidden',
+        [theme.breakpoints.down('sm')]: {
+            visibility: 'visible'
+        }
+    },
+    checkbox: {
+        padding: 5,
+        color: theme.palette.primary.main,
+        backgroundColor: '#FFF',
+        '&&:hover': {
+            backgroundColor: '#FFF',
+        },
+    }
 }));
 
 export default useStyles;

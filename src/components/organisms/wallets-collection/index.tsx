@@ -78,6 +78,11 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
     });
   };
 
+  const handleDelete = (id: number, name: string, success: boolean) => {
+    // TODO: show success/error notification
+    console.log(id, name, success);
+  }
+
   const Schema = () =>
     Yup.object().shape({
       name: Yup.string().required("Enter wallet name"),
@@ -97,6 +102,7 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
                 color={wallet.color}
                 amount={wallet.amount}
                 onClick={onItemClick}
+                onDelete={handleDelete}
               />
             </Grid>
           ))}
