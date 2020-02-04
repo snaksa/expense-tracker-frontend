@@ -21,6 +21,7 @@ import Button from "../../atoms/button";
 import TextField from "../../atoms/text-field";
 import * as Yup from "yup";
 import ConfirmationDialog from "../confirmation-dialog";
+import Notification from "../notification";
 
 interface Props {
   id: number;
@@ -51,6 +52,8 @@ const WalletSummary = ({
     false
   );
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessageContent, setSuccessMessageContent] = useState("");
 
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
@@ -119,6 +122,8 @@ const WalletSummary = ({
     onCompleted() {
       // TODO: show success notification
       setEditModalIsOpen(false);
+      setSuccessMessageContent("Successfully updated wallet!");
+      setShowSuccessMessage(true);
     },
     onError(error) {
       // TODO: show error notification
@@ -275,6 +280,12 @@ const WalletSummary = ({
         content={"All transactions related to this wallet will be removed!"}
         onConfirm={handleDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
+      />
+      <Notification
+        message={successMessageContent}
+        open={showSuccessMessage}
+        onClose={() => setShowSuccessMessage(false)}
+        type={"success"}
       />
     </Box>
   );
