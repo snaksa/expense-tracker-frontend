@@ -4,12 +4,12 @@ import Alert from "@material-ui/lab/Alert";
 
 interface Props {
   open: boolean;
-  message: string;
+  content: string;
   type: any;
   onClose: Function;
 }
 
-export default function Notification({ open, message, type, onClose }: Props) {
+export default function Notification({ open, content, type, onClose }: Props) {
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
       return;
@@ -22,14 +22,14 @@ export default function Notification({ open, message, type, onClose }: Props) {
     <Snackbar
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "center"
+        horizontal: "right"
       }}
       open={open}
       autoHideDuration={5000}
       onClose={handleClose}
     >
       <Alert severity={type} onClose={handleClose}>
-        {message}
+        {content}
       </Alert>
     </Snackbar>
   );

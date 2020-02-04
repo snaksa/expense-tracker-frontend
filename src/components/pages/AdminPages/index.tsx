@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import Box from "@material-ui/core/Box";
 import AdminTemplate from "../../templates/admin-template";
-import MainPage from './MainPage';
+import MainPage from "./MainPage";
 import Sidebar from "../../molecules/sidebar";
 import HeaderMenu from "../../organisms/admin-header-menu";
 import { Route, Switch } from "react-router-dom";
 import { useAuthDataContext } from "../../../services/auth-provider";
+import { useNotificationContext } from "services/notification-provider";
+import Notification from '../../molecules/notification';
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
   const { isAuthenticated } = useAuthDataContext();
   isAuthenticated();
+
+  const { content, type, visible, hideNotification } = useNotificationContext();
 
   return (
     <Box>
@@ -40,6 +44,12 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
           />
         </Route>
       </Switch>
+      <Notification
+        content={content}
+        type={type}
+        onClose={hideNotification}
+        open={visible}
+      />
     </Box>
   );
 };

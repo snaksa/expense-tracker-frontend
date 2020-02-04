@@ -21,7 +21,7 @@ import Button from "../../atoms/button";
 import TextField from "../../atoms/text-field";
 import * as Yup from "yup";
 import ConfirmationDialog from "../confirmation-dialog";
-import Notification from "../notification";
+import { useNotificationContext } from "services/notification-provider";
 
 interface Props {
   id: number;
@@ -29,7 +29,6 @@ interface Props {
   amount: number;
   color: string;
   onClick: Function;
-  onDelete: Function;
 }
 
 export interface FormFields {
@@ -42,8 +41,7 @@ const WalletSummary = ({
   name,
   amount,
   color,
-  onClick,
-  onDelete
+  onClick
 }: Props) => {
   const classes = useStyles();
 
@@ -52,18 +50,15 @@ const WalletSummary = ({
     false
   );
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [successMessageContent, setSuccessMessageContent] = useState("");
+
+  const { showSuccessNotification, showErrorNotification } = useNotificationContext();
 
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
-      // TODO: show success notification
-      onDelete(id, name, true);
+      showSuccessNotification('Wallet deleted successfully!');
     },
-    onError(error) {
-      // TODO: show error notification
-      console.log(error);
-      onDelete(id, name, false);
+    onError() {
+      showErrorNotification('An error occured while deleting the wallet!');
     },
     update: (store, { data }) => {
       const wallet = data?.deleteWallet;
@@ -94,7 +89,7 @@ const WalletSummary = ({
   });
 
   const handleDelete = () => {
-    // TODO: show confirm modal
+    setConfirmDeleteModalIsOpen(false);
     deleteWallet({
       variables: {
         id: id
@@ -120,14 +115,12 @@ const WalletSummary = ({
 
   const [updateWallet] = useUpdateWalletMutation({
     onCompleted() {
-      // TODO: show success notification
       setEditModalIsOpen(false);
-      setSuccessMessageContent("Successfully updated wallet!");
-      setShowSuccessMessage(true);
+      showSuccessNotification("Successfully updated wallet!");
     },
-    onError(error) {
-      // TODO: show error notification
-      console.log(error);
+    onError() {
+      setEditModalIsOpen(false);
+      showErrorNotification("An error occured while updating the wallet!");
     },
     update: (store, { data }) => {
       const wallet = data?.updateWallet;
@@ -280,12 +273,6 @@ const WalletSummary = ({
         content={"All transactions related to this wallet will be removed!"}
         onConfirm={handleDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
-      />
-      <Notification
-        message={successMessageContent}
-        open={showSuccessMessage}
-        onClose={() => setShowSuccessMessage(false)}
-        type={"success"}
       />
     </Box>
   );

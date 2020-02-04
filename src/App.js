@@ -9,6 +9,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import HomePages from './components/pages/UserPages';
 import AdminPages from './components/pages/AdminPages';
 import AuthDataProvider from "./services/auth-provider";
+import NotificationProvider from "./services/notification-provider";
 import {
   BrowserRouter as Router,
   Switch,
@@ -46,14 +47,16 @@ const App = () => {
       <MuiThemeProvider theme={theme}>
         <Router>
           <AuthDataProvider>
-            <Switch>
-              <Route path="/admin">
-                <AdminPages />
-              </Route>
-              <Route path="/">
-                <HomePages />
-              </Route>
-            </Switch>
+            <NotificationProvider>
+              <Switch>
+                <Route path="/admin">
+                  <AdminPages />
+                </Route>
+                <Route path="/">
+                  <HomePages />
+                </Route>
+              </Switch>
+            </NotificationProvider>
           </AuthDataProvider>
         </Router>
       </MuiThemeProvider>
