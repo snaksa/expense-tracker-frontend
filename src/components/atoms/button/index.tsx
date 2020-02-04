@@ -5,20 +5,22 @@ interface Props {
   onClick?: any;
   style?: any;
   type?: any;
+  color?: any;
 }
 
 const Button: React.FunctionComponent<Props> = ({
   children,
   onClick,
   style,
-  type
+  type,
+  color
 }): JSX.Element => {
   return (
     <MaterialButton
       type={type}
       style={style}
       variant="contained"
-      color="primary"
+      color={color ?? 'primary'}
       onClick={onClick}
       fullWidth
     >

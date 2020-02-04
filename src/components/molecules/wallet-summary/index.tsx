@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Tooltip from '@material-ui/core/Tooltip';
-import Checkbox from '@material-ui/core/Checkbox';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import useStyles from './styles';
-import Title from '../../atoms/title';
+import React, { useState } from "react";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Tooltip from "@material-ui/core/Tooltip";
+import Checkbox from "@material-ui/core/Checkbox";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import useStyles from "./styles";
+import Title from "../../atoms/title";
 import { gql } from "apollo-boost";
 import {
   useDeleteWalletMutation,
   useUpdateWalletMutation,
   WalletsQuery,
-  WalletsDocument,
+  WalletsDocument
 } from "../../../api";
 import { Form, Formik } from "formik";
 import ColorPicker from "material-ui-color-picker";
@@ -20,13 +20,14 @@ import Modal from "../modal";
 import Button from "../../atoms/button";
 import TextField from "../../atoms/text-field";
 import * as Yup from "yup";
+import ConfirmationDialog from "../confirmation-dialog";
 
 interface Props {
-  id: number,
-  name: string,
-  amount: number,
-  color: string,
-  onClick: Function,
+  id: number;
+  name: string;
+  amount: number;
+  color: string;
+  onClick: Function;
   onDelete: Function;
 }
 
@@ -35,12 +36,21 @@ export interface FormFields {
   color: string;
 }
 
-const WalletSummary = ({ id, name, amount, color, onClick, onDelete }: Props) => {
+const WalletSummary = ({
+  id,
+  name,
+  amount,
+  color,
+  onClick,
+  onDelete
+}: Props) => {
   const classes = useStyles();
 
   const [checked, setChecked] = useState(true);
+  const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
+    false
+  );
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-
 
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
@@ -69,7 +79,7 @@ const WalletSummary = ({ id, name, amount, color, onClick, onDelete }: Props) =>
         return;
       }
 
-      const result = cached.wallets.filter((w) => w && w.id !== wallet.id);
+      const result = cached.wallets.filter(w => w && w.id !== wallet.id);
 
       store.writeQuery({
         ...query,
@@ -87,8 +97,7 @@ const WalletSummary = ({ id, name, amount, color, onClick, onDelete }: Props) =>
         id: id
       }
     });
-  }
-
+  };
 
   const onSubmit = (values: FormFields) => {
     updateWallet({
@@ -106,47 +115,47 @@ const WalletSummary = ({ id, name, amount, color, onClick, onDelete }: Props) =>
       color: Yup.string().required("Choose wallet color")
     });
 
-    const [updateWallet] = useUpdateWalletMutation({
-      onCompleted() {
-        // TODO: show success notification
-        setEditModalIsOpen(false);
-      },
-      onError(error) {
-        // TODO: show error notification
-        console.log(error);
-      },
-      update: (store, { data }) => {
-        const wallet = data?.updateWallet;
-  
-        if (!wallet) {
-          return;
-        }
-  
-        const query = {
-          query: WalletsDocument
-        };
-  
-        const cached = store.readQuery<WalletsQuery>(query);
-  
-        if (!cached || !cached.wallets) {
-          return;
-        }
-  
-        const result = cached.wallets.map((w) => {
-          if(w && w.id === id) {
-            return wallet;
-          }
-          return w;
-        });
-  
-        store.writeQuery({
-          ...query,
-          data: {
-            wallets: result
-          }
-        });
+  const [updateWallet] = useUpdateWalletMutation({
+    onCompleted() {
+      // TODO: show success notification
+      setEditModalIsOpen(false);
+    },
+    onError(error) {
+      // TODO: show error notification
+      console.log(error);
+    },
+    update: (store, { data }) => {
+      const wallet = data?.updateWallet;
+
+      if (!wallet) {
+        return;
       }
-    });
+
+      const query = {
+        query: WalletsDocument
+      };
+
+      const cached = store.readQuery<WalletsQuery>(query);
+
+      if (!cached || !cached.wallets) {
+        return;
+      }
+
+      const result = cached.wallets.map(w => {
+        if (w && w.id === id) {
+          return wallet;
+        }
+        return w;
+      });
+
+      store.writeQuery({
+        ...query,
+        data: {
+          wallets: result
+        }
+      });
+    }
+  });
 
   return (
     <Box>
@@ -157,11 +166,23 @@ const WalletSummary = ({ id, name, amount, color, onClick, onDelete }: Props) =>
         style={{ opacity: checked ? 1 : 0.3 }}
       >
         <Grid item>
-          <Box p={0.5} className={classes.header} style={{ backgroundColor: color }}>
-            <Grid container justify={'space-between'} className={classes.headerGrid}>
+          <Box
+            p={0.5}
+            className={classes.header}
+            style={{ backgroundColor: color }}
+          >
+            <Grid
+              container
+              justify={"space-between"}
+              className={classes.headerGrid}
+            >
               <Grid item>
                 <Tooltip title="Edit" aria-label="edit">
-                  <EditIcon fontSize={'small'} className={classes.icon} onClick={() => setEditModalIsOpen(true)} />
+                  <EditIcon
+                    fontSize={"small"}
+                    className={classes.icon}
+                    onClick={() => setEditModalIsOpen(true)}
+                  />
                 </Tooltip>
               </Grid>
               <Grid item>
@@ -173,14 +194,18 @@ const WalletSummary = ({ id, name, amount, color, onClick, onDelete }: Props) =>
                   }}
                   value="primary"
                   color="primary"
-                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                  inputProps={{ "aria-label": "primary checkbox" }}
                   className={classes.checkbox}
                   disableRipple
                 />
               </Grid>
               <Grid item>
                 <Tooltip title="Delete" aria-label="delete">
-                  <DeleteIcon fontSize={'small'} className={classes.icon} onClick={handleDelete} />
+                  <DeleteIcon
+                    fontSize={"small"}
+                    className={classes.icon}
+                    onClick={() => setConfirmDeleteModalIsOpen(true)}
+                  />
                 </Tooltip>
               </Grid>
             </Grid>
@@ -244,9 +269,16 @@ const WalletSummary = ({ id, name, amount, color, onClick, onDelete }: Props) =>
           )}
         </Formik>
       </Modal>
+      <ConfirmationDialog
+        isOpen={confirmDeleteModalIsOpen}
+        title={"Are you sure?"}
+        content={"All transactions related to this wallet will be removed!"}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmDeleteModalIsOpen(false)}
+      />
     </Box>
   );
-}
+};
 
 WalletSummary.fragment = gql`
   mutation DeleteWallet($id: Int!) {
