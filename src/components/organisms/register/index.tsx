@@ -9,7 +9,7 @@ import { useRegisterMutation } from "../../../api";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import { useHistory } from 'react-router';
+import { useHistory } from "react-router";
 
 export interface FormFields {
   email: string;
@@ -24,7 +24,7 @@ const Register = () => {
 
   const [register] = useRegisterMutation({
     onCompleted(data) {
-      history.push('/');
+      history.push("/");
       console.log(data);
     },
     onError(error) {
@@ -98,8 +98,9 @@ const Register = () => {
                             value={values.email}
                             onChange={handleChange}
                             error={
-                              errors.email && touched.email && errors.email
+                              !!(errors.email && touched.email && errors.email)
                             }
+                            helperText={errors.email}
                           />
                         </Grid>
                         <Grid item>
@@ -111,10 +112,13 @@ const Register = () => {
                             value={values.password}
                             onChange={handleChange}
                             error={
-                              errors.password &&
-                              touched.password &&
-                              errors.password
+                              !!(
+                                errors.password &&
+                                touched.password &&
+                                errors.password
+                              )
                             }
+                            helperText={errors.password}
                           />
                         </Grid>
                         <Grid item>
@@ -126,10 +130,13 @@ const Register = () => {
                             value={values.confirmPassword}
                             onChange={handleChange}
                             error={
-                              errors.confirmPassword &&
-                              touched.confirmPassword &&
-                              errors.confirmPassword
+                              !!(
+                                errors.confirmPassword &&
+                                touched.confirmPassword &&
+                                errors.confirmPassword
+                              )
                             }
+                            helperText={errors.confirmPassword}
                           />
                         </Grid>
                         <Grid>

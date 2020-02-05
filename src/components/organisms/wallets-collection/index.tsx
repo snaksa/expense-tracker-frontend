@@ -1,22 +1,21 @@
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
+import { Box, Grid } from "@material-ui/core";
+import { Form, Formik } from "formik";
+import ColorPicker from "material-ui-color-picker";
+import { gql } from "apollo-boost";
+import * as Yup from "yup";
 import useStyles from "./styles";
 import Modal from "../../molecules/modal";
 import Button from "../../atoms/button";
 import TextField from "../../atoms/text-field";
 import WalletSummary from "../../molecules/wallet-summary";
-import { Box } from "@material-ui/core";
-import { Form, Formik } from "formik";
-import ColorPicker from "material-ui-color-picker";
-import { gql } from "apollo-boost";
 import {
   useCreateWalletMutation,
   Wallet,
   WalletsDocument,
   WalletsQuery
 } from "../../../api";
-import * as Yup from "yup";
-import { useNotificationContext } from "services/notification-provider";
+import { useNotificationContext } from "../../../services/notification-provider";
 
 interface Props {
   wallets: Wallet[];
@@ -33,19 +32,22 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
   const classes = useStyles({});
 
   const [newWalletModalIsOpen, setNewWalletModalIsOpen] = useState(false);
-  const {showSuccessNotification, showErrorNotification} = useNotificationContext();
+
+  const {
+    showSuccessNotification,
+    showErrorNotification
+  } = useNotificationContext();
 
   const [createWallet] = useCreateWalletMutation({
     onCompleted() {
       setNewWalletModalIsOpen(false);
-      showSuccessNotification('Wallet created succesfully!');
+      showSuccessNotification("Wallet created succesfully!");
     },
     onError() {
-      showErrorNotification('An error occured while saving the wallet data!');
+      showErrorNotification("An error occured while saving the wallet data!");
     },
     update: (store, { data }) => {
       const wallet = data?.createWallet;
-
       if (!wallet) {
         return;
       }
@@ -55,13 +57,11 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
       };
 
       const cached = store.readQuery<WalletsQuery>(query);
-
       if (!cached || !cached.wallets) {
         return;
       }
 
       cached.wallets.push(wallet);
-
       store.writeQuery({
         ...query,
         data: cached
@@ -79,7 +79,7 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
     });
   };
 
-  const Schema = () =>
+  const CreateWalletSchema = () =>
     Yup.object().shape({
       name: Yup.string().required("Enter wallet name"),
       amount: Yup.number().nullable(),
@@ -124,7 +124,7 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
             amount: null,
             color: "#DE60D4"
           }}
-          validationSchema={Schema}
+          validationSchema={CreateWalletSchema}
           onSubmit={onSubmit}
         >
           {({ errors, touched, values, handleChange, setFieldValue }) => (
@@ -137,7 +137,8 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
                     variant="outlined"
                     value={values.name}
                     onChange={handleChange}
-                    error={errors.name && touched.name && errors.name}
+                    error={!!(errors.name && touched.name && errors.name)}
+                    helperText={errors.name}
                   />
                 </Grid>
                 <Grid item>
@@ -148,7 +149,8 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
                     variant="outlined"
                     value={values.amount}
                     onChange={handleChange}
-                    error={errors.amount && touched.amount && errors.amount}
+                    error={!!(errors.amount && touched.amount && errors.amount)}
+                    helperText={errors.amount}
                   />
                 </Grid>
                 <Grid item>

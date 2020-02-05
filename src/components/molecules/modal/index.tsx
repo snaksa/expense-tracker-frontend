@@ -1,18 +1,20 @@
 import React from "react";
-import MaterialModal from "@material-ui/core/Modal";
-import Box from "@material-ui/core/Box";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import useStyles from './styles';
+import { Modal as MaterialModal, Box, Backdrop, Fade } from "@material-ui/core";
+import useStyles from "./styles";
 
 interface Props {
-  title: string,
+  title: string;
   children: any;
-  isOpen: boolean; 
+  isOpen: boolean;
   handleClose: any;
 }
 
-export default function Modal({title, children, isOpen, handleClose}: Props) {
+const Modal: React.FunctionComponent<any> = ({
+  title,
+  children,
+  isOpen,
+  handleClose
+}: Props): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -31,15 +33,13 @@ export default function Modal({title, children, isOpen, handleClose}: Props) {
       >
         <Fade in={isOpen}>
           <div className={classes.paper}>
-            <Box className={classes.header}>
-              {title}
-            </Box>
-            <Box className={classes.content}>
-              {children}
-            </Box>
+            <Box className={classes.header}>{title}</Box>
+            <Box className={classes.content}>{children}</Box>
           </div>
         </Fade>
       </MaterialModal>
     </div>
   );
-}
+};
+
+export default Modal;

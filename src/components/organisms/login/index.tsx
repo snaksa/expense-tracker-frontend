@@ -10,8 +10,8 @@ import { useLoginMutation } from "../../../api";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import { useHistory } from 'react-router';
-import { useAuthDataContext } from '../../../services/auth-provider';
+import { useHistory } from "react-router";
+import { useAuthDataContext } from "../../../services/auth-provider";
 
 export interface FormFields {
   email: string;
@@ -23,16 +23,16 @@ const Login = () => {
 
   const history = useHistory();
 
-  const context: any = useAuthDataContext();
+  const { onLogin } = useAuthDataContext();
 
   const [login] = useLoginMutation({
     onCompleted(data) {
-      localStorage.setItem('token', data?.loginUser ?? '');
-      context!.onLogin(data.loginUser);
-      history.push('/admin');
+      localStorage.setItem("token", data?.loginUser ?? "");
+      onLogin(data.loginUser);
+      history.push("/admin");
     },
     onError(error) {
-      // TODO: show error notification
+      // TODO: show error message
       console.log(error);
     }
   });
@@ -92,9 +92,8 @@ const Login = () => {
                             name="email"
                             value={values.email}
                             onChange={handleChange}
-                            error={
-                              errors.email && touched.email && errors.email
-                            }
+                            error={!!(errors.email && touched.email)}
+                            helperText={errors.email}
                           />
                         </Grid>
                         <Grid>
@@ -105,16 +104,13 @@ const Login = () => {
                             name="password"
                             value={values.password}
                             onChange={handleChange}
-                            error={
-                              errors.password &&
-                              touched.password &&
-                              errors.password
-                            }
+                            error={!!(errors.password && touched.password)}
+                            helperText={errors.password}
                           />
                         </Grid>
                         <Grid>
                           <Box mt={1}>
-                            <Button type="submit" style={{}} onClick={onSubmit}>
+                            <Button type="submit" style={{}}>
                               Login
                             </Button>
                           </Box>

@@ -3,7 +3,14 @@ import Grid from '@material-ui/core/Grid';
 import useStyles from './styles';
 import Title from '../../atoms/title';
 
-const Heading = ({ title, subtitle }) => {
+interface Props {
+  title: string;
+  subtitle: string;
+}
+
+const Heading: React.FunctionComponent<any> = (
+  {title, subtitle}: Props
+): JSX.Element => {
   const classes = useStyles();
   return (
     <Grid container className={classes.main} direction="column">

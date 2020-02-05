@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import useStyles from "./styles";
-import ExpenseTable from "../../../organisms/expense-table";
-import WalletsCollection from "../../../organisms/wallets-collection";
+import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
+import useStyles from "./styles";
+import TransactionsTable from "../../../organisms/transactions-table";
+import WalletsCollection from "../../../organisms/wallets-collection";
 import { useWalletsQuery, Wallet } from "../../../../api";
 
 const MainPage = () => {
@@ -39,8 +38,8 @@ const MainPage = () => {
           />
         </Grid>
         <Grid item>
-          <Box className={classes.expenses}>
-            <ExpenseTable wallets={chosenWallets} />
+          <Box className={classes.transactions}>
+            <TransactionsTable wallets={chosenWallets} />
           </Box>
         </Grid>
       </Grid>
@@ -53,7 +52,7 @@ MainPage.fragment = gql`
     wallets {
       id
       name
-      color,
+      color
       amount
     }
   }

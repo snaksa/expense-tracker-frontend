@@ -16,7 +16,9 @@ interface Props {
   onCancel: Function;
 }
 
-export default function ConfirmationDialog({isOpen, title, content, onConfirm, onCancel}: Props) {
+const ConfirmationDialog: React.FunctionComponent<any> = (
+  {isOpen, title, content, onConfirm, onCancel}: Props
+): JSX.Element => {
   return (
       <Dialog
         open={isOpen}
@@ -43,3 +45,5 @@ export default function ConfirmationDialog({isOpen, title, content, onConfirm, o
       </Dialog>
   );
 }
+
+export default ConfirmationDialog;

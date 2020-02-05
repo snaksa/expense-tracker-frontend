@@ -1,27 +1,23 @@
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Tooltip from "@material-ui/core/Tooltip";
-import Checkbox from "@material-ui/core/Checkbox";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
+import { Grid, Box, Tooltip, Checkbox } from "@material-ui/core";
+import { Delete as DeleteIcon, Edit as EditIcon } from "@material-ui/icons";
+import * as Yup from "yup";
+import { gql } from "apollo-boost";
+import ColorPicker from "material-ui-color-picker";
+import { Form, Formik } from "formik";
 import useStyles from "./styles";
 import Title from "../../atoms/title";
-import { gql } from "apollo-boost";
+import Modal from "../modal";
+import Button from "../../atoms/button";
+import TextField from "../../atoms/text-field";
+import ConfirmationDialog from "../confirmation-dialog";
+import { useNotificationContext } from "services/notification-provider";
 import {
   useDeleteWalletMutation,
   useUpdateWalletMutation,
   WalletsQuery,
   WalletsDocument
 } from "../../../api";
-import { Form, Formik } from "formik";
-import ColorPicker from "material-ui-color-picker";
-import Modal from "../modal";
-import Button from "../../atoms/button";
-import TextField from "../../atoms/text-field";
-import * as Yup from "yup";
-import ConfirmationDialog from "../confirmation-dialog";
-import { useNotificationContext } from "services/notification-provider";
 
 interface Props {
   id: number;
@@ -36,13 +32,7 @@ export interface FormFields {
   color: string;
 }
 
-const WalletSummary = ({
-  id,
-  name,
-  amount,
-  color,
-  onClick
-}: Props) => {
+const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
   const classes = useStyles();
 
   const [checked, setChecked] = useState(true);
@@ -51,14 +41,17 @@ const WalletSummary = ({
   );
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
-  const { showSuccessNotification, showErrorNotification } = useNotificationContext();
+  const {
+    showSuccessNotification,
+    showErrorNotification
+  } = useNotificationContext();
 
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
-      showSuccessNotification('Wallet deleted successfully!');
+      showSuccessNotification("Wallet deleted successfully!");
     },
     onError() {
-      showErrorNotification('An error occured while deleting the wallet!');
+      showErrorNotification("An error occured while deleting the wallet!");
     },
     update: (store, { data }) => {
       const wallet = data?.deleteWallet;
@@ -72,13 +65,11 @@ const WalletSummary = ({
       };
 
       const cached = store.readQuery<WalletsQuery>(query);
-
       if (!cached || !cached.wallets) {
         return;
       }
 
       const result = cached.wallets.filter(w => w && w.id !== wallet.id);
-
       store.writeQuery({
         ...query,
         data: {
@@ -87,31 +78,6 @@ const WalletSummary = ({
       });
     }
   });
-
-  const handleDelete = () => {
-    setConfirmDeleteModalIsOpen(false);
-    deleteWallet({
-      variables: {
-        id: id
-      }
-    });
-  };
-
-  const onSubmit = (values: FormFields) => {
-    updateWallet({
-      variables: {
-        id: id,
-        name: values.name,
-        color: values.color
-      }
-    });
-  };
-
-  const Schema = () =>
-    Yup.object().shape({
-      name: Yup.string().required("Enter wallet name"),
-      color: Yup.string().required("Choose wallet color")
-    });
 
   const [updateWallet] = useUpdateWalletMutation({
     onCompleted() {
@@ -154,6 +120,31 @@ const WalletSummary = ({
       });
     }
   });
+
+  const UpdateWalletSchema = () =>
+    Yup.object().shape({
+      name: Yup.string().required("Enter wallet name"),
+      color: Yup.string().required("Choose wallet color")
+    });
+
+  const onUpdateWalletSubmit = (values: FormFields) => {
+    updateWallet({
+      variables: {
+        id: id,
+        name: values.name,
+        color: values.color
+      }
+    });
+  };
+
+  const handleWalletDelete = () => {
+    setConfirmDeleteModalIsOpen(false);
+    deleteWallet({
+      variables: {
+        id: id
+      }
+    });
+  };
 
   return (
     <Box>
@@ -228,8 +219,8 @@ const WalletSummary = ({
             name: name,
             color: color
           }}
-          validationSchema={Schema}
-          onSubmit={onSubmit}
+          validationSchema={UpdateWalletSchema}
+          onSubmit={onUpdateWalletSubmit}
         >
           {({ errors, touched, values, handleChange, setFieldValue }) => (
             <Form>
@@ -241,7 +232,8 @@ const WalletSummary = ({
                     variant="outlined"
                     value={values.name}
                     onChange={handleChange}
-                    error={errors.name && touched.name && errors.name}
+                    error={!!(errors.name && touched.name && errors.name)}
+                    helperText={errors.name}
                   />
                 </Grid>
                 <Grid item>
@@ -271,7 +263,7 @@ const WalletSummary = ({
         isOpen={confirmDeleteModalIsOpen}
         title={"Are you sure?"}
         content={"All transactions related to this wallet will be removed!"}
-        onConfirm={handleDelete}
+        onConfirm={handleWalletDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />
     </Box>

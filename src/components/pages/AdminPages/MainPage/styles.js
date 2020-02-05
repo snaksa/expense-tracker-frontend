@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
             padding: 10,
         }
     },
-    expenses: {
+    transactions: {
         width: '50%',
         [theme.breakpoints.down('sm')]: {
             width: '100%'

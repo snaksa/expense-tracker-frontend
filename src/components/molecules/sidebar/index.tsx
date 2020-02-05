@@ -8,9 +8,9 @@ export interface Props {
   options: object[];
 }
 
-const Sidebar: React.FunctionComponent<Props> = (props): JSX.Element => {
-  const { isVisible, options } = props;
+const Sidebar: React.FunctionComponent<Props> = ({ isVisible, options }: Props): JSX.Element => {
   const classes = useStyles();
+  
   return isVisible ? (
     <Grid container className={classes.main} direction='column'>
       {

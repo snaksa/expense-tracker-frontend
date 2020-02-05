@@ -39,6 +39,12 @@ const client = new ApolloClient({
       },
     });
   },
+  onError: (error) => {
+    if (error.networkError?.statusCode === 403) {
+      localStorage.removeItem('token');
+      window.location.href = '/';
+    }
+  }
 });
 
 const App = () => {

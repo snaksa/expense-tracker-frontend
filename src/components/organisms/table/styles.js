@@ -1,7 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-    container: {
+    main: {
+        minHeight: 360,
         maxHeight: 440,
     },
 }));

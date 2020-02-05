@@ -1,11 +1,11 @@
 import React from "react";
 import { Snackbar } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+import Alert, { Color } from "@material-ui/lab/Alert";
 
 interface Props {
   open: boolean;
   content: string;
-  type: any;
+  type: Color;
   onClose: Function;
 }
 
