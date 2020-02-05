@@ -114,7 +114,7 @@ export interface Query {
    __typename?: 'Query',
   users: Maybe<Array<Maybe<User>>>,
   me: Maybe<User>,
-  transactions: Maybe<Array<Maybe<Transaction>>>,
+  transactions: Maybe<TransactionsPaginatedResult>,
   transaction: Maybe<Transaction>,
   wallets: Maybe<Array<Maybe<Wallet>>>,
   wallet: Maybe<Wallet>,
@@ -167,6 +167,18 @@ export interface TransactionDeleteRequestInput {
 
 export interface TransactionRecordsRequestInput {
   walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  limit: Maybe<Scalars['Int']>,
+  page: Maybe<Scalars['Int']>,
+}
+
+export interface TransactionsPaginatedResult {
+   __typename?: 'TransactionsPaginatedResult',
+  data: Array<Maybe<Transaction>>,
+  currentPage: Scalars['Int'],
+  totalPages: Scalars['Int'],
+  totalResults: Scalars['Int'],
+  hasNextPage: Scalars['Boolean'],
+  hasPrevPage: Scalars['Boolean'],
 }
 
 export enum TransactionType {
@@ -257,23 +269,29 @@ export type UpdateWalletMutation = (
 );
 
 export type TransactionsQueryVariables = {
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  page: Maybe<Scalars['Int']>,
+  limit: Maybe<Scalars['Int']>
 };
 
 
 export type TransactionsQuery = (
   { __typename?: 'Query' }
-  & { transactions: Maybe<Array<Maybe<(
-    { __typename?: 'Transaction' }
-    & Pick<Transaction, 'id' | 'description' | 'type' | 'value' | 'date'>
-    & { wallet: Maybe<(
-      { __typename?: 'Wallet' }
-      & Pick<Wallet, 'id' | 'name' | 'color'>
-    )>, category: Maybe<(
-      { __typename?: 'Category' }
-      & Pick<Category, 'id' | 'name' | 'color'>
-    )> }
-  )>>> }
+  & { transactions: Maybe<(
+    { __typename?: 'TransactionsPaginatedResult' }
+    & Pick<TransactionsPaginatedResult, 'currentPage' | 'totalPages' | 'totalResults' | 'hasNextPage' | 'hasPrevPage'>
+    & { data: Array<Maybe<(
+      { __typename?: 'Transaction' }
+      & Pick<Transaction, 'id' | 'description' | 'type' | 'value' | 'date'>
+      & { wallet: Maybe<(
+        { __typename?: 'Wallet' }
+        & Pick<Wallet, 'id' | 'name' | 'color'>
+      )>, category: Maybe<(
+        { __typename?: 'Category' }
+        & Pick<Category, 'id' | 'name' | 'color'>
+      )> }
+    )>> }
+  )> }
 );
 
 export type LoginMutationVariables = {
@@ -399,23 +417,30 @@ export type UpdateWalletMutationHookResult = ReturnType<typeof useUpdateWalletMu
 export type UpdateWalletMutationResult = ApolloReactCommon.MutationResult<UpdateWalletMutation>;
 export type UpdateWalletMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateWalletMutation, UpdateWalletMutationVariables>;
 export const TransactionsDocument = gql`
-    query Transactions($walletIds: [Int]) {
-  transactions(input: {walletIds: $walletIds}) {
-    id
-    description
-    type
-    value
-    date
-    wallet {
+    query Transactions($walletIds: [Int], $page: Int, $limit: Int) {
+  transactions(input: {walletIds: $walletIds, page: $page, limit: $limit}) {
+    data {
       id
-      name
-      color
+      description
+      type
+      value
+      date
+      wallet {
+        id
+        name
+        color
+      }
+      category {
+        id
+        name
+        color
+      }
     }
-    category {
-      id
-      name
-      color
-    }
+    currentPage
+    totalPages
+    totalResults
+    hasNextPage
+    hasPrevPage
   }
 }
     `;
@@ -433,6 +458,8 @@ export const TransactionsDocument = gql`
  * const { data, loading, error } = useTransactionsQuery({
  *   variables: {
  *      walletIds: // value for 'walletIds'
+ *      page: // value for 'page'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
