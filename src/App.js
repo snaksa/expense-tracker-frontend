@@ -1,8 +1,6 @@
 import React from 'react';
 import { createMuiTheme, responsiveFontSizes, MuiThemeProvider } from '@material-ui/core/styles';
-import pink from '@material-ui/core/colors/pink';
-import red from '@material-ui/core/colors/red';
-import orange from '@material-ui/core/colors/orange';
+import { pink, red } from '@material-ui/core/colors';
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
