@@ -20,11 +20,14 @@ import {
 let theme = createMuiTheme({
   palette: {
     primary: pink,
-    secondary: orange,
+    secondary: {
+      main: '#29303e'
+    },
   },
   status: {
     danger: red,
   },
+  spacing: 4,
 });
 
 theme = responsiveFontSizes(theme);

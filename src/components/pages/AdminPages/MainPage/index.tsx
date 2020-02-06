@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
 import useStyles from "./styles";
-import TransactionsTable from "../../../organisms/transactions-table";
 import WalletsCollection from "../../../organisms/wallets-collection";
 import { useWalletsQuery, Wallet } from "../../../../api";
+import LastTransactions from "components/organisms/last-transactions";
 
 const MainPage = () => {
   const classes = useStyles();
@@ -31,16 +31,20 @@ const MainPage = () => {
   return (
     <Box className={classes.main} p={2}>
       <Grid direction="column">
-        <Grid item>
+        <Grid item xs={12} md={12} lg={12}>
           <WalletsCollection
             wallets={wallets}
             onItemClick={onChosenWalletsClick}
           />
         </Grid>
         <Grid item>
-          <Box className={classes.transactions}>
-            <TransactionsTable wallets={chosenWallets} />
-          </Box>
+          <Grid container>
+            <Grid item xs={12} md={4} lg={3}>
+              <Box className={classes.transactions}>
+                <LastTransactions wallets={chosenWallets} />
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Box>

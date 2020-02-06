@@ -6,6 +6,7 @@ import TrendingDown from "@material-ui/icons/TrendingDown";
 import TrendingUp from "@material-ui/icons/TrendingUp";
 import { TransactionType } from "api";
 import { PropTypes } from "@material-ui/core";
+import useStyles from './styles';
 
 export interface Props {
   value: any;
@@ -21,9 +22,11 @@ const TableCell: React.FunctionComponent<Props> = ({
   value,
   column
 }): JSX.Element => {
+  const classes = useStyles();
+
   if (["number", "text"].includes(column.type)) {
     return (
-      <TableCellMaterial key={column.id} align={column.align}>
+      <TableCellMaterial key={column.id} align={column.align} className={classes.cell}>
         {column.format && column.type === "number"
           ? column.format(value)
           : value}
@@ -33,7 +36,7 @@ const TableCell: React.FunctionComponent<Props> = ({
 
   if (column.type === "icon") {
     return (
-      <TableCellMaterial key={column.id} align={column.align}>
+      <TableCellMaterial key={column.id} align={column.align} className={classes.cell}>
         {value === TransactionType.Expense && (
           <TrendingDown fontSize="small" style={{ color: "red" }} />
         )}
@@ -46,8 +49,8 @@ const TableCell: React.FunctionComponent<Props> = ({
 
   if (column.type === "object") {
     return (
-      <TableCellMaterial key={column.id} align={column.align}>
-        <Grid container spacing={1}>
+      <TableCellMaterial key={column.id} align={column.align} className={classes.cell}>
+        <Grid container spacing={2}>
           <Grid item>
             <Box p={1} width={0} style={{ backgroundColor: value.color }}></Box>
           </Grid>

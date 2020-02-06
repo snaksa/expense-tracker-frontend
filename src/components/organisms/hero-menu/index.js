@@ -8,7 +8,7 @@ const HeroMenu = () => {
 
   return (
     <Box pr={3}>
-      <Grid container className={classes.main} justify="flex-end" spacing={3}>
+      <Grid container className={classes.main} justify="flex-end" spacing={6}>
         <Grid item>
           <Link to={'/'}>
             <Title variant="subtitle2" display="inline">Login</Title>

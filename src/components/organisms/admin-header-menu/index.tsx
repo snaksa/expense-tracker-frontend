@@ -24,23 +24,28 @@ const AdminHeaderMenu: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <Grid container className={classes.main} justify="space-between">
-      <Grid item>
-        <Box className={classes.mobileMenuIcon}>
-          <Button onClick={setSidebarVisibility}>
-            <MenuIcon fontSize={"large"} />
-          </Button>
-        </Box>
-      </Grid>
-      <Grid item>
-        <Box className={classes.logo}>Expense Tracker</Box>
-      </Grid>
-      <Grid item>
-        <Box>
-          <Button onClick={logout}>
-            <ExitToAppIcon fontSize={"large"} />
-          </Button>
-        </Box>
+    <Grid container>
+      <Grid item xs={12} sm={12} md={2} lg={1} className={classes.sidebar}></Grid>
+      <Grid item xs={12} sm={12} md={10} lg={11}>
+        <Grid container className={classes.main} justify="space-between">
+          <Grid item>
+            <Box className={classes.mobileMenuIcon}>
+              <Button onClick={setSidebarVisibility} color='secondary'>
+                <MenuIcon fontSize={"small"} />
+              </Button>
+            </Box>
+          </Grid>
+          <Grid item>
+            <Box className={classes.logo}>Expense Tracker</Box>
+          </Grid>
+          <Grid item>
+            <Box>
+              <Button onClick={logout} color="secondary">
+                <ExitToAppIcon fontSize={"small"} />
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

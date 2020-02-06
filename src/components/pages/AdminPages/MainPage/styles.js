@@ -11,7 +11,6 @@ const useStyles = makeStyles(theme => ({
         }
     },
     transactions: {
-        width: '50%',
         [theme.breakpoints.down('sm')]: {
             width: '100%'
         }

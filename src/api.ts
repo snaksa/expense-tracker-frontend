@@ -294,6 +294,41 @@ export type TransactionsQuery = (
   )> }
 );
 
+export type CreateTransactionMutationVariables = {
+  description: Scalars['String'],
+  value: Scalars['Float'],
+  type: TransactionType,
+  categoryId: Scalars['Int'],
+  walletId: Scalars['Int']
+};
+
+
+export type CreateTransactionMutation = (
+  { __typename?: 'Mutation' }
+  & { createTransaction: Maybe<(
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id' | 'description' | 'value' | 'type' | 'date'>
+    & { wallet: Maybe<(
+      { __typename?: 'Wallet' }
+      & Pick<Wallet, 'id' | 'name' | 'color'>
+    )>, category: Maybe<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'name' | 'color'>
+    )> }
+  )> }
+);
+
+export type CategoriesQueryVariables = {};
+
+
+export type CategoriesQuery = (
+  { __typename?: 'Query' }
+  & { categories: Maybe<Array<Maybe<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name' | 'color'>
+  )>>> }
+);
+
 export type LoginMutationVariables = {
   email: Scalars['String'],
   password: Scalars['String']
@@ -472,6 +507,90 @@ export function useTransactionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type TransactionsQueryHookResult = ReturnType<typeof useTransactionsQuery>;
 export type TransactionsLazyQueryHookResult = ReturnType<typeof useTransactionsLazyQuery>;
 export type TransactionsQueryResult = ApolloReactCommon.QueryResult<TransactionsQuery, TransactionsQueryVariables>;
+export const CreateTransactionDocument = gql`
+    mutation CreateTransaction($description: String!, $value: Float!, $type: TransactionType!, $categoryId: Int!, $walletId: Int!) {
+  createTransaction(input: {description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId}) {
+    id
+    description
+    value
+    type
+    date
+    wallet {
+      id
+      name
+      color
+    }
+    category {
+      id
+      name
+      color
+    }
+  }
+}
+    `;
+export type CreateTransactionMutationFn = ApolloReactCommon.MutationFunction<CreateTransactionMutation, CreateTransactionMutationVariables>;
+
+/**
+ * __useCreateTransactionMutation__
+ *
+ * To run a mutation, you first call `useCreateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
+ *   variables: {
+ *      description: // value for 'description'
+ *      value: // value for 'value'
+ *      type: // value for 'type'
+ *      categoryId: // value for 'categoryId'
+ *      walletId: // value for 'walletId'
+ *   },
+ * });
+ */
+export function useCreateTransactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTransactionMutation, CreateTransactionMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateTransactionMutation, CreateTransactionMutationVariables>(CreateTransactionDocument, baseOptions);
+      }
+export type CreateTransactionMutationHookResult = ReturnType<typeof useCreateTransactionMutation>;
+export type CreateTransactionMutationResult = ApolloReactCommon.MutationResult<CreateTransactionMutation>;
+export type CreateTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTransactionMutation, CreateTransactionMutationVariables>;
+export const CategoriesDocument = gql`
+    query Categories {
+  categories {
+    id
+    name
+    color
+  }
+}
+    `;
+
+/**
+ * __useCategoriesQuery__
+ *
+ * To run a query within a React component, call `useCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCategoriesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+        return ApolloReactHooks.useQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, baseOptions);
+      }
+export function useCategoriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, baseOptions);
+        }
+export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
+export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;
+export type CategoriesQueryResult = ApolloReactCommon.QueryResult<CategoriesQuery, CategoriesQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   loginUser(input: {email: $email, password: $password})

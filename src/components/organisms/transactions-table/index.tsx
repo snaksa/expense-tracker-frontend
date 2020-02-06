@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { gql } from "apollo-boost";
 import { useTransactionsLazyQuery } from "../../../api";
 import Table from "../table";
 
@@ -39,34 +38,6 @@ const TransactionsTable = ({ wallets }: { wallets: number[] }) => {
   );
 };
 
-TransactionsTable.fragment = gql`
-  query Transactions($walletIds: [Int], $page: Int, $limit: Int) {
-    transactions(input: { walletIds: $walletIds, page: $page, limit: $limit }) {
-      data {
-        id
-        description
-        type
-        value
-        date
-        wallet {
-          id
-          name
-          color
-        }
-        category {
-          id
-          name
-          color
-        }
-      }
-      currentPage
-      totalPages
-      totalResults
-      hasNextPage
-      hasPrevPage
-    }
-  }
-`;
 
 const columns = [
   {
