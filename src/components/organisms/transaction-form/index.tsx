@@ -219,13 +219,6 @@ TransactionForm.fragment = gql`
       }
     }
   }
-  query Categories {
-    categories {
-      id
-      name
-      color
-    }
-  }
 `;
 
 export default TransactionForm;

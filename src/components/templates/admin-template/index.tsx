@@ -12,7 +12,7 @@ const AdminTemplate = ({ header, sidebar, content }: any) => {
       <Grid item xs={12} sm={12} md={2} lg={1} className={classes.sidebar}>
         {sidebar}
       </Grid>
-      <Grid item xs={12} sm={12} md={10} lg={11}>
+      <Grid item xs={12} sm={12} md={10} lg={11} className={classes.content}>
         {content}
       </Grid>
     </Grid>

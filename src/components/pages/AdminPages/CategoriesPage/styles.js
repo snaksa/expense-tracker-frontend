@@ -9,9 +9,6 @@ const useStyles = makeStyles(theme => ({
             padding: 10,
         }
     },
-    collection: {
-        backgroundColor: "#FFF"
-    },
     transactions: {
         [theme.breakpoints.down('sm')]: {
             width: '100%'

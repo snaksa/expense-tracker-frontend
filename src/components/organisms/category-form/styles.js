@@ -1,11 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-    sidebar: {
+    main: {
+        width: '100%',
+        textAlign: "center",
+        color: '#FFF'
     },
-    content: {
-        backgroundColor: '#f2f2f2',
-    }
 }));
 
 export default useStyles;

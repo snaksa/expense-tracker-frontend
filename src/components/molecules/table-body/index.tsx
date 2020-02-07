@@ -1,30 +1,38 @@
-import React from 'react';
-import { TableHead as TableBodyMaterial, TableRow } from '@material-ui/core';
-import TableCell from '../../atoms/table-cell';
+import React from "react";
+import { TableHead as TableBodyMaterial, TableRow } from "@material-ui/core";
+import TableCell from "../../atoms/table-cell";
 
 interface Props {
-  rows: any[];
+  rows: any;
   columns: any;
+  onAction?: Function;
 }
 
-const TableBody: React.FunctionComponent<Props> = ({ rows, columns }: Props): JSX.Element => {
+const TableBody: React.FunctionComponent<Props> = ({
+  rows,
+  columns,
+  onAction
+}: Props): JSX.Element => {
   return (
     <TableBodyMaterial>
-      {
-        rows.map(row => {
-          return (
-            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-              {columns.map((column: any) => {
-                const value = row[column.id];
-                return <TableCell column={column} value={value}></TableCell>
-              })
-              }
-            </TableRow>
-          )
-        })
-      }
+      {rows.map((row: any) => {
+        return (
+          <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+            {columns.map((column: any) => {
+              const value = row[column.id];
+              return (
+                <TableCell
+                  column={column}
+                  value={value}
+                  onAction={onAction}
+                ></TableCell>
+              );
+            })}
+          </TableRow>
+        );
+      })}
     </TableBodyMaterial>
   );
-}
+};
 
 export default TableBody;

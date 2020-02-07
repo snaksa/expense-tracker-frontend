@@ -29,13 +29,15 @@ const MainPage = () => {
   };
 
   return (
-    <Box className={classes.main} p={2}>
+    <Box className={classes.main} p={10}>
       <Grid direction="column">
         <Grid item xs={12} md={12} lg={12}>
-          <WalletsCollection
-            wallets={wallets}
-            onItemClick={onChosenWalletsClick}
-          />
+          <Box mb={5} p={5} className={classes.collection}>
+            <WalletsCollection
+              wallets={wallets}
+              onItemClick={onChosenWalletsClick}
+            />
+          </Box>
         </Grid>
         <Grid item>
           <Grid container>
