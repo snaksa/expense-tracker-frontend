@@ -387,6 +387,44 @@ export type CreateTransactionMutation = (
   )> }
 );
 
+export type DeleteTransactionMutationVariables = {
+  id: Scalars['Int']
+};
+
+
+export type DeleteTransactionMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteTransaction: Maybe<(
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id'>
+  )> }
+);
+
+export type UpdateTransactionMutationVariables = {
+  id: Scalars['Int'],
+  description: Maybe<Scalars['String']>,
+  value: Maybe<Scalars['Float']>,
+  type: Maybe<TransactionType>,
+  categoryId: Maybe<Scalars['Int']>,
+  walletId: Maybe<Scalars['Int']>
+};
+
+
+export type UpdateTransactionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTransaction: Maybe<(
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id' | 'description' | 'value' | 'type' | 'date'>
+    & { wallet: Maybe<(
+      { __typename?: 'Wallet' }
+      & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+    )>, category: Maybe<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'name' | 'color'>
+    )> }
+  )> }
+);
+
 export type CreateWalletMutationVariables = {
   name: Scalars['String'],
   amount: Maybe<Scalars['Float']>,
@@ -773,6 +811,90 @@ export function useCreateTransactionMutation(baseOptions?: ApolloReactHooks.Muta
 export type CreateTransactionMutationHookResult = ReturnType<typeof useCreateTransactionMutation>;
 export type CreateTransactionMutationResult = ApolloReactCommon.MutationResult<CreateTransactionMutation>;
 export type CreateTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTransactionMutation, CreateTransactionMutationVariables>;
+export const DeleteTransactionDocument = gql`
+    mutation DeleteTransaction($id: Int!) {
+  deleteTransaction(input: {id: $id}) {
+    id
+  }
+}
+    `;
+export type DeleteTransactionMutationFn = ApolloReactCommon.MutationFunction<DeleteTransactionMutation, DeleteTransactionMutationVariables>;
+
+/**
+ * __useDeleteTransactionMutation__
+ *
+ * To run a mutation, you first call `useDeleteTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTransactionMutation, { data, loading, error }] = useDeleteTransactionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTransactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteTransactionMutation, DeleteTransactionMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteTransactionMutation, DeleteTransactionMutationVariables>(DeleteTransactionDocument, baseOptions);
+      }
+export type DeleteTransactionMutationHookResult = ReturnType<typeof useDeleteTransactionMutation>;
+export type DeleteTransactionMutationResult = ApolloReactCommon.MutationResult<DeleteTransactionMutation>;
+export type DeleteTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteTransactionMutation, DeleteTransactionMutationVariables>;
+export const UpdateTransactionDocument = gql`
+    mutation UpdateTransaction($id: Int!, $description: String, $value: Float, $type: TransactionType, $categoryId: Int, $walletId: Int) {
+  updateTransaction(input: {id: $id, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId}) {
+    id
+    description
+    value
+    type
+    date
+    wallet {
+      id
+      name
+      color
+      amount
+    }
+    category {
+      id
+      name
+      color
+    }
+  }
+}
+    `;
+export type UpdateTransactionMutationFn = ApolloReactCommon.MutationFunction<UpdateTransactionMutation, UpdateTransactionMutationVariables>;
+
+/**
+ * __useUpdateTransactionMutation__
+ *
+ * To run a mutation, you first call `useUpdateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTransactionMutation, { data, loading, error }] = useUpdateTransactionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      description: // value for 'description'
+ *      value: // value for 'value'
+ *      type: // value for 'type'
+ *      categoryId: // value for 'categoryId'
+ *      walletId: // value for 'walletId'
+ *   },
+ * });
+ */
+export function useUpdateTransactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateTransactionMutation, UpdateTransactionMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateTransactionMutation, UpdateTransactionMutationVariables>(UpdateTransactionDocument, baseOptions);
+      }
+export type UpdateTransactionMutationHookResult = ReturnType<typeof useUpdateTransactionMutation>;
+export type UpdateTransactionMutationResult = ApolloReactCommon.MutationResult<UpdateTransactionMutation>;
+export type UpdateTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateTransactionMutation, UpdateTransactionMutationVariables>;
 export const CreateWalletDocument = gql`
     mutation CreateWallet($name: String!, $amount: Float, $color: String!) {
   createWallet(input: {name: $name, amount: $amount, color: $color}) {

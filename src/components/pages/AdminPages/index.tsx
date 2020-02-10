@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Box from "@material-ui/core/Box";
 import {
   Home as HomeIcon,
+  Receipt as ReceiptIcon,
   Category as CategoryIcon,
   BarChart as BarChartIcon,
   Settings as SettingsIcon
@@ -39,9 +40,9 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
             options={[
               { label: "Home", to: "/admin", icon: <HomeIcon /> },
               {
-                label: "Wallets",
-                to: "/admin/wallets",
-                icon: <CategoryIcon />
+                label: "Records",
+                to: "/admin/records",
+                icon: <ReceiptIcon />
               },
               {
                 label: "Categories",
@@ -55,7 +56,7 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
         }
         content={
           <Switch>
-            <Route path="/admin/wallets" component={TransactionsPage} />
+            <Route path="/admin/records" component={TransactionsPage} />
             <Route path="/admin/categories" component={CategoriesPage} />
             <Route path="/admin" component={MainPage} />
           </Switch>

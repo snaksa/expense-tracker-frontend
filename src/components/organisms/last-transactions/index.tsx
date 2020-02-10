@@ -7,7 +7,6 @@ import TransactionForm from "components/organisms/transaction-form";
 import {
   useTransactionsLazyQuery,
   Transaction,
-  useCategoriesQuery,
   useWalletsQuery
 } from "api";
 import Loader from "components/atoms/loader";
@@ -18,9 +17,6 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
   const [newTransactionModalIsOpen, setNewTransactionModalIsOpen] = useState(
     false
   );
-
-  const { data: categoriesData } = useCategoriesQuery();
-  const userCategories: any = categoriesData?.categories ?? [];
 
   const { data: walletsData } = useWalletsQuery();
   const userWallets: any = walletsData?.wallets ?? [];
@@ -63,7 +59,6 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
         }}
       >
         <TransactionForm
-          categories={userCategories}
           wallets={userWallets}
           onComplete={() => {
             refetch({

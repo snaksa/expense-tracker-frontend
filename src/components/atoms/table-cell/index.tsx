@@ -11,12 +11,16 @@ import RoundBox from "../round-box";
 import { StringValueNode } from "graphql";
 
 export interface Props {
+  row?: any;
   value: any;
   column: {
     id: string;
     type: string;
     align?: PropTypes.Alignment;
     format?: Function;
+    color?: Function;
+    sign?: Function;
+    includeSign?: boolean;
     actions?: {
       id: StringValueNode;
       icon: any;
@@ -26,6 +30,7 @@ export interface Props {
 }
 
 const TableCell: React.FunctionComponent<Props> = ({
+  row,
   value,
   column,
   onAction
@@ -38,7 +43,9 @@ const TableCell: React.FunctionComponent<Props> = ({
         key={column.id}
         align={column.align}
         className={classes.cell}
+        style={{ color: column.color && row && column.color(row.type) }}
       >
+        {column.type === "number" && column.sign && row && column.sign(row.type)}
         {column.format && column.type === "number"
           ? column.format(value)
           : value}

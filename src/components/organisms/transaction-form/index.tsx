@@ -12,11 +12,14 @@ import {
   TransactionType,
   Category,
   Wallet,
-  useCreateTransactionMutation
+  useCreateTransactionMutation,
+  Transaction,
+  useCategoriesQuery,
+  useUpdateTransactionMutation
 } from "api";
 
 interface Props {
-  categories: Category[];
+  transaction?: Transaction;
   wallets: Wallet[];
   onComplete: Function;
   onError: Function;
@@ -40,7 +43,15 @@ const schema = () => {
   });
 };
 
-const TransactionForm = ({ wallets, categories, onComplete, onError }: Props): JSX.Element => {
+const TransactionForm = ({
+  transaction,
+  wallets,
+  onComplete,
+  onError
+}: Props): JSX.Element => {
+  const { data: categoriesData } = useCategoriesQuery();
+  const categories: any = categoriesData?.categories ?? [];
+
   const walletOptions = wallets.map((wallet: Wallet) => {
     return {
       id: wallet.id,
@@ -85,27 +96,59 @@ const TransactionForm = ({ wallets, categories, onComplete, onError }: Props): J
     }
   });
 
+  const [updateTransaction] = useUpdateTransactionMutation({
+    onCompleted() {
+      showSuccessNotification("Record updated succesfully!");
+      onComplete();
+    },
+    onError() {
+      showErrorNotification("An error occured while updating the record data!");
+      onError();
+    }
+  });
+
   const onSubmit = (values: FormFields) => {
-    createTransaction({
-      variables: {
-        description: values.description,
-        value: parseFloat(values.value ?? 0),
-        type: values.type,
-        categoryId: values.categoryId,
-        walletId: values.walletId
-      }
-    });
+    if (transaction) {
+      updateTransaction({
+        variables: {
+          id: transaction.id,
+          description: values.description,
+          value: parseFloat(values.value ?? 0),
+          type: values.type,
+          categoryId: values.categoryId,
+          walletId: values.walletId
+        }
+      });
+    } else {
+      createTransaction({
+        variables: {
+          description: values.description,
+          value: parseFloat(values.value ?? 0),
+          type: values.type,
+          categoryId: values.categoryId,
+          walletId: values.walletId
+        }
+      });
+    }
   };
 
   return (
     <Formik
       enableReinitialize
       initialValues={{
-        description: "",
-        value: "",
-        type: TransactionType.Expense,
-        categoryId: categoryOptions.length ? categoryOptions[0].id : 0,
-        walletId: walletOptions.length ? walletOptions[0].id : 0
+        description: transaction?.description ?? "",
+        value: transaction?.value.toString() ?? "",
+        type: transaction?.type ?? TransactionType.Expense,
+        categoryId: transaction?.category
+          ? transaction.category.id
+          : categoryOptions.length
+          ? categoryOptions[0].id
+          : 0,
+        walletId: transaction?.wallet
+          ? transaction.wallet.id
+          : walletOptions.length
+          ? walletOptions[0].id
+          : 0
       }}
       validationSchema={schema}
       onSubmit={onSubmit}
@@ -209,7 +252,7 @@ TransactionForm.fragment = gql`
       wallet {
         id
         name
-        color,
+        color
         amount
       }
       category {

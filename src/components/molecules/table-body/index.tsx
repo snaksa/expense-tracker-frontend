@@ -25,6 +25,7 @@ const TableBody: React.FunctionComponent<Props> = ({
                   column={column}
                   value={value}
                   onAction={onAction}
+                  row={row}
                 ></TableCell>
               );
             })}

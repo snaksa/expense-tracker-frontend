@@ -7,7 +7,7 @@ import {
   TableContainer,
   TablePagination
 } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from "@material-ui/icons/Add";
 import useStyles from "./styles";
 import TableHead from "../../molecules/table-head";
 import TableBody from "../../molecules/table-body";
@@ -48,16 +48,18 @@ const Table: React.FunctionComponent<Props> = ({
       <Paper>
         <TableContainer className={classes.main}>
           <Box className={classes.header} p={4}>
-            <Grid container justify='space-between'>
+            <Grid container justify="space-between">
               <Grid item>
                 <Title variant="h5">{title}</Title>
               </Grid>
               <Grid item>
-                <Box>
-                  <Button onClick={onClick}>
-                    <AddIcon fontSize={"small"} />
-                  </Button>
-                </Box>
+                {onClick && (
+                  <Box>
+                    <Button onClick={onClick}>
+                      <AddIcon fontSize={"small"} />
+                    </Button>
+                  </Box>
+                )}
               </Grid>
             </Grid>
           </Box>
