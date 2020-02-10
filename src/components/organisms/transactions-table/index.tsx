@@ -7,7 +7,7 @@ import {
   Wallet,
   useDeleteTransactionMutation
 } from "api";
-import {Edit as EditIcon, Delete as DeleteIcon} from '@material-ui/icons';
+import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import Table from "../table";
 import { useNotificationContext } from "services/notification-provider";
 import { gql } from "apollo-boost";
@@ -141,6 +141,19 @@ TransactionsTable.fragment = gql`
   mutation DeleteTransaction($id: Int!) {
     deleteTransaction(input: { id: $id }) {
       id
+      wallet {
+        id
+        name
+        color
+        amount
+      }
+      category {
+        id
+        name
+        color
+        balance
+        transactionsCount
+      }
     }
   }
   mutation UpdateTransaction(
@@ -176,6 +189,8 @@ TransactionsTable.fragment = gql`
         id
         name
         color
+        balance
+        transactionsCount
       }
     }
   }
@@ -196,11 +211,10 @@ const columns = [
     minWidth: 50,
     align: "right",
     format: (value: number) => value.toFixed(2),
-    color: (type: TransactionType) =>
-      type === TransactionType.Expense ? "red" : "green",
-    sign: (type: TransactionType) =>
-      type === TransactionType.Expense ? "BGN -" : "BGN ",
-    includeSign: true
+    color: (row: any) =>
+      row.type === TransactionType.Expense ? "red" : "green",
+    sign: (row: any) =>
+      row.type === TransactionType.Expense ? "-BGN " : "BGN "
   },
   {
     type: "colorName",

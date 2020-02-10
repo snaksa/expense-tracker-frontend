@@ -20,6 +20,8 @@ export interface Category {
   icon: Maybe<Scalars['Int']>,
   user: Maybe<User>,
   transactions: Maybe<Array<Maybe<Transaction>>>,
+  transactionsCount: Maybe<Scalars['Int']>,
+  balance: Maybe<Scalars['Float']>,
 }
 
 export interface CategoryCreateRequestInput {
@@ -220,6 +222,7 @@ export interface Wallet {
   name: Scalars['String'],
   color: Scalars['String'],
   amount: Scalars['Float'],
+  initial_amount: Scalars['Float'],
   user: Maybe<User>,
   transactions: Maybe<Array<Maybe<Transaction>>>,
 }
@@ -292,7 +295,7 @@ export type UpdateCategoryMutation = (
   { __typename?: 'Mutation' }
   & { updateCategory: Maybe<(
     { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'name' | 'color' | 'icon'>
+    & Pick<Category, 'id' | 'name' | 'color' | 'icon' | 'transactionsCount' | 'balance'>
   )> }
 );
 
@@ -306,7 +309,7 @@ export type CreateCategoryMutation = (
   { __typename?: 'Mutation' }
   & { createCategory: Maybe<(
     { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'color' | 'name' | 'icon'>
+    & Pick<Category, 'id' | 'color' | 'name' | 'icon' | 'transactionsCount' | 'balance'>
   )> }
 );
 
@@ -382,7 +385,7 @@ export type CreateTransactionMutation = (
       & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
     )>, category: Maybe<(
       { __typename?: 'Category' }
-      & Pick<Category, 'id' | 'name' | 'color'>
+      & Pick<Category, 'id' | 'name' | 'color' | 'balance' | 'transactionsCount'>
     )> }
   )> }
 );
@@ -397,6 +400,13 @@ export type DeleteTransactionMutation = (
   & { deleteTransaction: Maybe<(
     { __typename?: 'Transaction' }
     & Pick<Transaction, 'id'>
+    & { wallet: Maybe<(
+      { __typename?: 'Wallet' }
+      & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+    )>, category: Maybe<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'name' | 'color' | 'balance' | 'transactionsCount'>
+    )> }
   )> }
 );
 
@@ -420,7 +430,7 @@ export type UpdateTransactionMutation = (
       & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
     )>, category: Maybe<(
       { __typename?: 'Category' }
-      & Pick<Category, 'id' | 'name' | 'color'>
+      & Pick<Category, 'id' | 'name' | 'color' | 'balance' | 'transactionsCount'>
     )> }
   )> }
 );
@@ -447,7 +457,7 @@ export type CategoriesQuery = (
   { __typename?: 'Query' }
   & { categories: Maybe<Array<Maybe<(
     { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'name' | 'color'>
+    & Pick<Category, 'id' | 'name' | 'color' | 'transactionsCount' | 'balance'>
   )>>> }
 );
 
@@ -571,6 +581,8 @@ export const UpdateCategoryDocument = gql`
     name
     color
     icon
+    transactionsCount
+    balance
   }
 }
     `;
@@ -608,6 +620,8 @@ export const CreateCategoryDocument = gql`
     color
     name
     icon
+    transactionsCount
+    balance
   }
 }
     `;
@@ -778,6 +792,8 @@ export const CreateTransactionDocument = gql`
       id
       name
       color
+      balance
+      transactionsCount
     }
   }
 }
@@ -815,6 +831,19 @@ export const DeleteTransactionDocument = gql`
     mutation DeleteTransaction($id: Int!) {
   deleteTransaction(input: {id: $id}) {
     id
+    wallet {
+      id
+      name
+      color
+      amount
+    }
+    category {
+      id
+      name
+      color
+      balance
+      transactionsCount
+    }
   }
 }
     `;
@@ -861,6 +890,8 @@ export const UpdateTransactionDocument = gql`
       id
       name
       color
+      balance
+      transactionsCount
     }
   }
 }
@@ -938,6 +969,8 @@ export const CategoriesDocument = gql`
     id
     name
     color
+    transactionsCount
+    balance
   }
 }
     `;

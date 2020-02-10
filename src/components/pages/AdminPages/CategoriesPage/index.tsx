@@ -10,7 +10,7 @@ import CategoryForm from "components/organisms/category-form";
 const CategoriesPage = () => {
   const classes = useStyles();
 
-  const { data } = useCategoriesQuery();
+  const { data } = useCategoriesQuery({fetchPolicy: 'network-only'});
   const categories: any = data?.categories ?? [];
 
   const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);
@@ -47,7 +47,9 @@ CategoriesPage.fragment = gql`
     categories {
       id
       name
-      color
+      color,
+      transactionsCount,
+      balance
     }
   }
 `;

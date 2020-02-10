@@ -11,7 +11,7 @@ const TransactionsPage = () => {
 
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
 
-  const [getTransactions, { data, refetch }] = useTransactionsLazyQuery();
+  const [getTransactions, { data, refetch }] = useTransactionsLazyQuery({fetchPolicy: 'network-only'});
 
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];

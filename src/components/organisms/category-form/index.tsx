@@ -33,7 +33,11 @@ const schema = () => {
   });
 };
 
-const CategoryForm = ({ category, onComplete, onError }: Props): JSX.Element => {
+const CategoryForm = ({
+  category,
+  onComplete,
+  onError
+}: Props): JSX.Element => {
   const {
     showSuccessNotification,
     showErrorNotification
@@ -157,6 +161,8 @@ CategoryForm.fragment = gql`
       color
       name
       icon
+      transactionsCount
+      balance
     }
   }
 `;

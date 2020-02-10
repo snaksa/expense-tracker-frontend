@@ -87,7 +87,7 @@ const CategoriesTable = ({ categories, onClick }: Props) => {
   return (
     <Box>
       <Table
-        title='Categories'
+        title="Categories"
         rows={categories}
         columns={columns}
         onClick={onClick}
@@ -108,7 +108,13 @@ const CategoriesTable = ({ categories, onClick }: Props) => {
         }}
       >
         <CategoryForm
-          category={selectedRow ? categories.filter((category: Category) => category.id === selectedRow)[0] : undefined}
+          category={
+            selectedRow
+              ? categories.filter(
+                  (category: Category) => category.id === selectedRow
+                )[0]
+              : undefined
+          }
           onComplete={() => setEditModalIsOpen(false)}
           onError={() => setEditModalIsOpen(false)}
         />
@@ -129,6 +135,8 @@ CategoriesTable.fragment = gql`
       name
       color
       icon
+      transactionsCount
+      balance
     }
   }
 `;
@@ -149,18 +157,22 @@ const columns = [
     align: "left"
   },
   {
-    type: "text",
-    id: "id",
+    type: "number",
+    id: "transactionsCount",
     label: "Records",
     minWidth: 100,
     align: "center"
   },
   {
-    type: "text",
-    id: "id",
-    label: "Spend",
+    type: "number",
+    id: "balance",
+    label: "Balance",
     minWidth: 100,
-    align: "center"
+    align: "center",
+    prefix: 'BGN',
+    format: (value: number) => Math.abs(value).toFixed(2),
+    color: (row: any) => row.balance < 0 ? 'red' : 'green',
+    sign: (row: any) => row.balance < 0 ? '-BGN ' : 'BGN ',
   },
   {
     type: "actions",

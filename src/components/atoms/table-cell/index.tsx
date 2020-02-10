@@ -43,9 +43,9 @@ const TableCell: React.FunctionComponent<Props> = ({
         key={column.id}
         align={column.align}
         className={classes.cell}
-        style={{ color: column.color && row && column.color(row.type) }}
+        style={{ color: column.color && row && column.color(row) }}
       >
-        {column.type === "number" && column.sign && row && column.sign(row.type)}
+        {column.type === "number" && column.sign && row && column.sign(row)}
         {column.format && column.type === "number"
           ? column.format(value)
           : value}

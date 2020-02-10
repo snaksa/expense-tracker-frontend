@@ -60,7 +60,7 @@ const TransactionSummary = ({ transaction }: Props) => {
               {transaction?.value.toFixed(2)}
             </Grid>
             <Grid item className={classes.bottom}>
-              21 January 22:34
+              {transaction.date}
             </Grid>
           </Grid>
         </Grid>

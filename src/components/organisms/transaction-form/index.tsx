@@ -258,7 +258,9 @@ TransactionForm.fragment = gql`
       category {
         id
         name
-        color
+        color,
+        balance,
+        transactionsCount
       }
     }
   }
