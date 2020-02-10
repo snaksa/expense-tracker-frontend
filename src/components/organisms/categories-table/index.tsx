@@ -87,6 +87,7 @@ const CategoriesTable = ({ categories, onClick }: Props) => {
   return (
     <Box>
       <Table
+        title='Categories'
         rows={categories}
         columns={columns}
         onClick={onClick}

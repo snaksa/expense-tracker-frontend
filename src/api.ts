@@ -168,6 +168,7 @@ export interface TransactionRecordsRequestInput {
   walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
   limit: Maybe<Scalars['Int']>,
   page: Maybe<Scalars['Int']>,
+  unlimited: Maybe<Scalars['Boolean']>,
 }
 
 export interface TransactionsPaginatedResult {
@@ -312,7 +313,8 @@ export type CreateCategoryMutation = (
 export type TransactionsQueryVariables = {
   walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
   page: Maybe<Scalars['Int']>,
-  limit: Maybe<Scalars['Int']>
+  limit: Maybe<Scalars['Int']>,
+  unlimited: Maybe<Scalars['Boolean']>
 };
 
 
@@ -598,8 +600,8 @@ export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCatego
 export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const TransactionsDocument = gql`
-    query Transactions($walletIds: [Int], $page: Int, $limit: Int) {
-  transactions(input: {walletIds: $walletIds, page: $page, limit: $limit}) {
+    query Transactions($walletIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean) {
+  transactions(input: {walletIds: $walletIds, page: $page, limit: $limit, unlimited: $unlimited}) {
     data {
       id
       description
@@ -641,6 +643,7 @@ export const TransactionsDocument = gql`
  *      walletIds: // value for 'walletIds'
  *      page: // value for 'page'
  *      limit: // value for 'limit'
+ *      unlimited: // value for 'unlimited'
  *   },
  * });
  */

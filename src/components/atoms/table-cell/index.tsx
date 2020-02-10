@@ -92,6 +92,23 @@ const TableCell: React.FunctionComponent<Props> = ({
     );
   }
 
+  if (column.type === "colorName") {
+    return (
+      <TableCellMaterial
+        key={column.id}
+        align={column.align}
+        className={classes.cell}
+      >
+        <Grid container spacing={1} alignItems="center" justify="flex-start">
+          <Grid item>
+            <RoundBox width={15} height={15} color={value.color} />
+          </Grid>
+          <Grid item>{value.name}</Grid>
+        </Grid>
+      </TableCellMaterial>
+    );
+  }
+
   if (column.type === "actions") {
     return (
       <TableCellMaterial

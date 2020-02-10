@@ -1,43 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useTransactionsLazyQuery } from "../../../api";
+import React from "react";
+import { Transaction } from "../../../api";
 import Table from "../table";
 
-const TransactionsTable = ({ wallets }: { wallets: number[] }) => {
-  const [getTransactions, { data }] = useTransactionsLazyQuery();
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [currentLimit, setCurrentLimit] = useState<number>(5);
+interface Props {
+  transactions: Transaction[];
+}
 
-  useEffect(() => {
-    getTransactions({
-      variables: {
-        walletIds: wallets,
-        page: currentPage + 1,
-        limit: currentLimit
-      }
-    });
-  }, [getTransactions, wallets, currentPage, currentLimit]);
-
-  const transactions: any = data?.transactions?.data ?? [];
-
+const TransactionsTable = ({
+  transactions,
+}: Props) => {
   return (
     <Table
+      title="Records"
       rows={transactions}
       columns={columns}
-      hasPagination={true}
-      currentPage={currentPage}
-      currentLimit={currentLimit}
-      totalResults={data?.transactions?.totalResults ?? 0}
-      onPageChange={(newPage: number) => {
-        setCurrentPage(newPage);
-      }}
-      onLimitChange={(limit: number) => {
-        setCurrentLimit(limit);
-        setCurrentPage(0);
-      }}
     />
   );
 };
-
 
 const columns = [
   {
@@ -56,7 +35,7 @@ const columns = [
     format: (value: number) => value.toFixed(2)
   },
   {
-    type: "object",
+    type: "colorName",
     id: "category",
     label: "Category",
     minWidth: 100,
@@ -67,10 +46,10 @@ const columns = [
     id: "type",
     label: "Type",
     minWidth: 100,
-    align: "left"
+    align: "center"
   },
   {
-    type: "object",
+    type: "colorName",
     id: "wallet",
     label: "Wallet",
     minWidth: 100,

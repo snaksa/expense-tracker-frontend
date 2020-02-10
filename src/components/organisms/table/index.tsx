@@ -15,6 +15,7 @@ import Title from "components/atoms/title";
 import Button from "components/atoms/button";
 
 interface Props {
+  title?: string;
   rows: any;
   columns: any[];
   hasPagination?: boolean;
@@ -28,6 +29,7 @@ interface Props {
 }
 
 const Table: React.FunctionComponent<Props> = ({
+  title,
   rows,
   columns,
   hasPagination,
@@ -48,7 +50,7 @@ const Table: React.FunctionComponent<Props> = ({
           <Box className={classes.header} p={4}>
             <Grid container justify='space-between'>
               <Grid item>
-                <Title variant="h5">Categories</Title>
+                <Title variant="h5">{title}</Title>
               </Grid>
               <Grid item>
                 <Box>

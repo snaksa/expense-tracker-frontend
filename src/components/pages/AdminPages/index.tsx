@@ -15,6 +15,7 @@ import { Route, Switch } from "react-router-dom";
 import { useAuthDataContext } from "../../../services/auth-provider";
 import { useNotificationContext } from "services/notification-provider";
 import Notification from "../../molecules/notification";
+import TransactionsPage from "./TransactionsPage";
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -38,6 +39,11 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
             options={[
               { label: "Home", to: "/admin", icon: <HomeIcon /> },
               {
+                label: "Wallets",
+                to: "/admin/wallets",
+                icon: <CategoryIcon />
+              },
+              {
                 label: "Categories",
                 to: "/admin/categories",
                 icon: <CategoryIcon />
@@ -49,6 +55,7 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
         }
         content={
           <Switch>
+            <Route path="/admin/wallets" component={TransactionsPage} />
             <Route path="/admin/categories" component={CategoriesPage} />
             <Route path="/admin" component={MainPage} />
           </Switch>

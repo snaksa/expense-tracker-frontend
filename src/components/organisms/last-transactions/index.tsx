@@ -32,7 +32,8 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
       variables: {
         walletIds: wallets,
         page: 1,
-        limit: 5
+        limit: 5,
+        unlimited: false
       }
     });
   }, [getTransactions, wallets]);
@@ -68,7 +69,8 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
             refetch({
               walletIds: wallets,
               page: 1,
-              limit: 5
+              limit: 5,
+              unlimited: false
             });
             setNewTransactionModalIsOpen(false);
           }}
@@ -80,8 +82,8 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
 };
 
 LastTransactions.fragment = gql`
-  query Transactions($walletIds: [Int], $page: Int, $limit: Int) {
-    transactions(input: { walletIds: $walletIds, page: $page, limit: $limit }) {
+  query Transactions($walletIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean) {
+    transactions(input: { walletIds: $walletIds, page: $page, limit: $limit, unlimited: $unlimited}) {
       data {
         id
         description
