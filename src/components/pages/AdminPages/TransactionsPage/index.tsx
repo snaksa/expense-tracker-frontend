@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid } from "@material-ui/core";
 import useStyles from "./styles";
-import { useWalletsQuery, useTransactionsLazyQuery, Wallet } from "api";
+import { useWalletsQuery, useTransactionsLazyQuery, Wallet, Transaction } from "api";
 import TransactionsTable from "components/organisms/transactions-table";
 import Modal from "components/molecules/modal";
 import TransactionForm from "components/organisms/transaction-form";
@@ -11,7 +11,7 @@ const TransactionsPage = () => {
 
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
 
-  const [getTransactions, { data, refetch }] = useTransactionsLazyQuery({fetchPolicy: 'network-only'});
+  const [getTransactions, { data, refetch }] = useTransactionsLazyQuery();
 
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
@@ -28,6 +28,12 @@ const TransactionsPage = () => {
   }, [getTransactions, wallets]);
 
   const transactions: any = data?.transactions?.data ?? [];
+  transactions.sort((a: Transaction, b: Transaction) => {
+    const aDate = new Date(a.date);
+    const bDate = new Date(b.date);
+
+    return aDate > bDate ? -1 : bDate > aDate ? 1 : 0;
+  })
 
   return (
     <Box className={classes.main} p={10}>

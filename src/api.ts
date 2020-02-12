@@ -310,6 +310,10 @@ export type CreateCategoryMutation = (
   & { createCategory: Maybe<(
     { __typename?: 'Category' }
     & Pick<Category, 'id' | 'color' | 'name' | 'icon' | 'transactionsCount' | 'balance'>
+    & { transactions: Maybe<Array<Maybe<(
+      { __typename?: 'Transaction' }
+      & Pick<Transaction, 'id' | 'value' | 'type' | 'date'>
+    )>>> }
   )> }
 );
 
@@ -386,6 +390,10 @@ export type CreateTransactionMutation = (
     )>, category: Maybe<(
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'name' | 'color' | 'balance' | 'transactionsCount'>
+      & { transactions: Maybe<Array<Maybe<(
+        { __typename?: 'Transaction' }
+        & Pick<Transaction, 'id' | 'value' | 'type' | 'date'>
+      )>>> }
     )> }
   )> }
 );
@@ -458,6 +466,10 @@ export type CategoriesQuery = (
   & { categories: Maybe<Array<Maybe<(
     { __typename?: 'Category' }
     & Pick<Category, 'id' | 'name' | 'color' | 'transactionsCount' | 'balance'>
+    & { transactions: Maybe<Array<Maybe<(
+      { __typename?: 'Transaction' }
+      & Pick<Transaction, 'id' | 'value' | 'type' | 'date'>
+    )>>> }
   )>>> }
 );
 
@@ -622,6 +634,12 @@ export const CreateCategoryDocument = gql`
     icon
     transactionsCount
     balance
+    transactions {
+      id
+      value
+      type
+      date
+    }
   }
 }
     `;
@@ -794,6 +812,12 @@ export const CreateTransactionDocument = gql`
       color
       balance
       transactionsCount
+      transactions {
+        id
+        value
+        type
+        date
+      }
     }
   }
 }
@@ -971,6 +995,12 @@ export const CategoriesDocument = gql`
     color
     transactionsCount
     balance
+    transactions {
+      id
+      value
+      type
+      date
+    }
   }
 }
     `;

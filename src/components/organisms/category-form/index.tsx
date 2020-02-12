@@ -163,6 +163,12 @@ CategoryForm.fragment = gql`
       icon
       transactionsCount
       balance
+      transactions {
+        id
+        value
+        type
+        date
+      }
     }
   }
 `;

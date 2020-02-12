@@ -21,7 +21,7 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
   const { data: walletsData } = useWalletsQuery();
   const userWallets: any = walletsData?.wallets ?? [];
 
-  const [getTransactions, { data, refetch, loading }] = useTransactionsLazyQuery();
+  const [getTransactions, { data, refetch, loading }] = useTransactionsLazyQuery({fetchPolicy: 'network-only'});
 
   useEffect(() => {
     getTransactions({

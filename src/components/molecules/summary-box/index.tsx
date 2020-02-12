@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Box } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from "@material-ui/icons/Add";
 import useStyles from "./styles";
 import Button from "../../atoms/button";
 
@@ -18,7 +18,7 @@ const SummaryBox = ({ header, children, onClick }: Props) => {
       <Box className={classes.main} p={3}>
         <Grid container direction="column">
           <Grid item className={classes.header}>
-            <Grid container justify={'space-between'}>
+            <Grid container justify={"space-between"}>
               <Grid item>
                 <Box mb={3} pb={3}>
                   {header}
@@ -26,9 +26,11 @@ const SummaryBox = ({ header, children, onClick }: Props) => {
               </Grid>
               <Grid item>
                 <Box>
-                  <Button onClick={onClick}>
-                    <AddIcon fontSize={"small"} />
-                  </Button>
+                  {onClick && (
+                    <Button onClick={onClick}>
+                      <AddIcon fontSize={"small"} />
+                    </Button>
+                  )}
                 </Box>
               </Grid>
             </Grid>

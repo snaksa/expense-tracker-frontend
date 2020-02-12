@@ -4,7 +4,8 @@ import {
   Category,
   CategoriesDocument,
   CategoriesQuery,
-  useDeleteCategoryMutation
+  useDeleteCategoryMutation,
+  WalletsDocument
 } from "api";
 import Table from "../table";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
@@ -61,7 +62,12 @@ const CategoriesTable = ({ categories, onClick }: Props) => {
           categories: result
         }
       });
-    }
+    },
+    refetchQueries: [
+      {
+        query: WalletsDocument
+      }
+    ]
   });
 
   const handleDelete = () => {
@@ -169,10 +175,10 @@ const columns = [
     label: "Balance",
     minWidth: 100,
     align: "center",
-    prefix: 'BGN',
+    prefix: "BGN",
     format: (value: number) => Math.abs(value).toFixed(2),
-    color: (row: any) => row.balance < 0 ? 'red' : 'green',
-    sign: (row: any) => row.balance < 0 ? '-BGN ' : 'BGN ',
+    color: (row: any) => (row.balance < 0 ? "red" : "green"),
+    sign: (row: any) => (row.balance < 0 ? "-BGN " : "BGN ")
   },
   {
     type: "actions",

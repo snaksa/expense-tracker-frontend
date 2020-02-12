@@ -15,7 +15,11 @@ import {
   useCreateTransactionMutation,
   Transaction,
   useCategoriesQuery,
-  useUpdateTransactionMutation
+  useUpdateTransactionMutation,
+  WalletsDocument,
+  WalletsQuery,
+  TransactionsDocument,
+  TransactionsQuery
 } from "api";
 
 interface Props {
@@ -93,6 +97,43 @@ const TransactionForm = ({
     onError() {
       showErrorNotification("An error occured while saving the record data!");
       onError();
+    },
+    update: (store, { data }) => {
+      const transaction = data?.createTransaction;
+
+      if (!transaction) {
+        return;
+      }
+
+      const walletsQuery = {
+        query: WalletsDocument
+      };
+
+      const cachedWallets = store.readQuery<WalletsQuery>(walletsQuery);
+      if (!cachedWallets || !cachedWallets.wallets) {
+        return;
+      }
+
+      const transactionsQuery = {
+        query: TransactionsDocument,
+        variables: {
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          page: 0,
+          limit: 0,
+          unlimited: true
+        }
+      };
+
+      const cached = store.readQuery<TransactionsQuery>(transactionsQuery);
+      if (!cached || !cached.transactions) {
+        return;
+      }
+
+      cached.transactions.data.push(transaction);
+      store.writeQuery({
+        ...transactionsQuery,
+        data: cached
+      });
     }
   });
 
@@ -258,9 +299,15 @@ TransactionForm.fragment = gql`
       category {
         id
         name
-        color,
-        balance,
+        color
+        balance
         transactionsCount
+        transactions {
+          id
+          value
+          type
+          date
+        }
       }
     }
   }
