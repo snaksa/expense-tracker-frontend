@@ -5,7 +5,10 @@ import {
   CategoriesDocument,
   CategoriesQuery,
   useDeleteCategoryMutation,
-  WalletsDocument
+  WalletsDocument,
+  TransactionsDocument,
+  TransactionsQuery,
+  WalletsQuery
 } from "api";
 import Table from "../table";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
@@ -60,6 +63,40 @@ const CategoriesTable = ({ categories, onClick }: Props) => {
         ...query,
         data: {
           categories: result
+        }
+      });
+
+      const walletsQuery = {
+        query: WalletsDocument
+      };
+
+      const cachedWallets = store.readQuery<WalletsQuery>(walletsQuery);
+      if (!cachedWallets || !cachedWallets.wallets) {
+        return;
+      }
+
+      const queryTransactions = {
+        query: TransactionsDocument,
+        variables: {
+          walletIds: cachedWallets.wallets.map((wallet: any) => wallet.id),
+          page: 0,
+          limit: 0,
+          unlimited: true
+        }
+      };
+
+      const cachedTransactions = store.readQuery<TransactionsQuery>(queryTransactions);
+      if (!cachedTransactions || !cachedTransactions.transactions) {
+        return;
+      }
+
+      const resultTransactions = cachedTransactions.transactions.data.filter(t => t && t.category?.id !== category.id);
+      store.writeQuery({
+        ...queryTransactions,
+        data: {
+          transactions: {
+            data: resultTransactions
+          }
         }
       });
     },

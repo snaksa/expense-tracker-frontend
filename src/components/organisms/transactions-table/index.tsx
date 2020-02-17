@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Transaction,
   TransactionType,
-  TransactionsDocument,
-  TransactionsQuery,
   Wallet,
-  useDeleteTransactionMutation
+  useDeleteTransactionMutation,
+  useWalletsQuery,
+  useTransactionsLazyQuery,
+  TransactionsDocument
 } from "api";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import Table from "../table";
@@ -17,22 +18,65 @@ import Modal from "components/molecules/modal";
 import TransactionForm from "../transaction-form";
 
 interface Props {
-  transactions: Transaction[];
-  wallets: Wallet[];
   onNewClick?: Function;
 }
 
-const TransactionsTable = ({ transactions, wallets, onNewClick }: Props) => {
+const TransactionsTable = ({ onNewClick }: Props) => {
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
   const [selectedRow, setSelectedRow] = useState(0);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [currentLimit, setCurrentLimit] = useState(10);
+  // const [usedParams, setUsedParams] = useState(new Set());
+
+  const [getTransactions, { data }] = useTransactionsLazyQuery();
+
+  const { data: walletsData } = useWalletsQuery();
+  const wallets: any = walletsData?.wallets ?? [];
 
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
+    setTransactionUsedParams,
+    getTransactionUsedParams
   } = useNotificationContext();
+
+  const usedParams = getTransactionUsedParams();
+
+  useEffect(() => {
+    const params = {
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      page: currentPage + 1,
+      limit: currentLimit,
+      unlimited: false
+    };
+
+    getTransactions({
+      variables: params
+    });
+    const used: any = usedParams;
+    if (!used.has(params)) {
+      used.add(params);
+      setTransactionUsedParams(used);
+    }
+  }, [getTransactions, wallets, currentLimit, currentPage, usedParams, setTransactionUsedParams]);
+
+  const transactionsData: any = data?.transactions ?? [];
+  const transactions: any = transactionsData.data ?? [];
+
+  const getRefetchQueries = () => {
+    const result: any = [];
+    for (let params of usedParams) {
+      result.push({
+        query: TransactionsDocument,
+        variables: params
+      });
+    }
+
+    return result;
+  };
 
   const [deleteTransaction] = useDeleteTransactionMutation({
     onCompleted() {
@@ -41,40 +85,7 @@ const TransactionsTable = ({ transactions, wallets, onNewClick }: Props) => {
     onError() {
       showErrorNotification("An error occured while deleting the record!");
     },
-    update: (store, { data }) => {
-      const transaction = data?.deleteTransaction;
-
-      if (!transaction) {
-        return;
-      }
-
-      const query = {
-        query: TransactionsDocument,
-        variables: {
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          page: 0,
-          limit: 0,
-          unlimited: true
-        }
-      };
-
-      const cached = store.readQuery<TransactionsQuery>(query);
-      if (!cached || !cached.transactions) {
-        return;
-      }
-
-      const result = cached.transactions.data.filter(
-        c => c && c.id !== transaction.id
-      );
-      store.writeQuery({
-        ...query,
-        data: {
-          transactions: {
-            data: result
-          }
-        }
-      });
-    }
+    refetchQueries: getRefetchQueries()
   });
 
   const handleDelete = () => {
@@ -105,6 +116,12 @@ const TransactionsTable = ({ transactions, wallets, onNewClick }: Props) => {
         columns={columns}
         onClick={onNewClick}
         onAction={handleAction}
+        hasPagination={true}
+        totalResults={transactionsData?.totalResults ?? 0}
+        currentPage={currentPage}
+        currentLimit={currentLimit}
+        onPageChange={(page: number) => setCurrentPage(page)}
+        onLimitChange={(limit: number) => setCurrentLimit(limit)}
       />
       <ConfirmationDialog
         isOpen={confirmDeleteModalIsOpen}

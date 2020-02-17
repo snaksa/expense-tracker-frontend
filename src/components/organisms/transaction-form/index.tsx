@@ -16,10 +16,7 @@ import {
   Transaction,
   useCategoriesQuery,
   useUpdateTransactionMutation,
-  WalletsDocument,
-  WalletsQuery,
-  TransactionsDocument,
-  TransactionsQuery
+  TransactionsDocument
 } from "api";
 
 interface Props {
@@ -86,8 +83,22 @@ const TransactionForm = ({
 
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
+    getTransactionUsedParams
   } = useNotificationContext();
+
+  const usedParams = getTransactionUsedParams();
+  const getRefetchQueries = () => {
+    const result: any = [];
+    for (let params of usedParams) {
+      result.push({
+        query: TransactionsDocument,
+        variables: params
+      });
+    }
+
+    return result;
+  };
 
   const [createTransaction] = useCreateTransactionMutation({
     onCompleted() {
@@ -98,43 +109,7 @@ const TransactionForm = ({
       showErrorNotification("An error occured while saving the record data!");
       onError();
     },
-    update: (store, { data }) => {
-      const transaction = data?.createTransaction;
-
-      if (!transaction) {
-        return;
-      }
-
-      const walletsQuery = {
-        query: WalletsDocument
-      };
-
-      const cachedWallets = store.readQuery<WalletsQuery>(walletsQuery);
-      if (!cachedWallets || !cachedWallets.wallets) {
-        return;
-      }
-
-      const transactionsQuery = {
-        query: TransactionsDocument,
-        variables: {
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          page: 0,
-          limit: 0,
-          unlimited: true
-        }
-      };
-
-      const cached = store.readQuery<TransactionsQuery>(transactionsQuery);
-      if (!cached || !cached.transactions) {
-        return;
-      }
-
-      cached.transactions.data.push(transaction);
-      store.writeQuery({
-        ...transactionsQuery,
-        data: cached
-      });
-    }
+    refetchQueries: getRefetchQueries()
   });
 
   const [updateTransaction] = useUpdateTransactionMutation({

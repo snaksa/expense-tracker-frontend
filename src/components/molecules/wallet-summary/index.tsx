@@ -203,7 +203,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
         <Grid item>
           <Box p={1}>
             <Title variant="subtitle2">{name}</Title>
-            <Title variant="subtitle1">${amount}</Title>
+            <Title variant="subtitle1">${amount.toFixed(2)}</Title>
           </Box>
         </Grid>
       </Grid>
