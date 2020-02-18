@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Transaction,
   TransactionType,
@@ -16,12 +16,21 @@ import { Box } from "@material-ui/core";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
 import Modal from "components/molecules/modal";
 import TransactionForm from "../transaction-form";
+import { useSharedDataContext } from "services/shared-data-provider";
 
 interface Props {
+  selectedDate: string;
   onNewClick?: Function;
+  onEdit?: Function;
+  onDelete?: Function;
 }
 
-const TransactionsTable = ({ onNewClick }: Props) => {
+const TransactionsTable = ({
+  selectedDate,
+  onNewClick,
+  onDelete,
+  onEdit
+}: Props) => {
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
@@ -29,24 +38,36 @@ const TransactionsTable = ({ onNewClick }: Props) => {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentLimit, setCurrentLimit] = useState(10);
-  // const [usedParams, setUsedParams] = useState(new Set());
 
-  const [getTransactions, { data }] = useTransactionsLazyQuery();
+  const oldData: any = useRef([]);
+  const [getTransactions, { data, loading }] = useTransactionsLazyQuery();
+
+  if (data?.transactions?.data) {
+    oldData.current = data;
+  }
+
+  const responseData: any = !loading ? data : oldData.current;
 
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
 
   const {
     showSuccessNotification,
-    showErrorNotification,
-    setTransactionUsedParams,
-    getTransactionUsedParams
+    showErrorNotification
   } = useNotificationContext();
 
-  const usedParams = getTransactionUsedParams();
+  const {
+    usedTranasctionParams,
+    setTransactionUsedParams
+  } = useSharedDataContext();
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [selectedDate]);
 
   useEffect(() => {
     const params = {
+      date: selectedDate,
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       page: currentPage + 1,
       limit: currentLimit,
@@ -56,19 +77,27 @@ const TransactionsTable = ({ onNewClick }: Props) => {
     getTransactions({
       variables: params
     });
-    const used: any = usedParams;
+    const used: any = usedTranasctionParams;
     if (!used.has(params)) {
       used.add(params);
       setTransactionUsedParams(used);
     }
-  }, [getTransactions, wallets, currentLimit, currentPage, usedParams, setTransactionUsedParams]);
+  }, [
+    getTransactions,
+    wallets,
+    selectedDate,
+    currentLimit,
+    currentPage,
+    usedTranasctionParams,
+    setTransactionUsedParams
+  ]);
 
-  const transactionsData: any = data?.transactions ?? [];
+  const transactionsData: any = responseData?.transactions ?? [];
   const transactions: any = transactionsData.data ?? [];
 
   const getRefetchQueries = () => {
     const result: any = [];
-    for (let params of usedParams) {
+    for (let params of usedTranasctionParams) {
       result.push({
         query: TransactionsDocument,
         variables: params
@@ -81,6 +110,9 @@ const TransactionsTable = ({ onNewClick }: Props) => {
   const [deleteTransaction] = useDeleteTransactionMutation({
     onCompleted() {
       showSuccessNotification("Record deleted successfully!");
+      if (onDelete) {
+        onDelete();
+      }
     },
     onError() {
       showErrorNotification("An error occured while deleting the record!");
@@ -146,7 +178,12 @@ const TransactionsTable = ({ onNewClick }: Props) => {
                 )[0]
               : undefined
           }
-          onComplete={() => setEditModalIsOpen(false)}
+          onComplete={() => {
+            setEditModalIsOpen(false);
+            if (onEdit) {
+              onEdit();
+            }
+          }}
           onError={() => setEditModalIsOpen(false)}
         />
       </Modal>

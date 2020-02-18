@@ -26,6 +26,7 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
   useEffect(() => {
     getTransactions({
       variables: {
+        date: null,
         walletIds: wallets,
         page: 1,
         limit: 5,
@@ -62,6 +63,7 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
           wallets={userWallets}
           onComplete={() => {
             refetch({
+              date: null,
               walletIds: wallets,
               page: 1,
               limit: 5,
@@ -77,8 +79,8 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
 };
 
 LastTransactions.fragment = gql`
-  query Transactions($walletIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean) {
-    transactions(input: { walletIds: $walletIds, page: $page, limit: $limit, unlimited: $unlimited}) {
+  query Transactions($walletIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean, $date: String) {
+    transactions(input: { walletIds: $walletIds, page: $page, limit: $limit, unlimited: $unlimited, date: $date}) {
       data {
         id
         description

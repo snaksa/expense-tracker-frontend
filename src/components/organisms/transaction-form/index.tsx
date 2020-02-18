@@ -18,6 +18,7 @@ import {
   useUpdateTransactionMutation,
   TransactionsDocument
 } from "api";
+import { useSharedDataContext } from "services/shared-data-provider";
 
 interface Props {
   transaction?: Transaction;
@@ -83,14 +84,14 @@ const TransactionForm = ({
 
   const {
     showSuccessNotification,
-    showErrorNotification,
-    getTransactionUsedParams
+    showErrorNotification
   } = useNotificationContext();
 
-  const usedParams = getTransactionUsedParams();
+  const { usedTranasctionParams } = useSharedDataContext();
+
   const getRefetchQueries = () => {
     const result: any = [];
-    for (let params of usedParams) {
+    for (let params of usedTranasctionParams) {
       result.push({
         query: TransactionsDocument,
         variables: params

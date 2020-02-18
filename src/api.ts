@@ -12,6 +12,12 @@ export interface Scalars {
   DateTime: any,
 }
 
+export interface AreaChart {
+   __typename?: 'AreaChart',
+  header: Array<Maybe<Scalars['String']>>,
+  data: Maybe<Array<Maybe<Array<Maybe<Scalars['String']>>>>>,
+}
+
 export interface Category {
    __typename?: 'Category',
   id: Scalars['Int'],
@@ -115,12 +121,18 @@ export interface Query {
    __typename?: 'Query',
   users: Maybe<Array<Maybe<User>>>,
   me: Maybe<User>,
+  transactionSpendingFlow: Maybe<AreaChart>,
   transactions: Maybe<TransactionsPaginatedResult>,
   transaction: Maybe<Transaction>,
   wallets: Maybe<Array<Maybe<Wallet>>>,
   wallet: Maybe<Wallet>,
   categories: Maybe<Array<Maybe<Category>>>,
   category: Maybe<Category>,
+}
+
+
+export interface QueryTransactionSpendingFlowArgs {
+  input: TransactionRecordsRequestInput
 }
 
 
@@ -168,6 +180,8 @@ export interface TransactionDeleteRequestInput {
 
 export interface TransactionRecordsRequestInput {
   walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  date: Maybe<Scalars['String']>,
   limit: Maybe<Scalars['Int']>,
   page: Maybe<Scalars['Int']>,
   unlimited: Maybe<Scalars['Boolean']>,
@@ -321,7 +335,8 @@ export type TransactionsQueryVariables = {
   walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
   page: Maybe<Scalars['Int']>,
   limit: Maybe<Scalars['Int']>,
-  unlimited: Maybe<Scalars['Boolean']>
+  unlimited: Maybe<Scalars['Boolean']>,
+  date: Maybe<Scalars['String']>
 };
 
 
@@ -482,6 +497,21 @@ export type WalletsQuery = (
     { __typename?: 'Wallet' }
     & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
   )>>> }
+);
+
+export type TransactionSpendingFlowQueryVariables = {
+  date: Maybe<Scalars['String']>,
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>
+};
+
+
+export type TransactionSpendingFlowQuery = (
+  { __typename?: 'Query' }
+  & { transactionSpendingFlow: Maybe<(
+    { __typename?: 'AreaChart' }
+    & Pick<AreaChart, 'header' | 'data'>
+  )> }
 );
 
 
@@ -670,8 +700,8 @@ export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCatego
 export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const TransactionsDocument = gql`
-    query Transactions($walletIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean) {
-  transactions(input: {walletIds: $walletIds, page: $page, limit: $limit, unlimited: $unlimited}) {
+    query Transactions($walletIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean, $date: String) {
+  transactions(input: {walletIds: $walletIds, page: $page, limit: $limit, unlimited: $unlimited, date: $date}) {
     data {
       id
       description
@@ -714,6 +744,7 @@ export const TransactionsDocument = gql`
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      unlimited: // value for 'unlimited'
+ *      date: // value for 'date'
  *   },
  * });
  */
@@ -1064,3 +1095,39 @@ export function useWalletsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type WalletsQueryHookResult = ReturnType<typeof useWalletsQuery>;
 export type WalletsLazyQueryHookResult = ReturnType<typeof useWalletsLazyQuery>;
 export type WalletsQueryResult = ApolloReactCommon.QueryResult<WalletsQuery, WalletsQueryVariables>;
+export const TransactionSpendingFlowDocument = gql`
+    query TransactionSpendingFlow($date: String, $walletIds: [Int], $categoryIds: [Int]) {
+  transactionSpendingFlow(input: {date: $date, walletIds: $walletIds, categoryIds: $categoryIds}) {
+    header
+    data
+  }
+}
+    `;
+
+/**
+ * __useTransactionSpendingFlowQuery__
+ *
+ * To run a query within a React component, call `useTransactionSpendingFlowQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransactionSpendingFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransactionSpendingFlowQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *      walletIds: // value for 'walletIds'
+ *      categoryIds: // value for 'categoryIds'
+ *   },
+ * });
+ */
+export function useTransactionSpendingFlowQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TransactionSpendingFlowQuery, TransactionSpendingFlowQueryVariables>) {
+        return ApolloReactHooks.useQuery<TransactionSpendingFlowQuery, TransactionSpendingFlowQueryVariables>(TransactionSpendingFlowDocument, baseOptions);
+      }
+export function useTransactionSpendingFlowLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TransactionSpendingFlowQuery, TransactionSpendingFlowQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TransactionSpendingFlowQuery, TransactionSpendingFlowQueryVariables>(TransactionSpendingFlowDocument, baseOptions);
+        }
+export type TransactionSpendingFlowQueryHookResult = ReturnType<typeof useTransactionSpendingFlowQuery>;
+export type TransactionSpendingFlowLazyQueryHookResult = ReturnType<typeof useTransactionSpendingFlowLazyQuery>;
+export type TransactionSpendingFlowQueryResult = ApolloReactCommon.QueryResult<TransactionSpendingFlowQuery, TransactionSpendingFlowQueryVariables>;

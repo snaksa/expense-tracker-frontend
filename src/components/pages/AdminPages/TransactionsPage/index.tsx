@@ -1,84 +1,120 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, Grid } from "@material-ui/core";
 import useStyles from "./styles";
 import {
   useWalletsQuery,
-  // useTransactionsLazyQuery,
-  // Wallet,
-  // Transaction,
-  // TransactionType
+  useTransactionSpendingFlowLazyQuery,
+  Wallet
 } from "api";
 import TransactionsTable from "components/organisms/transactions-table";
 import Modal from "components/molecules/modal";
 import TransactionForm from "components/organisms/transaction-form";
-// import Chart from "react-google-charts";
-// import SummaryBox from "components/molecules/summary-box";
+import { gql } from "apollo-boost";
+import SummaryBox from "components/molecules/summary-box";
+import Chart from "react-google-charts";
+import moment from "moment";
+import DateRangePicker, { Range } from "components/molecules/date-range-picker";
 
 const TransactionsPage = () => {
   const classes = useStyles();
 
+  const oldChartData: any = useRef([]);
+  const [selectedPeriod, setSelectedPeriod] = useState(Range.Last7Days);
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
+
+  let backDate: any = moment
+    .utc()
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+  if (selectedPeriod === Range.Last7Days) {
+    backDate = backDate.subtract(7, "days");
+  } else if (selectedPeriod === Range.Last30Days) {
+    backDate = backDate.subtract(30, "days");
+  } else if (selectedPeriod === Range.Last12Months) {
+    backDate = backDate.subtract(12, "months");
+  } else if (selectedPeriod === Range.All) {
+    backDate = null;
+  }
+
+  const recordsDate: any = backDate ? backDate.format("Y-M-D") : null
 
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
 
-  // transactions.sort((a: Transaction, b: Transaction) => {
-  //   const aDate = new Date(a.date);
-  //   const bDate = new Date(b.date);
+  const [
+    getReport,
+    { data: spendingFlowData, refetch, loading }
+  ] = useTransactionSpendingFlowLazyQuery({ fetchPolicy: "network-only" });
 
-  //   return aDate > bDate ? -1 : bDate > aDate ? 1 : 0;
-  // });
+  useEffect(() => {
+    getReport({
+      variables: {
+        date: recordsDate,
+        walletIds: wallets.map((wallet: Wallet) => wallet.id),
+        categoryIds: []
+      }
+    });
+  }, [wallets, getReport, recordsDate]);
 
-  // const currentDate: Date = new Date();
-  // let backDate: Date = new Date();
-  // backDate.setDate(currentDate.getDate() - 5);
-  // const flowChart = [];
+  const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
+  let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
+  flowChart = flowChart.map((row: any) => [
+    moment.utc(row[0]).toDate(),
+    parseFloat(row[1])
+  ]);
 
-  // while (backDate <= currentDate) {
-  //   let total = 0;
-  //   transactions.forEach((transaction: any) => {
-  //     const date = new Date(transaction.date);
-  //     total +=
-  //       transaction.type === TransactionType.Expense &&
-  //       date.getDate() === backDate.getDate() &&
-  //       date.getMonth() === backDate.getMonth() &&
-  //       date.getFullYear() === backDate.getFullYear()
-  //         ? transaction.value
-  //         : 0;
-  //   });
-
-  //   flowChart.push([backDate.toLocaleDateString(), total]);
-  //   backDate.setDate(backDate.getDate() + 1);
-  //   total = 0;
-  // }
-  // const flowColumns = ["Date", "Money"];
+  const chartData = [flowColumns, ...flowChart];
+  if (flowColumns.length > 0) {
+    oldChartData.current = chartData;
+  }
 
   return (
     <Box className={classes.main} p={10}>
       <Grid container spacing={5}>
-        <Grid item xs={12} md={6} lg={6}>
-          <TransactionsTable
-            onNewClick={() => setNewModalIsOpen(true)}
+        <Grid item xs={12} md={12} lg={12}>
+          <DateRangePicker
+            onChange={(period: Range) => setSelectedPeriod(period)}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          {/* <SummaryBox header="Spending flow">
+          <TransactionsTable
+            selectedDate={recordsDate}
+            onNewClick={() => setNewModalIsOpen(true)}
+            onDelete={() => {
+              refetch({
+                date: recordsDate,
+                walletIds: wallets.map((wallet: Wallet) => wallet.id),
+                categoryIds: []
+              });
+            }}
+            onEdit={() => {
+              refetch({
+                date: recordsDate,
+                walletIds: wallets.map((wallet: Wallet) => wallet.id),
+                categoryIds: []
+              });
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6} lg={6}>
+          <SummaryBox header="Spending flow">
             <Chart
               width={"100%"}
               height={"300px"}
               chartType="AreaChart"
               loader={<div>Loading Chart</div>}
-              data={[flowColumns, ...flowChart]}
+              data={chartData && !loading ? chartData : oldChartData.current}
               options={{
                 hAxis: {
-                  title: "Time"
+                  title: "Time",
+                  type: "date",
+                  format: "Y-MM-dd"
                 },
                 vAxis: {
                   title: "Money"
                 }
               }}
             />
-          </SummaryBox> */}
+          </SummaryBox>
         </Grid>
       </Grid>
       <Modal
@@ -90,12 +126,34 @@ const TransactionsPage = () => {
       >
         <TransactionForm
           wallets={wallets}
-          onComplete={() => setNewModalIsOpen(false)}
+          onComplete={() => {
+            refetch({
+              date: backDate ? backDate.format("Y-M-D") : null,
+              walletIds: wallets.map((wallet: Wallet) => wallet.id),
+              categoryIds: []
+            });
+            setNewModalIsOpen(false);
+          }}
           onError={() => setNewModalIsOpen(false)}
         />
       </Modal>
     </Box>
   );
 };
+
+TransactionsPage.fragment = gql`
+  query TransactionSpendingFlow(
+    $date: String
+    $walletIds: [Int]
+    $categoryIds: [Int]
+  ) {
+    transactionSpendingFlow(
+      input: { date: $date, walletIds: $walletIds, categoryIds: $categoryIds }
+    ) {
+      header
+      data
+    }
+  }
+`;
 
 export default TransactionsPage;

@@ -8,6 +8,7 @@ import HomePages from './components/pages/UserPages';
 import AdminPages from './components/pages/AdminPages';
 import AuthDataProvider from "./services/auth-provider";
 import NotificationProvider from "./services/notification-provider";
+import SharedDataProvider from "./services/shared-data-provider";
 import {
   BrowserRouter as Router,
   Switch,
@@ -55,14 +56,16 @@ const App = () => {
         <Router>
           <AuthDataProvider>
             <NotificationProvider>
-              <Switch>
-                <Route path="/admin">
-                  <AdminPages />
-                </Route>
-                <Route path="/">
-                  <HomePages />
-                </Route>
-              </Switch>
+              <SharedDataProvider>
+                <Switch>
+                  <Route path="/admin">
+                    <AdminPages />
+                  </Route>
+                  <Route path="/">
+                    <HomePages />
+                  </Route>
+                </Switch>
+              </SharedDataProvider>
             </NotificationProvider>
           </AuthDataProvider>
         </Router>
