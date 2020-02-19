@@ -1,174 +1,145 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
-import { Chart } from "react-google-charts";
-import moment from "moment";
 import useStyles from "./styles";
-import { useCategoriesQuery, Category, TransactionType } from "api";
+import {
+  useCategoriesQuery,
+  TransactionType,
+  useCategoriesSpendingFlowLazyQuery,
+  Wallet,
+  useWalletsQuery,
+  useCategoriesSpendingPieLazyQuery
+} from "api";
 import CategoriesTable from "components/organisms/categories-table";
 import Modal from "components/molecules/modal";
 import CategoryForm from "components/organisms/category-form";
 import SummaryBox from "components/molecules/summary-box";
-import DateRangePicker, { Range } from "components/molecules/date-range-picker";
+import DateRangePicker, {
+  calculateBackDate,
+  Range
+} from "components/molecules/date-range-picker";
+import PieChart from "components/organisms/pie-chart";
+import LineChart from "components/organisms/line-chart";
+import moment from "moment";
 
 const CategoriesPage = () => {
   const classes = useStyles();
 
+  const [backDate, setBackDate] = useState(calculateBackDate(Range.Last7Days));
+  const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);
+
   const { data } = useCategoriesQuery({ fetchPolicy: "network-only" });
   const categories: any = data?.categories ?? [];
 
-  const [selectedPeriod, setSelectedPeriod] = useState(Range.Last7Days);
-  const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);
+  const { data: walletsData } = useWalletsQuery();
+  const wallets: any = walletsData?.wallets ?? [];
 
-  const currentDate: any = moment.utc().set({hour:0,minute:0,second:0,millisecond:0});
-  let backDate: any = moment.utc().set({hour:0,minute:0,second:0,millisecond:0});
-  if (selectedPeriod === Range.Last7Days) {
-    backDate = backDate.subtract(7, "days");
-  } else if (selectedPeriod === Range.Last30Days) {
-    backDate = backDate.subtract(30, "days");
-  } else if (selectedPeriod === Range.Last12Months) {
-    backDate = backDate.subtract(12, "months");
-  } else if (selectedPeriod === Range.All) {
-    backDate = null;
-  }
+  const [
+    getReport,
+    { data: spendingFlowQueryData, loading: spendingFlowLoading }
+  ] = useCategoriesSpendingFlowLazyQuery({ fetchPolicy: "network-only" });
 
-  const spendingChartData = categories.map((category: Category) => {
-    let total = 0;
-    const transactions = category.transactions ?? [];
-    transactions?.forEach((transaction: any) => {
-      const date: any = moment.utc(transaction.date);
-        total +=
-          transaction.type === TransactionType.Expense && date >= backDate
-            ? transaction.value
-            : 0;
-    });
-    return [category.name, total];
-  });
-
-  const incomeChartData = categories.map((category: Category) => {
-    let total = 0;
-    const transactions = category.transactions ?? [];
-    transactions?.forEach((transaction: any) => {
-      const date: any = moment.utc(transaction.date);
-        total +=
-          transaction.type === TransactionType.Income && date >= backDate
-            ? transaction.value
-            : 0;
-    });
-    return [category.name, total];
-  });
-
-  const flowChart = [];
-
-  if (!backDate) {
-    categories.forEach((category: Category) => {
-      const transactions = category.transactions ?? [];
-      transactions.forEach((transaction: any) => {
-        const date: any = moment.utc(transaction.date);
-        if(!backDate) {
-          backDate = date;
+  const spendingFlowData: any = {
+    header: spendingFlowQueryData?.categoriesSpendingFlow?.header ?? [],
+    colors: spendingFlowQueryData?.categoriesSpendingFlow?.colors ?? [],
+    data: (spendingFlowQueryData?.categoriesSpendingFlow?.data ?? []).map(
+      (row: any) => {
+        const result: any = [moment.utc(row[0]).toDate()];
+        for (let i = 1; i < row.length; i++) {
+          result.push(parseFloat(row[i]));
         }
-        else if (date < backDate) {
-          backDate = date;
-        }
-      });
+        return result;
+      }
+    )
+  };
+
+  const [
+    getSpendingChart,
+    { data: spendingQueryData, loading: spendingPieLoading }
+  ] = useCategoriesSpendingPieLazyQuery({ fetchPolicy: "network-only" });
+
+  const spendingData: any = {
+    header: spendingQueryData?.categoriesSpendingPieChart?.header ?? [],
+    colors: spendingQueryData?.categoriesSpendingPieChart?.colors ?? [],
+    data: (
+      spendingQueryData?.categoriesSpendingPieChart?.data ?? []
+    ).map((row: any) => [row[0], parseFloat(row[1])])
+  };
+
+  const [
+    getIncomeChart,
+    { data: incomeQueryData, loading: incomePieLoading }
+  ] = useCategoriesSpendingPieLazyQuery({ fetchPolicy: "network-only" });
+
+  const incomeData: any = {
+    header: incomeQueryData?.categoriesSpendingPieChart?.header ?? [],
+    colors: incomeQueryData?.categoriesSpendingPieChart?.colors ?? [],
+    data: (
+      incomeQueryData?.categoriesSpendingPieChart?.data ?? []
+    ).map((row: any) => [row[0], parseFloat(row[1])])
+  };
+
+  const updateReports = useCallback(() => {
+    getReport({
+      variables: {
+        date: backDate,
+        walletIds: wallets.map((wallet: Wallet) => wallet.id),
+        categoryIds: []
+      }
     });
-  }
-
-  const getFlowData = (category: Category) => {
-    let total = 0;
-    const transactions = category.transactions ?? [];
-
-    transactions.forEach((transaction: any) => {
-      const date: any = moment.utc(transaction.date);
-      total +=
-        transaction.type === TransactionType.Expense &&
-        date.date() === backDate.date() &&
-        date.month() === backDate.month() &&
-        date.year() === backDate.year()
-          ? transaction.value
-          : 0;
+    getSpendingChart({
+      variables: {
+        date: backDate,
+        walletIds: wallets.map((wallet: Wallet) => wallet.id),
+        categoryIds: [],
+        type: TransactionType.Expense
+      }
     });
-    return total;
-  }
+    getIncomeChart({
+      variables: {
+        date: backDate,
+        walletIds: wallets.map((wallet: Wallet) => wallet.id),
+        categoryIds: [],
+        type: TransactionType.Income
+      }
+    });
+  }, [wallets, backDate, getReport, getSpendingChart, getIncomeChart]);
 
-  while (backDate <= currentDate) {
-    const dateData = categories.map(getFlowData);
+  useEffect(() => {
+    updateReports();
+  }, [updateReports]);
 
-    flowChart.push([backDate.toDate(), ...dateData]);
-    backDate.add(1, "days");
-  }
-  const flowColumns = [
-    "Date",
-    ...categories.map((category: any) => category.name)
-  ];
-
-  const chartColors = categories.map((category: Category) => category.color);
   return (
     <Box className={classes.main} p={10}>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={12}>
           <DateRangePicker
-            onChange={(period: Range) => setSelectedPeriod(period)}
+            onChange={(date: any) => {
+              setBackDate(date);
+            }}
           />
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <SummaryBox header="Spending flow">
-            <Chart
-              width={"100%"}
-              height={"300px"}
-              chartType="LineChart"
-              loader={<div>Loading Chart</div>}
-              data={[flowColumns, ...flowChart]}
-              options={{
-                hAxis: {
-                  title: "Time",
-                  type: 'date',
-                  format: 'Y-MM-dd'        
-                },
-                vAxis: {
-                  title: "Money"
-                }
-              }}
-            />
+            <LineChart hTitle='Time' vTitle='Money' data={spendingFlowData} loading={spendingFlowLoading} />
           </SummaryBox>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <CategoriesTable
             categories={categories}
             onClick={() => setNewCategoryModalIsOpen(true)}
+            onEdit={() => updateReports()}
+            onDelete={() => updateReports()}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <SummaryBox header="Spending">
-            <Chart
-              width={"100%"}
-              height={"300px"}
-              chartType="PieChart"
-              loader={<div>Loading Chart</div>}
-              data={[["Category", "Income per category"], ...spendingChartData]}
-              options={{
-                chartArea: { width: "100%", height: "80%" },
-                legend: { position: "bottom" },
-                colors: chartColors
-              }}
-            />
+            <PieChart data={spendingData} loading={spendingPieLoading} />
           </SummaryBox>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <SummaryBox header="Income">
-            <Chart
-              width={"100%"}
-              height={"300px"}
-              chartType="PieChart"
-              loader={<div>Loading Chart</div>}
-              data={[["Category", "Income per category"], ...incomeChartData]}
-              options={{
-                chartArea: { width: "100%", height: "80%" },
-                legend: { position: "bottom" },
-                colors: chartColors
-              }}
-            />
+            <PieChart data={incomeData} loading={incomePieLoading} />
           </SummaryBox>
         </Grid>
       </Grid>
@@ -202,6 +173,38 @@ CategoriesPage.fragment = gql`
         type
         date
       }
+    }
+  }
+  query CategoriesSpendingFlow(
+    $date: String
+    $walletIds: [Int]
+    $categoryIds: [Int]
+  ) {
+    categoriesSpendingFlow(
+      input: { date: $date, walletIds: $walletIds, categoryIds: $categoryIds }
+    ) {
+      header
+      data,
+      colors
+    }
+  }
+  query CategoriesSpendingPie(
+    $date: String
+    $walletIds: [Int]
+    $categoryIds: [Int]
+    $type: TransactionType
+  ) {
+    categoriesSpendingPieChart(
+      input: {
+        date: $date
+        walletIds: $walletIds
+        categoryIds: $categoryIds
+        type: $type
+      }
+    ) {
+      header
+      data
+      colors
     }
   }
 `;

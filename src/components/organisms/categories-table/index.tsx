@@ -6,9 +6,7 @@ import {
   CategoriesQuery,
   useDeleteCategoryMutation,
   WalletsDocument,
-  TransactionsDocument,
-  TransactionsQuery,
-  WalletsQuery
+  TransactionsDocument
 } from "api";
 import Table from "../table";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
@@ -17,13 +15,16 @@ import { gql } from "apollo-boost";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import Modal from "components/molecules/modal";
 import CategoryForm from "../category-form";
+import { useSharedDataContext } from "services/shared-data-provider";
 
 interface Props {
   categories: Category[];
   onClick: Function;
+  onEdit: Function;
+  onDelete: Function;
 }
 
-const CategoriesTable = ({ categories, onClick }: Props) => {
+const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
@@ -31,12 +32,29 @@ const CategoriesTable = ({ categories, onClick }: Props) => {
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
   const {
+    usedTranasctionParams
+  } = useSharedDataContext();
+
+  const {
     showSuccessNotification,
     showErrorNotification
   } = useNotificationContext();
 
+  const getRefetchQueries = () => {
+    const result: any = [];
+    for (let params of usedTranasctionParams) {
+      result.push({
+        query: TransactionsDocument,
+        variables: params
+      });
+    }
+
+    return result;
+  };
+
   const [deleteCategory] = useDeleteCategoryMutation({
     onCompleted() {
+      onDelete();
       showSuccessNotification("Category deleted successfully!");
     },
     onError() {
@@ -66,44 +84,13 @@ const CategoriesTable = ({ categories, onClick }: Props) => {
         }
       });
 
-      const walletsQuery = {
-        query: WalletsDocument
-      };
-
-      const cachedWallets = store.readQuery<WalletsQuery>(walletsQuery);
-      if (!cachedWallets || !cachedWallets.wallets) {
-        return;
-      }
-
-      const queryTransactions = {
-        query: TransactionsDocument,
-        variables: {
-          walletIds: cachedWallets.wallets.map((wallet: any) => wallet.id),
-          page: 0,
-          limit: 0,
-          unlimited: true
-        }
-      };
-
-      const cachedTransactions = store.readQuery<TransactionsQuery>(queryTransactions);
-      if (!cachedTransactions || !cachedTransactions.transactions) {
-        return;
-      }
-
-      const resultTransactions = cachedTransactions.transactions.data.filter(t => t && t.category?.id !== category.id);
-      store.writeQuery({
-        ...queryTransactions,
-        data: {
-          transactions: {
-            data: resultTransactions
-          }
-        }
-      });
+      
     },
     refetchQueries: [
       {
         query: WalletsDocument
-      }
+      },
+      ...getRefetchQueries()
     ]
   });
 
@@ -158,7 +145,10 @@ const CategoriesTable = ({ categories, onClick }: Props) => {
                 )[0]
               : undefined
           }
-          onComplete={() => setEditModalIsOpen(false)}
+          onComplete={() => {
+            setEditModalIsOpen(false);
+            onEdit();
+          }}
           onError={() => setEditModalIsOpen(false)}
         />
       </Modal>

@@ -1,16 +1,17 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Box } from "@material-ui/core";
 import useStyles from "./styles";
 import Select from "../../atoms/select";
+import moment from "moment";
 
 interface Props {
   onChange: Function;
 }
 
 interface optionProps {
-  id: number, 
-  value: string
-};
+  id: number;
+  value: string;
+}
 
 export enum Range {
   All = 0,
@@ -19,7 +20,25 @@ export enum Range {
   Last12Months = 4
 }
 
-const DateRangePicker = ({onChange}: Props): JSX.Element => {
+export const calculateBackDate = (value: number) => {
+  let backDate: any = moment
+    .utc()
+    .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+
+  if (value === Range.Last7Days) {
+    backDate = backDate.subtract(7, "days");
+  } else if (value === Range.Last30Days) {
+    backDate = backDate.subtract(30, "days");
+  } else if (value === Range.Last12Months) {
+    backDate = backDate.subtract(12, "months");
+  } else if (value === Range.All) {
+    backDate = null;
+  }
+
+  return backDate ? backDate.format("Y-M-D") : null;
+};
+
+const DateRangePicker = ({ onChange }: Props): JSX.Element => {
   const classes = useStyles({});
 
   const options: optionProps[] = [
@@ -36,8 +55,9 @@ const DateRangePicker = ({onChange}: Props): JSX.Element => {
       <Select
         options={options}
         onChange={(event: any) => {
-          setSelected(event.target.value);
-          onChange(event.target.value);
+          const value = event.target.value;
+          setSelected(value);
+          onChange(calculateBackDate(value));
         }}
         selected={selected}
         label={"Date Range"}

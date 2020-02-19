@@ -16,6 +16,7 @@ export interface AreaChart {
    __typename?: 'AreaChart',
   header: Array<Maybe<Scalars['String']>>,
   data: Maybe<Array<Maybe<Array<Maybe<Scalars['String']>>>>>,
+  colors: Maybe<Array<Maybe<Scalars['String']>>>,
 }
 
 export interface Category {
@@ -37,6 +38,13 @@ export interface CategoryCreateRequestInput {
 
 export interface CategoryDeleteRequestInput {
   id: Scalars['Int'],
+}
+
+export interface CategoryRecordsRequestInput {
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  type: Maybe<TransactionType>,
+  date: Maybe<Scalars['String']>,
 }
 
 export interface CategoryUpdateRequestInput {
@@ -122,6 +130,8 @@ export interface Query {
   users: Maybe<Array<Maybe<User>>>,
   me: Maybe<User>,
   transactionSpendingFlow: Maybe<AreaChart>,
+  categoriesSpendingFlow: Maybe<AreaChart>,
+  categoriesSpendingPieChart: Maybe<AreaChart>,
   transactions: Maybe<TransactionsPaginatedResult>,
   transaction: Maybe<Transaction>,
   wallets: Maybe<Array<Maybe<Wallet>>>,
@@ -133,6 +143,16 @@ export interface Query {
 
 export interface QueryTransactionSpendingFlowArgs {
   input: TransactionRecordsRequestInput
+}
+
+
+export interface QueryCategoriesSpendingFlowArgs {
+  input: CategoryRecordsRequestInput
+}
+
+
+export interface QueryCategoriesSpendingPieChartArgs {
+  input: CategoryRecordsRequestInput
 }
 
 
@@ -486,6 +506,37 @@ export type CategoriesQuery = (
       & Pick<Transaction, 'id' | 'value' | 'type' | 'date'>
     )>>> }
   )>>> }
+);
+
+export type CategoriesSpendingFlowQueryVariables = {
+  date: Maybe<Scalars['String']>,
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>
+};
+
+
+export type CategoriesSpendingFlowQuery = (
+  { __typename?: 'Query' }
+  & { categoriesSpendingFlow: Maybe<(
+    { __typename?: 'AreaChart' }
+    & Pick<AreaChart, 'header' | 'data' | 'colors'>
+  )> }
+);
+
+export type CategoriesSpendingPieQueryVariables = {
+  date: Maybe<Scalars['String']>,
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>,
+  type: Maybe<TransactionType>
+};
+
+
+export type CategoriesSpendingPieQuery = (
+  { __typename?: 'Query' }
+  & { categoriesSpendingPieChart: Maybe<(
+    { __typename?: 'AreaChart' }
+    & Pick<AreaChart, 'header' | 'data' | 'colors'>
+  )> }
 );
 
 export type WalletsQueryVariables = {};
@@ -1060,6 +1111,81 @@ export function useCategoriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryH
 export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
 export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;
 export type CategoriesQueryResult = ApolloReactCommon.QueryResult<CategoriesQuery, CategoriesQueryVariables>;
+export const CategoriesSpendingFlowDocument = gql`
+    query CategoriesSpendingFlow($date: String, $walletIds: [Int], $categoryIds: [Int]) {
+  categoriesSpendingFlow(input: {date: $date, walletIds: $walletIds, categoryIds: $categoryIds}) {
+    header
+    data
+    colors
+  }
+}
+    `;
+
+/**
+ * __useCategoriesSpendingFlowQuery__
+ *
+ * To run a query within a React component, call `useCategoriesSpendingFlowQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesSpendingFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesSpendingFlowQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *      walletIds: // value for 'walletIds'
+ *      categoryIds: // value for 'categoryIds'
+ *   },
+ * });
+ */
+export function useCategoriesSpendingFlowQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CategoriesSpendingFlowQuery, CategoriesSpendingFlowQueryVariables>) {
+        return ApolloReactHooks.useQuery<CategoriesSpendingFlowQuery, CategoriesSpendingFlowQueryVariables>(CategoriesSpendingFlowDocument, baseOptions);
+      }
+export function useCategoriesSpendingFlowLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CategoriesSpendingFlowQuery, CategoriesSpendingFlowQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CategoriesSpendingFlowQuery, CategoriesSpendingFlowQueryVariables>(CategoriesSpendingFlowDocument, baseOptions);
+        }
+export type CategoriesSpendingFlowQueryHookResult = ReturnType<typeof useCategoriesSpendingFlowQuery>;
+export type CategoriesSpendingFlowLazyQueryHookResult = ReturnType<typeof useCategoriesSpendingFlowLazyQuery>;
+export type CategoriesSpendingFlowQueryResult = ApolloReactCommon.QueryResult<CategoriesSpendingFlowQuery, CategoriesSpendingFlowQueryVariables>;
+export const CategoriesSpendingPieDocument = gql`
+    query CategoriesSpendingPie($date: String, $walletIds: [Int], $categoryIds: [Int], $type: TransactionType) {
+  categoriesSpendingPieChart(input: {date: $date, walletIds: $walletIds, categoryIds: $categoryIds, type: $type}) {
+    header
+    data
+    colors
+  }
+}
+    `;
+
+/**
+ * __useCategoriesSpendingPieQuery__
+ *
+ * To run a query within a React component, call `useCategoriesSpendingPieQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesSpendingPieQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesSpendingPieQuery({
+ *   variables: {
+ *      date: // value for 'date'
+ *      walletIds: // value for 'walletIds'
+ *      categoryIds: // value for 'categoryIds'
+ *      type: // value for 'type'
+ *   },
+ * });
+ */
+export function useCategoriesSpendingPieQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CategoriesSpendingPieQuery, CategoriesSpendingPieQueryVariables>) {
+        return ApolloReactHooks.useQuery<CategoriesSpendingPieQuery, CategoriesSpendingPieQueryVariables>(CategoriesSpendingPieDocument, baseOptions);
+      }
+export function useCategoriesSpendingPieLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CategoriesSpendingPieQuery, CategoriesSpendingPieQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CategoriesSpendingPieQuery, CategoriesSpendingPieQueryVariables>(CategoriesSpendingPieDocument, baseOptions);
+        }
+export type CategoriesSpendingPieQueryHookResult = ReturnType<typeof useCategoriesSpendingPieQuery>;
+export type CategoriesSpendingPieLazyQueryHookResult = ReturnType<typeof useCategoriesSpendingPieLazyQuery>;
+export type CategoriesSpendingPieQueryResult = ApolloReactCommon.QueryResult<CategoriesSpendingPieQuery, CategoriesSpendingPieQueryVariables>;
 export const WalletsDocument = gql`
     query Wallets {
   wallets {
