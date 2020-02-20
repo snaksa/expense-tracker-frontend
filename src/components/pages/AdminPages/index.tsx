@@ -19,7 +19,7 @@ import Notification from "../../molecules/notification";
 import TransactionsPage from "./TransactionsPage";
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const { isAuthenticated } = useAuthDataContext();
   isAuthenticated();
@@ -36,6 +36,7 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
         }
         sidebar={
           <Sidebar
+            onOptionClick={() => setIsSidebarVisible(false)}
             isVisible={isSidebarVisible}
             options={[
               { label: "Home", to: "/admin", icon: <HomeIcon /> },

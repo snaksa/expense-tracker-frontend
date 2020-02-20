@@ -9,6 +9,17 @@ const useStyles = makeStyles(theme => ({
             width: '100%'
         }
     },
+    mobile: {
+        [theme.breakpoints.up('sm')]: {
+            display: 'none'
+        }
+    },
+    desktop: {
+        height: '100%',
+        [theme.breakpoints.down('sm')]: {
+            display: 'none'
+        }
+    }
 }));
 
 export default useStyles;

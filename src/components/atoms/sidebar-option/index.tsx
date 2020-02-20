@@ -9,10 +9,12 @@ export interface Props {
     to?: string;
     icon?: any;
   };
+  onClick: any;
 }
 
 const SidebarOption: React.FunctionComponent<Props> = ({
-  option
+  option,
+  onClick
 }): JSX.Element => {
   const classes = useStyles();
   return (
@@ -22,6 +24,7 @@ const SidebarOption: React.FunctionComponent<Props> = ({
         exact
         className={classes.link}
         activeClassName={classes.active}
+        onClick={onClick}
       >
         <Box p={3}>
           <Grid container justify="flex-start" alignItems="center" spacing={1}>
