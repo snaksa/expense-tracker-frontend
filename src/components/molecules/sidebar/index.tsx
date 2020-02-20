@@ -18,9 +18,9 @@ const Sidebar: React.FunctionComponent<Props> = ({
   const classes = useStyles();
 
   return (
-    <Box height={'100%'}>
-      <Box className={classes.mobile}>
-        {isVisible ? (
+    <Box height={"100%"}>
+      {isVisible ? (
+        <Box className={classes.mobile}>
           <Grid container className={classes.main} direction="column">
             {options.map(option => (
               <Grid item>
@@ -28,10 +28,10 @@ const Sidebar: React.FunctionComponent<Props> = ({
               </Grid>
             ))}
           </Grid>
-        ) : (
-          <React.Fragment></React.Fragment>
-        )}
-      </Box>
+        </Box>
+      ) : (
+        <React.Fragment></React.Fragment>
+      )}
       <Box className={classes.desktop}>
         <Grid container className={classes.main} direction="column">
           {options.map(option => (
