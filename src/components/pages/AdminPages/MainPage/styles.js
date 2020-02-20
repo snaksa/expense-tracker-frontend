@@ -13,6 +13,8 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "#FFF"
     },
     transactions: {
+        height: '100%',
+        backgroundColor: '#FFF',
         [theme.breakpoints.down('sm')]: {
             width: '100%'
         }

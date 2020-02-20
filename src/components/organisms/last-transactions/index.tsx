@@ -13,7 +13,7 @@ import Loader from "components/atoms/loader";
 
 let backupData: any[] = [];
 
-const LastTransactions = ({ wallets }: { wallets: number[] }) => {
+const LastTransactions = ({ wallets, onChange }: { wallets: number[], onChange: Function }) => {
   const [newTransactionModalIsOpen, setNewTransactionModalIsOpen] = useState(
     false
   );
@@ -69,6 +69,7 @@ const LastTransactions = ({ wallets }: { wallets: number[] }) => {
               limit: 5,
               unlimited: false
             });
+            onChange();
             setNewTransactionModalIsOpen(false);
           }}
           onError={() => setNewTransactionModalIsOpen(false)}
