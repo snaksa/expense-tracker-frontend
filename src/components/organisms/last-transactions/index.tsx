@@ -10,10 +10,13 @@ import {
   useWalletsQuery
 } from "api";
 import Loader from "components/atoms/loader";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 let backupData: any[] = [];
 
 const LastTransactions = ({ wallets, onChange }: { wallets: number[], onChange: Function }) => {
+  const {setTransactionUpdate} = useUpdateDetectionContext();
+
   const [newTransactionModalIsOpen, setNewTransactionModalIsOpen] = useState(
     false
   );
@@ -62,6 +65,7 @@ const LastTransactions = ({ wallets, onChange }: { wallets: number[], onChange: 
         <TransactionForm
           wallets={userWallets}
           onComplete={() => {
+            setTransactionUpdate();
             refetch({
               date: null,
               walletIds: wallets,

@@ -16,6 +16,7 @@ import {
   WalletsQuery
 } from "../../../api";
 import { useNotificationContext } from "../../../services/notification-provider";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 interface Props {
   wallets: Wallet[];
@@ -38,9 +39,14 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
     showErrorNotification
   } = useNotificationContext();
 
+  const {
+    setWalletUpdate
+  } = useUpdateDetectionContext();
+
   const [createWallet] = useCreateWalletMutation({
     onCompleted() {
       setNewWalletModalIsOpen(false);
+      setWalletUpdate();
       showSuccessNotification("Wallet created succesfully!");
     },
     onError() {

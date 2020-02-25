@@ -14,6 +14,7 @@ import {
   useUpdateCategoryMutation
 } from "api";
 import ColorPicker from "material-ui-color-picker";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 interface Props {
   category?: Category;
@@ -43,9 +44,14 @@ const CategoryForm = ({
     showErrorNotification
   } = useNotificationContext();
 
+  const {
+    setCategoryUpdate
+  } = useUpdateDetectionContext();
+
   const [createCategory] = useCreateCategoryMutation({
     onCompleted() {
       showSuccessNotification("Category created succesfully!");
+      setCategoryUpdate();
       onComplete();
     },
     onError() {
@@ -78,6 +84,7 @@ const CategoryForm = ({
   const [updateCategory] = useUpdateCategoryMutation({
     onCompleted() {
       showSuccessNotification("Category updated succesfully!");
+      setCategoryUpdate();
       onComplete();
     },
     onError() {

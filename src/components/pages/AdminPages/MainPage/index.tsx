@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
 import useStyles from "./styles";
@@ -6,10 +6,10 @@ import WalletsCollection from "../../../organisms/wallets-collection";
 import {
   useWalletsQuery,
   Wallet,
-  useTransactionSpendingFlowLazyQuery,
-  useCategoriesSpendingPieLazyQuery,
+  useCategoriesSpendingPieQuery,
   TransactionType,
-  useCategoriesSpendingFlowLazyQuery
+  useCategoriesSpendingFlowQuery,
+  useTransactionSpendingFlowQuery
 } from "../../../../api";
 import LastTransactions from "components/organisms/last-transactions";
 import SummaryBox from "components/molecules/summary-box";
@@ -18,9 +18,16 @@ import moment from "moment";
 import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
 import Loader from "components/atoms/loader";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 const MainPage = () => {
   const classes = useStyles();
+
+  const {
+    lastTransactionAction,
+    lastCategoryAction,
+    lastWalletAction
+  } = useUpdateDetectionContext();
 
   const oldChartData: any = useRef([]);
   const [chosenWallets, setChosenWallets] = useState<number[]>([]);
@@ -42,10 +49,18 @@ const MainPage = () => {
     }
   };
 
-  const [
-    getReport,
-    { data: spendingFlowData, loading }
-  ] = useTransactionSpendingFlowLazyQuery({ fetchPolicy: "network-only" });
+  const {
+    data: spendingFlowData,
+    loading,
+    refetch: refetchReport
+  } = useTransactionSpendingFlowQuery({
+    variables: {
+      date: null,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: []
+    },
+    fetchPolicy: "cache-and-network"
+  });
 
   const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
   let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
@@ -55,10 +70,19 @@ const MainPage = () => {
   ]);
   const chartData = [flowColumns, ...flowChart];
 
-  const [
-    getSpendingChart,
-    { data: spendingQueryData, loading: spendingPieLoading }
-  ] = useCategoriesSpendingPieLazyQuery({ fetchPolicy: "network-only" });
+  const {
+    data: spendingQueryData,
+    loading: spendingPieLoading,
+    refetch: refetchSpendingPie
+  } = useCategoriesSpendingPieQuery({
+    variables: {
+      date: null,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: [],
+      type: TransactionType.Expense
+    },
+    fetchPolicy: "cache-and-network"
+  });
 
   const spendingData: any = {
     header: spendingQueryData?.categoriesSpendingPieChart?.header ?? [],
@@ -68,10 +92,19 @@ const MainPage = () => {
     ).map((row: any) => [row[0], parseFloat(row[1])])
   };
 
-  const [
-    getIncomeChart,
-    { data: incomeQueryData, loading: incomePieLoading }
-  ] = useCategoriesSpendingPieLazyQuery({ fetchPolicy: "network-only" });
+  const {
+    data: incomeQueryData,
+    loading: incomePieLoading,
+    refetch: refetchIncomePie
+  } = useCategoriesSpendingPieQuery({
+    variables: {
+      date: null,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: [],
+      type: TransactionType.Income
+    },
+    fetchPolicy: "cache-and-network"
+  });
 
   const incomeData: any = {
     header: incomeQueryData?.categoriesSpendingPieChart?.header ?? [],
@@ -81,10 +114,18 @@ const MainPage = () => {
     ).map((row: any) => [row[0], parseFloat(row[1])])
   };
 
-  const [
-    getSpendingFlowReport,
-    { data: spendingFlowQueryData, loading: spendingFlowLoading }
-  ] = useCategoriesSpendingFlowLazyQuery({ fetchPolicy: "network-only" });
+  const {
+    data: spendingFlowQueryData,
+    loading: spendingFlowLoading,
+    refetch: refetchSpendingFlow
+  } = useCategoriesSpendingFlowQuery({
+    variables: {
+      date: null,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: []
+    },
+    fetchPolicy: "cache-and-network"
+  });
 
   const spendingCategoryFlowData: any = {
     header: spendingFlowQueryData?.categoriesSpendingFlow?.header ?? [],
@@ -100,48 +141,16 @@ const MainPage = () => {
     )
   };
 
-  const updateReports = useCallback(() => {
-    getReport({
-      variables: {
-        date: null,
-        walletIds: wallets.map((wallet: Wallet) => wallet.id),
-        categoryIds: []
-      }
-    });
-    getSpendingChart({
-      variables: {
-        date: null,
-        walletIds: wallets.map((wallet: Wallet) => wallet.id),
-        categoryIds: [],
-        type: TransactionType.Expense
-      }
-    });
-    getSpendingFlowReport({
-      variables: {
-        date: null,
-        walletIds: wallets.map((wallet: Wallet) => wallet.id),
-        categoryIds: []
-      }
-    });
-    getIncomeChart({
-      variables: {
-        date: null,
-        walletIds: wallets.map((wallet: Wallet) => wallet.id),
-        categoryIds: [],
-        type: TransactionType.Income
-      }
-    });
-  }, [
-    wallets,
-    getReport,
-    getSpendingChart,
-    getIncomeChart,
-    getSpendingFlowReport
-  ]);
-
   useEffect(() => {
-    updateReports();
-  }, [wallets, updateReports]);
+    refetchReport();
+    refetchSpendingPie();
+    refetchIncomePie();
+    refetchSpendingFlow();
+  }, [
+    lastTransactionAction,
+    lastCategoryAction,
+    lastWalletAction
+  ]);
 
   if (flowColumns.length > 0) {
     oldChartData.current = chartData;
@@ -166,7 +175,7 @@ const MainPage = () => {
                   <Box className={classes.transactions}>
                     <LastTransactions
                       wallets={chosenWallets}
-                      onChange={() => updateReports()}
+                      onChange={() => {}}
                     />
                   </Box>
                 </Grid>

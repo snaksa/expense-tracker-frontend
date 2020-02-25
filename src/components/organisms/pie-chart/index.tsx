@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import Chart from "react-google-charts";
-import Loader from "components/atoms/loader";
 
 interface Props {
   loading: boolean;
@@ -21,7 +20,6 @@ const PieChart = ({ data, loading }: Props): JSX.Element => {
 
   return (
     <React.Fragment>
-      <Loader loading={loading} />
       <Chart
         width={"100%"}
         height={"300px"}

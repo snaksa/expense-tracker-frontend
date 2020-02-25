@@ -18,6 +18,7 @@ import {
   WalletsQuery,
   WalletsDocument
 } from "../../../api";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 interface Props {
   id: number;
@@ -35,6 +36,10 @@ export interface FormFields {
 const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
   const classes = useStyles();
 
+  const {
+    setWalletUpdate
+  } = useUpdateDetectionContext();
+
   const [checked, setChecked] = useState(true);
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
@@ -49,6 +54,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
       showSuccessNotification("Wallet deleted successfully!");
+      setWalletUpdate();
     },
     onError() {
       showErrorNotification("An error occured while deleting the wallet!");

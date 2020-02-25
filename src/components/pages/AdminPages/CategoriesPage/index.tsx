@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
 import useStyles from "./styles";
 import {
   useCategoriesQuery,
   TransactionType,
-  useCategoriesSpendingFlowLazyQuery,
+  useCategoriesSpendingPieQuery,
   Wallet,
   useWalletsQuery,
-  useCategoriesSpendingPieLazyQuery
+  useCategoriesSpendingFlowQuery
 } from "api";
 import CategoriesTable from "components/organisms/categories-table";
 import Modal from "components/molecules/modal";
@@ -21,9 +21,16 @@ import DateRangePicker, {
 import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
 import moment from "moment";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 const CategoriesPage = () => {
   const classes = useStyles();
+
+  const {
+    lastTransactionAction,
+    lastCategoryAction,
+    lastWalletAction
+  } = useUpdateDetectionContext();
 
   const [backDate, setBackDate] = useState(calculateBackDate(Range.Last7Days));
   const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);
@@ -36,10 +43,18 @@ const CategoriesPage = () => {
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
 
-  const [
-    getReport,
-    { data: spendingFlowQueryData, loading: spendingFlowLoading }
-  ] = useCategoriesSpendingFlowLazyQuery({ fetchPolicy: "network-only" });
+  const {
+    data: spendingFlowQueryData,
+    loading: spendingFlowLoading,
+    refetch: refetchReport
+  } = useCategoriesSpendingFlowQuery({
+    variables: {
+      date: backDate,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: []
+    },
+    fetchPolicy: "network-only"
+  });
 
   const spendingFlowData: any = {
     header: spendingFlowQueryData?.categoriesSpendingFlow?.header ?? [],
@@ -55,10 +70,19 @@ const CategoriesPage = () => {
     )
   };
 
-  const [
-    getSpendingChart,
-    { data: spendingQueryData, loading: spendingPieLoading }
-  ] = useCategoriesSpendingPieLazyQuery({ fetchPolicy: "network-only" });
+  const {
+    data: spendingQueryData,
+    loading: spendingPieLoading,
+    refetch: refetchSpendingPie
+  } = useCategoriesSpendingPieQuery({
+    variables: {
+      date: backDate,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: [],
+      type: TransactionType.Expense
+    },
+    fetchPolicy: "cache-and-network"
+  });
 
   const spendingData: any = {
     header: spendingQueryData?.categoriesSpendingPieChart?.header ?? [],
@@ -68,10 +92,19 @@ const CategoriesPage = () => {
     ).map((row: any) => [row[0], parseFloat(row[1])])
   };
 
-  const [
-    getIncomeChart,
-    { data: incomeQueryData, loading: incomePieLoading }
-  ] = useCategoriesSpendingPieLazyQuery({ fetchPolicy: "network-only" });
+  const {
+    data: incomeQueryData,
+    loading: incomePieLoading,
+    refetch: refetchIncomePie
+  } = useCategoriesSpendingPieQuery({
+    variables: {
+      date: backDate,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: [],
+      type: TransactionType.Income
+    },
+    fetchPolicy: "cache-and-network"
+  });
 
   const incomeData: any = {
     header: incomeQueryData?.categoriesSpendingPieChart?.header ?? [],
@@ -81,35 +114,20 @@ const CategoriesPage = () => {
     ).map((row: any) => [row[0], parseFloat(row[1])])
   };
 
-  const updateReports = useCallback(() => {
-    getReport({
-      variables: {
-        date: backDate,
-        walletIds: wallets.map((wallet: Wallet) => wallet.id),
-        categoryIds: []
-      }
-    });
-    getSpendingChart({
-      variables: {
-        date: backDate,
-        walletIds: wallets.map((wallet: Wallet) => wallet.id),
-        categoryIds: [],
-        type: TransactionType.Expense
-      }
-    });
-    getIncomeChart({
-      variables: {
-        date: backDate,
-        walletIds: wallets.map((wallet: Wallet) => wallet.id),
-        categoryIds: [],
-        type: TransactionType.Income
-      }
-    });
-  }, [wallets, backDate, getReport, getSpendingChart, getIncomeChart]);
-
   useEffect(() => {
-    updateReports();
-  }, [updateReports]);
+    refetchReport();
+    refetchSpendingPie();
+    refetchIncomePie();
+  }, [
+    wallets,
+    backDate,
+    refetchReport,
+    refetchSpendingPie,
+    refetchIncomePie,
+    lastTransactionAction,
+    lastCategoryAction,
+    lastWalletAction
+  ]);
 
   return (
     <Box className={classes.main} p={10}>
@@ -135,8 +153,8 @@ const CategoriesPage = () => {
           <CategoriesTable
             categories={categories}
             onClick={() => setNewCategoryModalIsOpen(true)}
-            onEdit={() => updateReports()}
-            onDelete={() => updateReports()}
+            onEdit={() => {}}
+            onDelete={() => {}}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={4}>

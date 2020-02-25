@@ -19,6 +19,7 @@ import {
   TransactionsDocument
 } from "api";
 import { useSharedDataContext } from "services/shared-data-provider";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 interface Props {
   transaction?: Transaction;
@@ -51,6 +52,10 @@ const TransactionForm = ({
   onComplete,
   onError
 }: Props): JSX.Element => {
+  const {
+    setTransactionUpdate
+  } = useUpdateDetectionContext();
+  
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
@@ -104,6 +109,7 @@ const TransactionForm = ({
   const [createTransaction] = useCreateTransactionMutation({
     onCompleted() {
       showSuccessNotification("Record created succesfully!");
+      setTransactionUpdate();
       onComplete();
     },
     onError() {
@@ -116,6 +122,7 @@ const TransactionForm = ({
   const [updateTransaction] = useUpdateTransactionMutation({
     onCompleted() {
       showSuccessNotification("Record updated succesfully!");
+      setTransactionUpdate();
       onComplete();
     },
     onError() {

@@ -17,6 +17,7 @@ import ConfirmationDialog from "components/molecules/confirmation-dialog";
 import Modal from "components/molecules/modal";
 import TransactionForm from "../transaction-form";
 import { useSharedDataContext } from "services/shared-data-provider";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 interface Props {
   selectedDate: string;
@@ -50,6 +51,10 @@ const TransactionsTable = ({
 
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
+
+  const {
+    setTransactionUpdate
+  } = useUpdateDetectionContext();
 
   const {
     showSuccessNotification,
@@ -110,6 +115,7 @@ const TransactionsTable = ({
   const [deleteTransaction] = useDeleteTransactionMutation({
     onCompleted() {
       showSuccessNotification("Record deleted successfully!");
+      setTransactionUpdate();
       if (onDelete) {
         onDelete();
       }

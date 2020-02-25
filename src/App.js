@@ -9,6 +9,7 @@ import AdminPages from './components/pages/AdminPages';
 import AuthDataProvider from "./services/auth-provider";
 import NotificationProvider from "./services/notification-provider";
 import SharedDataProvider from "./services/shared-data-provider";
+import UpdateDetectionProvider from "./services/update-detection-provider";
 import {
   BrowserRouter as Router,
   Switch,
@@ -59,14 +60,16 @@ const App = () => {
           <AuthDataProvider>
             <NotificationProvider>
               <SharedDataProvider>
-                <Switch>
-                  <Route path="/admin">
-                    <AdminPages />
-                  </Route>
-                  <Route path="/">
-                    <HomePages />
-                  </Route>
-                </Switch>
+                <UpdateDetectionProvider>
+                  <Switch>
+                    <Route path="/admin">
+                      <AdminPages />
+                    </Route>
+                    <Route path="/">
+                      <HomePages />
+                    </Route>
+                  </Switch>
+                </UpdateDetectionProvider>
               </SharedDataProvider>
             </NotificationProvider>
           </AuthDataProvider>

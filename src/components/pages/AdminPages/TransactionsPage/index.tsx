@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Grid } from "@material-ui/core";
 import useStyles from "./styles";
-import {
-  useWalletsQuery,
-  useTransactionSpendingFlowLazyQuery,
-  Wallet
-} from "api";
+import { useWalletsQuery, useTransactionSpendingFlowQuery, Wallet } from "api";
 import TransactionsTable from "components/organisms/transactions-table";
 import Modal from "components/molecules/modal";
 import TransactionForm from "components/organisms/transaction-form";
@@ -18,9 +14,16 @@ import DateRangePicker, {
   calculateBackDate
 } from "components/molecules/date-range-picker";
 import Loader from "components/atoms/loader";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 const TransactionsPage = () => {
   const classes = useStyles();
+
+  const {
+    lastTransactionAction,
+    lastCategoryAction,
+    lastWalletAction
+  } = useUpdateDetectionContext();
 
   const oldChartData: any = useRef([]);
   const [backDate, setBackDate] = useState(calculateBackDate(Range.Last7Days));
@@ -29,20 +32,27 @@ const TransactionsPage = () => {
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
 
-  const [
-    getReport,
-    { data: spendingFlowData, refetch, loading }
-  ] = useTransactionSpendingFlowLazyQuery({ fetchPolicy: "network-only" });
+  const {
+    data: spendingFlowData,
+    refetch,
+    loading
+  } = useTransactionSpendingFlowQuery({
+    variables: {
+      date: backDate,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: []
+    },
+    fetchPolicy: "cache-and-network"
+  });
 
   useEffect(() => {
-    getReport({
-      variables: {
-        date: backDate,
-        walletIds: wallets.map((wallet: Wallet) => wallet.id),
-        categoryIds: []
-      }
-    });
-  }, [wallets, getReport, backDate]);
+    refetch();
+  }, [
+    backDate,
+    lastTransactionAction,
+    lastCategoryAction,
+    lastWalletAction
+  ]);
 
   const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
   let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
@@ -66,20 +76,8 @@ const TransactionsPage = () => {
           <TransactionsTable
             selectedDate={backDate}
             onNewClick={() => setNewModalIsOpen(true)}
-            onDelete={() => {
-              refetch({
-                date: backDate,
-                walletIds: wallets.map((wallet: Wallet) => wallet.id),
-                categoryIds: []
-              });
-            }}
-            onEdit={() => {
-              refetch({
-                date: backDate,
-                walletIds: wallets.map((wallet: Wallet) => wallet.id),
-                categoryIds: []
-              });
-            }}
+            onDelete={() => {}}
+            onEdit={() => {}}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
@@ -120,11 +118,6 @@ const TransactionsPage = () => {
         <TransactionForm
           wallets={wallets}
           onComplete={() => {
-            refetch({
-              date: backDate ? backDate.format("Y-M-D") : null,
-              walletIds: wallets.map((wallet: Wallet) => wallet.id),
-              categoryIds: []
-            });
             setNewModalIsOpen(false);
           }}
           onError={() => setNewModalIsOpen(false)}
