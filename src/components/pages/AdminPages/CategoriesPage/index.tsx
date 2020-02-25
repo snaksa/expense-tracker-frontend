@@ -28,7 +28,9 @@ const CategoriesPage = () => {
   const [backDate, setBackDate] = useState(calculateBackDate(Range.Last7Days));
   const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);
 
-  const { data } = useCategoriesQuery({ fetchPolicy: "network-only" });
+  const { data } = useCategoriesQuery({
+    fetchPolicy: "network-only"
+  });
   const categories: any = data?.categories ?? [];
 
   const { data: walletsData } = useWalletsQuery();
@@ -121,7 +123,12 @@ const CategoriesPage = () => {
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
           <SummaryBox header="Spending flow">
-            <LineChart hTitle='Time' vTitle='Money' data={spendingFlowData} loading={spendingFlowLoading} />
+            <LineChart
+              hTitle="Time"
+              vTitle="Money"
+              data={spendingFlowData}
+              loading={spendingFlowLoading}
+            />
           </SummaryBox>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
@@ -184,7 +191,7 @@ CategoriesPage.fragment = gql`
       input: { date: $date, walletIds: $walletIds, categoryIds: $categoryIds }
     ) {
       header
-      data,
+      data
       colors
     }
   }

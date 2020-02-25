@@ -13,7 +13,11 @@ import { gql } from "apollo-boost";
 import SummaryBox from "components/molecules/summary-box";
 import Chart from "react-google-charts";
 import moment from "moment";
-import DateRangePicker, { Range, calculateBackDate } from "components/molecules/date-range-picker";
+import DateRangePicker, {
+  Range,
+  calculateBackDate
+} from "components/molecules/date-range-picker";
+import Loader from "components/atoms/loader";
 
 const TransactionsPage = () => {
   const classes = useStyles();
@@ -56,9 +60,7 @@ const TransactionsPage = () => {
     <Box className={classes.main} p={10}>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={12}>
-          <DateRangePicker
-            onChange={(date: any) => setBackDate(date)}
-          />
+          <DateRangePicker onChange={(date: any) => setBackDate(date)} />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <TransactionsTable
@@ -82,12 +84,18 @@ const TransactionsPage = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <SummaryBox header="Spending flow">
+            <Loader loading={loading} />
             <Chart
               width={"100%"}
               height={"300px"}
               chartType="AreaChart"
-              loader={<div>Loading Chart</div>}
-              data={chartData && !loading ? chartData : oldChartData.current.length ? oldChartData.current : ['Date', 'Money']}
+              data={
+                chartData && !loading
+                  ? chartData
+                  : oldChartData.current.length
+                  ? oldChartData.current
+                  : ["Date", "Money"]
+              }
               options={{
                 hAxis: {
                   title: "Time",

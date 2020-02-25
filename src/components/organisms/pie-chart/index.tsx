@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import Chart from "react-google-charts";
+import Loader from "components/atoms/loader";
 
 interface Props {
   loading: boolean;
@@ -11,7 +12,6 @@ interface Props {
 }
 
 const PieChart = ({ data, loading }: Props): JSX.Element => {
-
   const oldData: any = useRef([]);
 
   const chartData = [data.header, ...data.data];
@@ -20,24 +20,26 @@ const PieChart = ({ data, loading }: Props): JSX.Element => {
   }
 
   return (
-    <Chart
-      width={"100%"}
-      height={"300px"}
-      chartType="PieChart"
-      loader={<div>Loading Chart</div>}
-      data={
-        chartData && !loading
-          ? chartData
-          : oldData.current.length
-          ? oldData.current
-          : ["", ""]
-      }
-      options={{
-        chartArea: { width: "100%", height: "80%" },
-        legend: { position: "bottom" },
-        colors: data.colors ?? []
-      }}
-    />
+    <React.Fragment>
+      <Loader loading={loading} />
+      <Chart
+        width={"100%"}
+        height={"300px"}
+        chartType="PieChart"
+        data={
+          chartData && !loading
+            ? chartData
+            : oldData.current.length
+            ? oldData.current
+            : ["", ""]
+        }
+        options={{
+          chartArea: { width: "100%", height: "80%" },
+          legend: { position: "bottom" },
+          colors: data.colors ?? []
+        }}
+      />
+    </React.Fragment>
   );
 };
 

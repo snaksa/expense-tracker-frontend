@@ -17,6 +17,7 @@ import Chart from "react-google-charts";
 import moment from "moment";
 import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
+import Loader from "components/atoms/loader";
 
 const MainPage = () => {
   const classes = useStyles();
@@ -24,7 +25,7 @@ const MainPage = () => {
   const oldChartData: any = useRef([]);
   const [chosenWallets, setChosenWallets] = useState<number[]>([]);
 
-  const { data } = useWalletsQuery({fetchPolicy: 'network-only'});
+  const { data } = useWalletsQuery();
   const wallets: any = data ? (data.wallets ? data.wallets : []) : [];
 
   useEffect(() => {
@@ -163,16 +164,20 @@ const MainPage = () => {
               <Grid container spacing={5}>
                 <Grid item xs={12} md={4} lg={3}>
                   <Box className={classes.transactions}>
-                    <LastTransactions wallets={chosenWallets} onChange={() => updateReports()} />
+                    <LastTransactions
+                      wallets={chosenWallets}
+                      onChange={() => updateReports()}
+                    />
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={5} lg={6}>
                   <SummaryBox header="Spending flow">
+                    <Loader loading={loading} />
                     <Chart
                       width={"100%"}
                       height={"300px"}
                       chartType="AreaChart"
-                      loader={<div>Loading Chart</div>}
+                      loader={<div></div>}
                       data={
                         chartData && !loading
                           ? chartData

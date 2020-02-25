@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import Chart from "react-google-charts";
+import Loader from "components/atoms/loader";
 
 interface Props {
   hTitle: string;
@@ -21,32 +22,34 @@ const LineChart = ({ data, loading, hTitle, vTitle }: Props): JSX.Element => {
   }
 
   return (
-    <Chart
-      width={"100%"}
-      height={"300px"}
-      chartType="LineChart"
-      loader={<div>Loading Chart</div>}
-      data={
-        chartData && !loading
-          ? chartData
-          : oldData.current.length
-          ? oldData.current
-          : [""]
-      }
-      options={{
-        hAxis: {
-          title: hTitle
-        },
-        vAxis: {
-          title: vTitle
-        },
-        series: {
-          ...(data.colors ?? []).map((color: string) => {
-            return { color: color };
-          })
+    <React.Fragment>
+      <Loader loading={loading} />
+      <Chart
+        width={"100%"}
+        height={"300px"}
+        chartType="LineChart"
+        data={
+          chartData && !loading
+            ? chartData
+            : oldData.current.length
+            ? oldData.current
+            : [""]
         }
-      }}
-    />
+        options={{
+          hAxis: {
+            title: hTitle
+          },
+          vAxis: {
+            title: vTitle
+          },
+          series: {
+            ...(data.colors ?? []).map((color: string) => {
+              return { color: color };
+            })
+          }
+        }}
+      />
+    </React.Fragment>
   );
 };
 
