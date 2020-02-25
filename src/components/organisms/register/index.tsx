@@ -67,7 +67,7 @@ const Register = () => {
           <Grid item>
             <Grid container className={classes.form} direction="column">
               <Grid item>
-                <Box className={classes.image} mt={-10} mb={3} mx="auto">
+                <Box className={classes.image} mt={-21} mb={3} mx="auto">
                   <RoundImage src="https://pngimage.net/wp-content/uploads/2018/05/expense-icon-png-3.png" />
                 </Box>
               </Grid>

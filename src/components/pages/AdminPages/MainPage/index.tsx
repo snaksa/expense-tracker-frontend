@@ -24,7 +24,7 @@ const MainPage = () => {
   const oldChartData: any = useRef([]);
   const [chosenWallets, setChosenWallets] = useState<number[]>([]);
 
-  const { data } = useWalletsQuery();
+  const { data } = useWalletsQuery({fetchPolicy: 'network-only'});
   const wallets: any = data ? (data.wallets ? data.wallets : []) : [];
 
   useEffect(() => {

@@ -31,25 +31,27 @@ let theme = createMuiTheme({
 
 theme = responsiveFontSizes(theme);
 
-const client = new ApolloClient({
-  uri: 'http://localhost:8080',
-  cache: new InMemoryCache(),
-  request: (operation) => {
-    operation.setContext({
-      headers: {
-        Authorization: localStorage.getItem('token') ?? '',
-      },
-    });
-  },
-  onError: (error) => {
-    if (error.networkError?.statusCode === 403) {
-      localStorage.removeItem('token');
-      window.location.href = '/';
-    }
-  }
-});
-
 const App = () => {
+  const client = new ApolloClient({
+    uri: process.env.REACT_APP_API_URL,
+    cache: new InMemoryCache(),
+    request: (operation) => {
+      if (operation.operationName !== 'Login' && operation.operationName !== 'Register') {
+        operation.setContext({
+          headers: {
+            Authorization: localStorage.getItem('token') ?? '',
+          },
+        });
+      }
+    },
+    onError: (error) => {
+      if (error.networkError?.statusCode === 403) {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      }
+    }
+  });
+
   return (
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={theme}>
