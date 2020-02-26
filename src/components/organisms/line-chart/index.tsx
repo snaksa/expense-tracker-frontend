@@ -21,10 +21,12 @@ const LineChart = ({ data, hTitle, vTitle }: Props): JSX.Element => {
         width={"100%"}
         height={"300px"}
         chartType="LineChart"
-        data={data.data.length ? chartData : [['', ''], []]}
+        data={data.data.length ? chartData : [['', ''], ['', 0]]}
         options={{
           hAxis: {
-            title: hTitle
+            title: hTitle,
+            type: "date",
+            format: "Y-MM-dd"
           },
           vAxis: {
             title: vTitle

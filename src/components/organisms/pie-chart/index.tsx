@@ -17,7 +17,7 @@ const PieChart = ({ data }: Props): JSX.Element => {
         width={"100%"}
         height={"300px"}
         chartType="PieChart"
-        data={data.data.length ? chartData : [['', ''], []]}
+        data={data.data.length ? chartData : [['', '']]}
         options={{
           chartArea: { width: "100%", height: "80%" },
           legend: { position: "bottom" },

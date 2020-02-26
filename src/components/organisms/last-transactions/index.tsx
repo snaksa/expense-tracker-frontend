@@ -11,10 +11,12 @@ import {
 } from "api";
 import Loader from "components/atoms/loader";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import useStyles from './styles';
 
 let backupData: any[] = [];
 
 const LastTransactions = ({ wallets, onChange }: { wallets: number[], onChange: Function }) => {
+  const classes = useStyles();
   const {setTransactionUpdate} = useUpdateDetectionContext();
 
   const [newTransactionModalIsOpen, setNewTransactionModalIsOpen] = useState(
@@ -51,7 +53,9 @@ const LastTransactions = ({ wallets, onChange }: { wallets: number[], onChange: 
       onClick={() => setNewTransactionModalIsOpen(true)}
     >
       <Loader loading={loading}/>
-
+      {
+        !transactions.length && !loading && <div className={classes.noData}>No data</div>
+      }
       {transactions.map((transaction: Transaction) => (
         <TransactionSummary transaction={transaction} />
       ))}

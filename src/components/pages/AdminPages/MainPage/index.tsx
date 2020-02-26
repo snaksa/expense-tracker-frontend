@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
 import useStyles from "./styles";
@@ -29,7 +29,6 @@ const MainPage = () => {
     lastWalletAction
   } = useUpdateDetectionContext();
 
-  const oldChartData: any = useRef([]);
   const [chosenWallets, setChosenWallets] = useState<number[]>([]);
 
   const { data } = useWalletsQuery();
@@ -149,10 +148,6 @@ const MainPage = () => {
     lastWalletAction
   ]);
 
-  if (flowColumns.length > 0) {
-    oldChartData.current = chartData;
-  }
-
   return (
     <Box className={classes.main} p={10}>
       <Grid direction="column">
@@ -185,9 +180,9 @@ const MainPage = () => {
                       chartType="AreaChart"
                       loader={<div></div>}
                       data={
-                        chartData && chartData[0].length
+                        chartData.length > 1
                           ? chartData
-                          : ['', '']
+                          : [['', ''], ['', 0]]
                       }
                       options={{
                         hAxis: {
