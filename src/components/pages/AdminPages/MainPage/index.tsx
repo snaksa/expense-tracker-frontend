@@ -56,7 +56,7 @@ const MainPage = () => {
   } = useTransactionSpendingFlowQuery({
     variables: {
       date: null,
-      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      walletIds: chosenWallets,
       categoryIds: []
     },
     fetchPolicy: "cache-and-network"
@@ -72,12 +72,11 @@ const MainPage = () => {
 
   const {
     data: spendingQueryData,
-    loading: spendingPieLoading,
     refetch: refetchSpendingPie
   } = useCategoriesSpendingPieQuery({
     variables: {
       date: null,
-      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      walletIds: chosenWallets,
       categoryIds: [],
       type: TransactionType.Expense
     },
@@ -94,12 +93,11 @@ const MainPage = () => {
 
   const {
     data: incomeQueryData,
-    loading: incomePieLoading,
     refetch: refetchIncomePie
   } = useCategoriesSpendingPieQuery({
     variables: {
       date: null,
-      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      walletIds: chosenWallets,
       categoryIds: [],
       type: TransactionType.Income
     },
@@ -116,12 +114,11 @@ const MainPage = () => {
 
   const {
     data: spendingFlowQueryData,
-    loading: spendingFlowLoading,
     refetch: refetchSpendingFlow
   } = useCategoriesSpendingFlowQuery({
     variables: {
       date: null,
-      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      walletIds: chosenWallets,
       categoryIds: []
     },
     fetchPolicy: "cache-and-network"
@@ -171,7 +168,7 @@ const MainPage = () => {
           <Grid container direction="column" spacing={5}>
             <Grid item xs={12} md={12} lg={12}>
               <Grid container spacing={5}>
-                <Grid item xs={12} md={4} lg={3}>
+                <Grid item xs={12} md={6} lg={3}>
                   <Box className={classes.transactions}>
                     <LastTransactions
                       wallets={chosenWallets}
@@ -179,7 +176,7 @@ const MainPage = () => {
                     />
                   </Box>
                 </Grid>
-                <Grid item xs={12} md={5} lg={6}>
+                <Grid item xs={12} md={6} lg={6}>
                   <SummaryBox header="Spending flow">
                     <Loader loading={loading} />
                     <Chart
@@ -188,11 +185,9 @@ const MainPage = () => {
                       chartType="AreaChart"
                       loader={<div></div>}
                       data={
-                        chartData && !loading
+                        chartData && chartData[0].length
                           ? chartData
-                          : oldChartData.current.length
-                          ? oldChartData.current
-                          : ["Date", "Money"]
+                          : ['', '']
                       }
                       options={{
                         hAxis: {
@@ -207,11 +202,10 @@ const MainPage = () => {
                     />
                   </SummaryBox>
                 </Grid>
-                <Grid item xs={12} md={3} lg={3}>
+                <Grid item xs={12} md={12} lg={3}>
                   <SummaryBox header="Spending">
                     <PieChart
                       data={spendingData}
-                      loading={spendingPieLoading}
                     />
                   </SummaryBox>
                 </Grid>
@@ -220,24 +214,23 @@ const MainPage = () => {
             <Grid item>
               <Grid item xs={12} md={12} lg={12}>
                 <Grid container spacing={5}>
-                  <Grid item xs={12} md={3} lg={3}>
+                  <Grid item xs={12} md={6} lg={3}>
                     <SummaryBox header="Income">
-                      <PieChart data={incomeData} loading={incomePieLoading} />
+                      <PieChart data={incomeData} />
                     </SummaryBox>
                   </Grid>
-                  <Grid item xs={12} md={5} lg={6}>
+                  <Grid item xs={12} md={6} lg={6}>
                     <SummaryBox header="Spending flow by categories">
                       <LineChart
                         hTitle="Time"
                         vTitle="Money"
                         data={spendingCategoryFlowData}
-                        loading={spendingFlowLoading}
                       />
                     </SummaryBox>
                   </Grid>
-                  <Grid item xs={12} md={3} lg={3}>
+                  <Grid item xs={12} md={12} lg={3}>
                     <SummaryBox header="Income">
-                      <PieChart data={incomeData} loading={incomePieLoading} />
+                      <PieChart data={incomeData} />
                     </SummaryBox>
                   </Grid>
                 </Grid>

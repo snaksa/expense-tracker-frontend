@@ -88,11 +88,9 @@ const TransactionsPage = () => {
               height={"300px"}
               chartType="AreaChart"
               data={
-                chartData && !loading
+                chartData && chartData[0].length
                   ? chartData
-                  : oldChartData.current.length
-                  ? oldChartData.current
-                  : ["Date", "Money"]
+                  : ['', '']
               }
               options={{
                 hAxis: {

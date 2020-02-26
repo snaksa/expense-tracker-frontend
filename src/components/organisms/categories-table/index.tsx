@@ -190,24 +190,6 @@ const columns = [
     align: "left"
   },
   {
-    type: "number",
-    id: "transactionsCount",
-    label: "Records",
-    minWidth: 100,
-    align: "center"
-  },
-  {
-    type: "number",
-    id: "balance",
-    label: "Balance",
-    minWidth: 100,
-    align: "center",
-    prefix: "BGN",
-    format: (value: number) => Math.abs(value).toFixed(2),
-    color: (row: any) => (row.balance < 0 ? "red" : "green"),
-    sign: (row: any) => (row.balance < 0 ? "-BGN " : "BGN ")
-  },
-  {
     type: "actions",
     id: "id",
     actions: [

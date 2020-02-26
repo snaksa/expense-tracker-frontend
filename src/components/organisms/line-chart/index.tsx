@@ -1,10 +1,9 @@
-import React, { useRef } from "react";
+import React from "react";
 import Chart from "react-google-charts";
 
 interface Props {
   hTitle: string;
   vTitle: string;
-  loading: boolean;
   data: {
     header?: string[];
     colors?: string[];
@@ -12,13 +11,9 @@ interface Props {
   };
 }
 
-const LineChart = ({ data, loading, hTitle, vTitle }: Props): JSX.Element => {
-  const oldData: any = useRef([]);
+const LineChart = ({ data, hTitle, vTitle }: Props): JSX.Element => {
 
-  const chartData = [data.header, ...data.data];
-  if (data.header && data.header.length > 0) {
-    oldData.current = data.data;
-  }
+  const chartData = data.header?.length ? [data.header, ...data.data] : [];
 
   return (
     <React.Fragment>
@@ -26,13 +21,7 @@ const LineChart = ({ data, loading, hTitle, vTitle }: Props): JSX.Element => {
         width={"100%"}
         height={"300px"}
         chartType="LineChart"
-        data={
-          chartData && !loading
-            ? chartData
-            : oldData.current.length
-            ? oldData.current
-            : [""]
-        }
+        data={data.data.length ? chartData : [['', ''], []]}
         options={{
           hAxis: {
             title: hTitle

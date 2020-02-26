@@ -45,7 +45,6 @@ const CategoriesPage = () => {
 
   const {
     data: spendingFlowQueryData,
-    loading: spendingFlowLoading,
     refetch: refetchReport
   } = useCategoriesSpendingFlowQuery({
     variables: {
@@ -53,7 +52,7 @@ const CategoriesPage = () => {
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: []
     },
-    fetchPolicy: "network-only"
+    fetchPolicy: "cache-and-network"
   });
 
   const spendingFlowData: any = {
@@ -72,7 +71,6 @@ const CategoriesPage = () => {
 
   const {
     data: spendingQueryData,
-    loading: spendingPieLoading,
     refetch: refetchSpendingPie
   } = useCategoriesSpendingPieQuery({
     variables: {
@@ -94,7 +92,6 @@ const CategoriesPage = () => {
 
   const {
     data: incomeQueryData,
-    loading: incomePieLoading,
     refetch: refetchIncomePie
   } = useCategoriesSpendingPieQuery({
     variables: {
@@ -145,7 +142,6 @@ const CategoriesPage = () => {
               hTitle="Time"
               vTitle="Money"
               data={spendingFlowData}
-              loading={spendingFlowLoading}
             />
           </SummaryBox>
         </Grid>
@@ -159,12 +155,12 @@ const CategoriesPage = () => {
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <SummaryBox header="Spending">
-            <PieChart data={spendingData} loading={spendingPieLoading} />
+            <PieChart data={spendingData} />
           </SummaryBox>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <SummaryBox header="Income">
-            <PieChart data={incomeData} loading={incomePieLoading} />
+            <PieChart data={incomeData} />
           </SummaryBox>
         </Grid>
       </Grid>
