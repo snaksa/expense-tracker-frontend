@@ -142,6 +142,7 @@ const MainPage = () => {
     refetchSpendingPie();
     refetchIncomePie();
     refetchSpendingFlow();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     lastTransactionAction,
     lastCategoryAction,
@@ -150,7 +151,7 @@ const MainPage = () => {
 
   return (
     <Box className={classes.main} p={10}>
-      <Grid direction="column">
+      <Grid container direction="column">
         <Grid item xs={12} md={12} lg={12}>
           <Box mb={5} p={5} className={classes.collection}>
             <WalletsCollection

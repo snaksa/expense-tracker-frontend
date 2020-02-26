@@ -56,8 +56,8 @@ const LastTransactions = ({ wallets, onChange }: { wallets: number[], onChange: 
       {
         !transactions.length && !loading && <div className={classes.noData}>No data</div>
       }
-      {transactions.map((transaction: Transaction) => (
-        <TransactionSummary transaction={transaction} />
+      {transactions.map((transaction: Transaction, index: number) => (
+        <TransactionSummary key={index} transaction={transaction} />
       ))}
       <Modal
         title={"+ New Record"}

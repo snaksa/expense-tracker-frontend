@@ -47,6 +47,7 @@ const TransactionsPage = () => {
 
   useEffect(() => {
     refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     backDate,
     lastTransactionAction,
@@ -90,7 +91,7 @@ const TransactionsPage = () => {
               data={
                 chartData && chartData[0].length
                   ? chartData
-                  : ['', '']
+                  : [['', ''], ['', 0]]
               }
               options={{
                 hAxis: {

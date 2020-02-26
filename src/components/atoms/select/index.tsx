@@ -45,7 +45,7 @@ const Select: React.FunctionComponent<Props> = ({
           labelId={`select-${name}`}
         >
           {options.map((option: any) => (
-            <MenuItem value={option.id}>{option.value}</MenuItem>
+            <MenuItem key={option.id} value={option.id}>{option.value}</MenuItem>
           ))}
         </MaterialSelect>
       </FormControl>

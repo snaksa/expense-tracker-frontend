@@ -96,8 +96,8 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
     <Grid container direction="column">
       <Grid item>
         <Grid container direction="row">
-          {wallets.map((wallet: Wallet) => (
-            <Grid item className={classes.walletItem}>
+          {wallets.map((wallet: Wallet, index: number) => (
+            <Grid item key={index} className={classes.walletItem}>
               <WalletSummary
                 id={wallet.id}
                 name={wallet.name}

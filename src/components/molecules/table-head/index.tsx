@@ -17,8 +17,8 @@ const TableHead: React.FunctionComponent<Props> = ({
   return (
     <TableHeadMaterial>
       <TableRow>
-        {headCells.map(column => {
-          return <TableCell column={column} value={column.value} />;
+        {headCells.map((column, index) => {
+          return <TableCell key={index} column={column} value={column.value} />;
         })}
       </TableRow>
     </TableHeadMaterial>

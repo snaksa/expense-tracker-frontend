@@ -15,13 +15,14 @@ const TableBody: React.FunctionComponent<Props> = ({
 }: Props): JSX.Element => {
   return (
     <TableBodyMaterial>
-      {rows.map((row: any) => {
+      {rows.map((row: any, index: number) => {
         return (
-          <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+          <TableRow hover role="checkbox" tabIndex={-1} key={index}>
             {columns.map((column: any) => {
               const value = row[column.id];
               return (
                 <TableCell
+                  key={column.id}
                   column={column}
                   value={value}
                   onAction={onAction}

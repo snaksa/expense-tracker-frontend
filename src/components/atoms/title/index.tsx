@@ -6,7 +6,7 @@ const Title: React.FunctionComponent<any> = (
 ): JSX.Element => {
   const children = props.children;
   return (
-    <Typography {...props} fullWidth>
+    <Typography {...props}>
       {children}
     </Typography>
   );

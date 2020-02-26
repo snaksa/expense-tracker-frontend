@@ -22,8 +22,8 @@ const Sidebar: React.FunctionComponent<Props> = ({
       {isVisible ? (
         <Box className={classes.mobile}>
           <Grid container className={classes.main} direction="column">
-            {options.map(option => (
-              <Grid item>
+            {options.map((option, index) => (
+              <Grid item key={index}>
                 <SidebarOption option={option} onClick={onOptionClick} />
               </Grid>
             ))}
@@ -34,8 +34,8 @@ const Sidebar: React.FunctionComponent<Props> = ({
       )}
       <Box className={classes.desktop}>
         <Grid container className={classes.main} direction="column">
-          {options.map(option => (
-            <Grid item>
+          {options.map((option, index) => (
+            <Grid item key={index}>
               <SidebarOption option={option} onClick={onOptionClick} />
             </Grid>
           ))}

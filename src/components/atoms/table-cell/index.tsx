@@ -126,6 +126,7 @@ const TableCell: React.FunctionComponent<Props> = ({
         {column.actions &&
           column.actions.map((action: any) => (
             <Icon
+              key={action.id}
               className={classes.icon}
               onClick={() => (onAction ? onAction(action.id, value) : "")}
             >

@@ -73,11 +73,11 @@ const TransactionForm = ({
     };
   });
 
-  const categoryOptions = categories.map((category: Category) => {
+  const categoryOptions = categories.map((category: Category, index: number) => {
     return {
       id: category.id,
       value: (
-        <Grid container alignItems="center" spacing={1}>
+        <Grid container alignItems="center" spacing={1} key={index}>
           <Grid item>
             <RoundBox color={category.color} width={20} height={20} />
           </Grid>

@@ -20,7 +20,7 @@ const TransactionSummary = ({ transaction }: Props) => {
         alignContent="center"
         alignItems="center"
       >
-        <Grid item xs={2} alignItems="center" justify="center">
+        <Grid item xs={2}>
           <RoundBox color={transaction?.category?.color} width={32} height={32} />
         </Grid>
         <Grid item xs={6}>
