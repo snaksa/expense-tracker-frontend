@@ -54,11 +54,18 @@ export interface CategoryUpdateRequestInput {
   icon: Maybe<Scalars['Int']>,
 }
 
+export interface Currency {
+   __typename?: 'Currency',
+  id: Scalars['String'],
+  value: Scalars['String'],
+}
+
 
 export interface Mutation {
    __typename?: 'Mutation',
   registerUser: Maybe<User>,
   loginUser: Maybe<Scalars['String']>,
+  updateUser: Maybe<User>,
   createTransaction: Maybe<Transaction>,
   updateTransaction: Maybe<Transaction>,
   deleteTransaction: Maybe<Transaction>,
@@ -78,6 +85,11 @@ export interface MutationRegisterUserArgs {
 
 export interface MutationLoginUserArgs {
   input: UserLoginRequestInput
+}
+
+
+export interface MutationUpdateUserArgs {
+  input: UserUpdateRequestInput
 }
 
 
@@ -138,6 +150,7 @@ export interface Query {
   wallet: Maybe<Wallet>,
   categories: Maybe<Array<Maybe<Category>>>,
   category: Maybe<Category>,
+  currencies: Maybe<Array<Maybe<Currency>>>,
 }
 
 
@@ -234,7 +247,11 @@ export interface TransactionUpdateRequestInput {
 export interface User {
    __typename?: 'User',
   id: Scalars['Int'],
+  firstName: Maybe<Scalars['String']>,
+  lastName: Maybe<Scalars['String']>,
   email: Scalars['String'],
+  currency: Maybe<Scalars['String']>,
+  language: Maybe<Scalars['String']>,
   categories: Maybe<Array<Maybe<Category>>>,
   wallets: Maybe<Array<Maybe<Wallet>>>,
 }
@@ -248,6 +265,14 @@ export interface UserRegisterRequestInput {
   email: Scalars['String'],
   password: Scalars['String'],
   confirmPassword: Scalars['String'],
+}
+
+export interface UserUpdateRequestInput {
+  firstName: Maybe<Scalars['String']>,
+  lastName: Maybe<Scalars['String']>,
+  email: Maybe<Scalars['String']>,
+  currency: Maybe<Scalars['String']>,
+  language: Maybe<Scalars['String']>,
 }
 
 export interface Wallet {
@@ -390,6 +415,34 @@ export type LoginMutation = (
   & Pick<Mutation, 'loginUser'>
 );
 
+export type CurrentUserQueryVariables = {};
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { me: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'currency' | 'language'>
+  )> }
+);
+
+export type UpdateUserMutationVariables = {
+  email: Maybe<Scalars['String']>,
+  firstName: Maybe<Scalars['String']>,
+  lastName: Maybe<Scalars['String']>,
+  currency: Maybe<Scalars['String']>,
+  language: Maybe<Scalars['String']>
+};
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'currency' | 'language'>
+  )> }
+);
+
 export type RegisterMutationVariables = {
   email: Scalars['String'],
   password: Scalars['String'],
@@ -493,6 +546,17 @@ export type CreateWalletMutation = (
   )> }
 );
 
+export type WalletsQueryVariables = {};
+
+
+export type WalletsQuery = (
+  { __typename?: 'Query' }
+  & { wallets: Maybe<Array<Maybe<(
+    { __typename?: 'Wallet' }
+    & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+  )>>> }
+);
+
 export type CategoriesQueryVariables = {};
 
 
@@ -539,14 +603,14 @@ export type CategoriesSpendingPieQuery = (
   )> }
 );
 
-export type WalletsQueryVariables = {};
+export type CurrenciesQueryVariables = {};
 
 
-export type WalletsQuery = (
+export type CurrenciesQuery = (
   { __typename?: 'Query' }
-  & { wallets: Maybe<Array<Maybe<(
-    { __typename?: 'Wallet' }
-    & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+  & { currencies: Maybe<Array<Maybe<(
+    { __typename?: 'Currency' }
+    & Pick<Currency, 'id' | 'value'>
   )>>> }
 );
 
@@ -839,6 +903,84 @@ export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const CurrentUserDocument = gql`
+    query CurrentUser {
+  me {
+    id
+    email
+    firstName
+    lastName
+    currency
+    language
+  }
+}
+    `;
+
+/**
+ * __useCurrentUserQuery__
+ *
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        return ApolloReactHooks.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+        }
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($email: String, $firstName: String, $lastName: String, $currency: String, $language: String) {
+  updateUser(input: {email: $email, firstName: $firstName, lastName: $lastName, currency: $currency, language: $language}) {
+    id
+    email
+    firstName
+    lastName
+    currency
+    language
+  }
+}
+    `;
+export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      firstName: // value for 'firstName'
+ *      lastName: // value for 'lastName'
+ *      currency: // value for 'currency'
+ *      language: // value for 'language'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password: String!, $confirmPassword: String!) {
   registerUser(input: {email: $email, password: $password, confirmPassword: $confirmPassword}) {
@@ -1069,6 +1211,41 @@ export function useCreateWalletMutation(baseOptions?: ApolloReactHooks.MutationH
 export type CreateWalletMutationHookResult = ReturnType<typeof useCreateWalletMutation>;
 export type CreateWalletMutationResult = ApolloReactCommon.MutationResult<CreateWalletMutation>;
 export type CreateWalletMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateWalletMutation, CreateWalletMutationVariables>;
+export const WalletsDocument = gql`
+    query Wallets {
+  wallets {
+    id
+    name
+    color
+    amount
+  }
+}
+    `;
+
+/**
+ * __useWalletsQuery__
+ *
+ * To run a query within a React component, call `useWalletsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWalletsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWalletsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useWalletsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WalletsQuery, WalletsQueryVariables>) {
+        return ApolloReactHooks.useQuery<WalletsQuery, WalletsQueryVariables>(WalletsDocument, baseOptions);
+      }
+export function useWalletsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WalletsQuery, WalletsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<WalletsQuery, WalletsQueryVariables>(WalletsDocument, baseOptions);
+        }
+export type WalletsQueryHookResult = ReturnType<typeof useWalletsQuery>;
+export type WalletsLazyQueryHookResult = ReturnType<typeof useWalletsLazyQuery>;
+export type WalletsQueryResult = ApolloReactCommon.QueryResult<WalletsQuery, WalletsQueryVariables>;
 export const CategoriesDocument = gql`
     query Categories {
   categories {
@@ -1186,41 +1363,39 @@ export function useCategoriesSpendingPieLazyQuery(baseOptions?: ApolloReactHooks
 export type CategoriesSpendingPieQueryHookResult = ReturnType<typeof useCategoriesSpendingPieQuery>;
 export type CategoriesSpendingPieLazyQueryHookResult = ReturnType<typeof useCategoriesSpendingPieLazyQuery>;
 export type CategoriesSpendingPieQueryResult = ApolloReactCommon.QueryResult<CategoriesSpendingPieQuery, CategoriesSpendingPieQueryVariables>;
-export const WalletsDocument = gql`
-    query Wallets {
-  wallets {
+export const CurrenciesDocument = gql`
+    query Currencies {
+  currencies {
     id
-    name
-    color
-    amount
+    value
   }
 }
     `;
 
 /**
- * __useWalletsQuery__
+ * __useCurrenciesQuery__
  *
- * To run a query within a React component, call `useWalletsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWalletsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useCurrenciesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useWalletsQuery({
+ * const { data, loading, error } = useCurrenciesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useWalletsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<WalletsQuery, WalletsQueryVariables>) {
-        return ApolloReactHooks.useQuery<WalletsQuery, WalletsQueryVariables>(WalletsDocument, baseOptions);
+export function useCurrenciesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrenciesQuery, CurrenciesQueryVariables>) {
+        return ApolloReactHooks.useQuery<CurrenciesQuery, CurrenciesQueryVariables>(CurrenciesDocument, baseOptions);
       }
-export function useWalletsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<WalletsQuery, WalletsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<WalletsQuery, WalletsQueryVariables>(WalletsDocument, baseOptions);
+export function useCurrenciesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrenciesQuery, CurrenciesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CurrenciesQuery, CurrenciesQueryVariables>(CurrenciesDocument, baseOptions);
         }
-export type WalletsQueryHookResult = ReturnType<typeof useWalletsQuery>;
-export type WalletsLazyQueryHookResult = ReturnType<typeof useWalletsLazyQuery>;
-export type WalletsQueryResult = ApolloReactCommon.QueryResult<WalletsQuery, WalletsQueryVariables>;
+export type CurrenciesQueryHookResult = ReturnType<typeof useCurrenciesQuery>;
+export type CurrenciesLazyQueryHookResult = ReturnType<typeof useCurrenciesLazyQuery>;
+export type CurrenciesQueryResult = ApolloReactCommon.QueryResult<CurrenciesQuery, CurrenciesQueryVariables>;
 export const TransactionSpendingFlowDocument = gql`
     query TransactionSpendingFlow($date: String, $walletIds: [Int], $categoryIds: [Int]) {
   transactionSpendingFlow(input: {date: $date, walletIds: $walletIds, categoryIds: $categoryIds}) {

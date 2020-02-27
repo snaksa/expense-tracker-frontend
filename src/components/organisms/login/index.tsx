@@ -6,7 +6,7 @@ import Button from "../../atoms/button";
 import useStyles from "./styles";
 import RoundImage from "../../molecules/round-image";
 import Heading from "../../molecules/heading";
-import { useLoginMutation } from "../../../api";
+import { useLoginMutation, useCurrentUserLazyQuery } from "../../../api";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
@@ -21,19 +21,22 @@ export interface FormFields {
 const Login = () => {
   const classes = useStyles();
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
 
   const { onLogin } = useAuthDataContext();
+
+  const [getCurrentUser] = useCurrentUserLazyQuery();
 
   const [login] = useLoginMutation({
     onCompleted(data) {
       localStorage.setItem("token", data?.loginUser ?? "");
       onLogin(data.loginUser);
+      getCurrentUser();
       history.push("/admin");
     },
     onError() {
-      setErrorMessage('Incorrect username or password');
+      setErrorMessage("Incorrect username or password");
     }
   });
 
@@ -106,7 +109,9 @@ const Login = () => {
                         helperText={errors.password}
                       />
                     </Grid>
-                    <Grid item className={classes.errorMessage}>{errorMessage}</Grid>
+                    <Grid item className={classes.errorMessage}>
+                      {errorMessage}
+                    </Grid>
                     <Grid item>
                       <Box mt={1}>
                         <Button type="submit" style={{}}>
@@ -128,6 +133,16 @@ const Login = () => {
 Login.fragment = gql`
   mutation Login($email: String!, $password: String!) {
     loginUser(input: { email: $email, password: $password })
+  }
+  query CurrentUser {
+    me {
+      id
+      email
+      firstName
+      lastName
+      currency
+      language
+    }
   }
 `;
 

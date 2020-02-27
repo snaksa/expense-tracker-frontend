@@ -1,40 +1,40 @@
 import React, { useState } from "react";
 import { Box } from "@material-ui/core";
 import {
-  Category,
-  CategoriesDocument,
-  CategoriesQuery,
-  useDeleteCategoryMutation,
   WalletsDocument,
-  TransactionsDocument
+  TransactionsDocument,
+  WalletsQuery,
+  useDeleteWalletMutation,
+  Wallet
 } from "api";
 import Table from "../table";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
 import { useNotificationContext } from "services/notification-provider";
-import { gql } from "apollo-boost";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import Modal from "components/molecules/modal";
-import CategoryForm from "../category-form";
 import { useSharedDataContext } from "services/shared-data-provider";
+import WalletForm from "../wallet-form";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 interface Props {
-  categories: Category[];
+  wallets: Wallet[];
   onClick: Function;
   onEdit: Function;
   onDelete: Function;
 }
 
-const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
+const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
   const [selectedRow, setSelectedRow] = useState(0);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
-  const {setCategoryUpdate} = useUpdateDetectionContext();
+  const {setWalletUpdate} = useUpdateDetectionContext();
 
-  const { usedTranasctionParams } = useSharedDataContext();
+  const {
+    usedTranasctionParams
+  } = useSharedDataContext();
 
   const {
     showSuccessNotification,
@@ -53,50 +53,47 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     return result;
   };
 
-  const [deleteCategory] = useDeleteCategoryMutation({
+  const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
       onDelete();
-      setCategoryUpdate();
-      showSuccessNotification("Category deleted successfully!");
+      setWalletUpdate();
+      showSuccessNotification("Wallet deleted successfully!");
     },
     onError() {
-      showErrorNotification("An error occured while deleting the category!");
+      showErrorNotification("An error occured while deleting the wallet!");
     },
     update: (store, { data }) => {
-      const category = data?.deleteCategory;
+      const wallet = data?.deleteWallet;
 
-      if (!category) {
+      if (!wallet) {
         return;
       }
 
       const query = {
-        query: CategoriesDocument
+        query: WalletsDocument
       };
 
-      const cached = store.readQuery<CategoriesQuery>(query);
-      if (!cached || !cached.categories) {
+      const cached = store.readQuery<WalletsQuery>(query);
+      if (!cached || !cached.wallets) {
         return;
       }
 
-      const result = cached.categories.filter(c => c && c.id !== category.id);
+      const result = cached.wallets.filter(c => c && c.id !== wallet.id);
       store.writeQuery({
         ...query,
         data: {
-          categories: result
+          wallets: result
         }
       });
+
+      
     },
-    refetchQueries: [
-      {
-        query: WalletsDocument
-      },
-      ...getRefetchQueries()
-    ]
+    refetchQueries: getRefetchQueries()
   });
 
   const handleDelete = () => {
     setConfirmDeleteModalIsOpen(false);
-    deleteCategory({
+    deleteWallet({
       variables: {
         id: selectedRow
       }
@@ -117,8 +114,8 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
   return (
     <Box>
       <Table
-        title="Categories"
-        rows={categories}
+        title="Wallets"
+        rows={wallets}
         columns={columns}
         onClick={onClick}
         onAction={handleAction}
@@ -126,22 +123,22 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
       <ConfirmationDialog
         isOpen={confirmDeleteModalIsOpen}
         title={"Are you sure?"}
-        content={"All transactions related to this category will be removed!"}
+        content={"All transactions related to this wallet will be removed!"}
         onConfirm={handleDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />
       <Modal
-        title={"+ Edit Category"}
+        title={"+ Edit Wallet"}
         isOpen={editModalIsOpen}
         handleClose={() => {
           setEditModalIsOpen(false);
         }}
       >
-        <CategoryForm
-          category={
+        <WalletForm
+          wallet={
             selectedRow
-              ? categories.filter(
-                  (category: Category) => category.id === selectedRow
+              ? wallets.filter(
+                  (wallet: Wallet) => wallet.id === selectedRow
                 )[0]
               : undefined
           }
@@ -155,24 +152,6 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     </Box>
   );
 };
-
-CategoriesTable.fragment = gql`
-  mutation DeleteCategory($id: Int!) {
-    deleteCategory(input: { id: $id }) {
-      id
-    }
-  }
-  mutation UpdateCategory($id: Int!, $name: String, $color: String) {
-    updateCategory(input: { id: $id, name: $name, color: $color }) {
-      id
-      name
-      color
-      icon
-      transactionsCount
-      balance
-    }
-  }
-`;
 
 const columns = [
   {
@@ -190,24 +169,6 @@ const columns = [
     align: "left"
   },
   {
-    type: "number",
-    id: "transactionsCount",
-    label: "Records",
-    minWidth: 100,
-    align: "center"
-  },
-  {
-    type: "number",
-    id: "balance",
-    label: "Balance",
-    minWidth: 100,
-    align: "center",
-    prefix: "BGN",
-    format: (value: number) => Math.abs(value).toFixed(2),
-    color: (row: any) => (row.balance < 0 ? "red" : "green"),
-    sign: (row: any) => (row.balance < 0 ? "-BGN " : "BGN ")
-  },
-  {
     type: "actions",
     id: "id",
     actions: [
@@ -223,4 +184,4 @@ const columns = [
   }
 ];
 
-export default CategoriesTable;
+export default WalletsTable;

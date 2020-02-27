@@ -3,13 +3,12 @@ import Box from "@material-ui/core/Box";
 import {
   Home as HomeIcon,
   Receipt as ReceiptIcon,
-  Category as CategoryIcon,
   BarChart as BarChartIcon,
   Settings as SettingsIcon
 } from "@material-ui/icons";
 import AdminTemplate from "../../templates/admin-template";
 import MainPage from "./MainPage";
-import CategoriesPage from "./CategoriesPage";
+import SettingsPage from "./SettingsPage";
 import Sidebar from "../../molecules/sidebar";
 import HeaderMenu from "../../organisms/admin-header-menu";
 import { Route, Switch } from "react-router-dom";
@@ -45,20 +44,19 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
                 to: "/admin/records",
                 icon: <ReceiptIcon />
               },
-              {
-                label: "Categories",
-                to: "/admin/categories",
-                icon: <CategoryIcon />
-              },
               { label: "Stats", icon: <BarChartIcon /> },
-              { label: "Settings", icon: <SettingsIcon /> }
+              {
+                label: "Settings",
+                to: "/admin/settings",
+                icon: <SettingsIcon />
+              },
             ]}
           />
         }
         content={
           <Switch>
             <Route path="/admin/records" component={TransactionsPage} />
-            <Route path="/admin/categories" component={CategoriesPage} />
+            <Route path="/admin/settings" component={SettingsPage} />
             <Route path="/admin" component={MainPage} />
           </Switch>
         }
