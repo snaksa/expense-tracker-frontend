@@ -277,6 +277,7 @@ TransactionsTable.fragment = gql`
   }
   mutation UpdateTransaction(
     $id: Int!
+    $date: String,
     $description: String
     $value: Float
     $type: TransactionType
@@ -286,6 +287,7 @@ TransactionsTable.fragment = gql`
     updateTransaction(
       input: {
         id: $id
+        date: $date
         description: $description
         value: $value
         type: $type

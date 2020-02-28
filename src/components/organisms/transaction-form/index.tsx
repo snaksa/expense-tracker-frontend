@@ -20,6 +20,9 @@ import {
 } from "api";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import DatePicker from "components/atoms/datepicker";
+import TimePicker from "components/atoms/timepicker";
+import moment from "moment";
 
 interface Props {
   transaction?: Transaction;
@@ -29,6 +32,7 @@ interface Props {
 }
 
 export interface FormFields {
+  date: string;
   description: string;
   value: string;
   type: TransactionType;
@@ -38,6 +42,7 @@ export interface FormFields {
 
 const schema = () => {
   return Yup.object().shape({
+    date: Yup.string().required("Enter record date and time"),
     description: Yup.string().required("Enter record description"),
     value: Yup.string().required("Set record amount"),
     type: Yup.string().required("Choose record type"),
@@ -52,10 +57,8 @@ const TransactionForm = ({
   onComplete,
   onError
 }: Props): JSX.Element => {
-  const {
-    setTransactionUpdate
-  } = useUpdateDetectionContext();
-  
+  const { setTransactionUpdate } = useUpdateDetectionContext();
+
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
@@ -73,19 +76,21 @@ const TransactionForm = ({
     };
   });
 
-  const categoryOptions = categories.map((category: Category, index: number) => {
-    return {
-      id: category.id,
-      value: (
-        <Grid container alignItems="center" spacing={1} key={index}>
-          <Grid item>
-            <RoundBox color={category.color} width={20} height={20} />
+  const categoryOptions = categories.map(
+    (category: Category, index: number) => {
+      return {
+        id: category.id,
+        value: (
+          <Grid container alignItems="center" spacing={1} key={index}>
+            <Grid item>
+              <RoundBox color={category.color} width={20} height={20} />
+            </Grid>
+            <Grid item>{category.name}</Grid>
           </Grid>
-          <Grid item>{category.name}</Grid>
-        </Grid>
-      )
-    };
-  });
+        )
+      };
+    }
+  );
 
   const {
     showSuccessNotification,
@@ -108,13 +113,13 @@ const TransactionForm = ({
 
   const [createTransaction] = useCreateTransactionMutation({
     onCompleted() {
+      onComplete();
       showSuccessNotification("Record created succesfully!");
       setTransactionUpdate();
-      onComplete();
     },
     onError() {
-      showErrorNotification("An error occured while saving the record data!");
       onError();
+      showErrorNotification("An error occured while saving the record data!");
     },
     refetchQueries: getRefetchQueries()
   });
@@ -128,14 +133,18 @@ const TransactionForm = ({
     onError() {
       showErrorNotification("An error occured while updating the record data!");
       onError();
-    }
+    },
+    refetchQueries: getRefetchQueries()
   });
 
   const onSubmit = (values: FormFields) => {
+    console.log(values);
     if (transaction) {
+      console.log(values.date, moment(values.date).utc().format('YYYY-MM-D HH:mm:ss'));
       updateTransaction({
         variables: {
           id: transaction.id,
+          date: moment(values.date).utc().format('YYYY-MM-D HH:mm:ss'),
           description: values.description,
           value: parseFloat(values.value ?? 0),
           type: values.type,
@@ -146,6 +155,7 @@ const TransactionForm = ({
     } else {
       createTransaction({
         variables: {
+          date: moment(values.date).utc().format('YYYY-MM-D HH:mm:ss'),
           description: values.description,
           value: parseFloat(values.value ?? 0),
           type: values.type,
@@ -160,6 +170,7 @@ const TransactionForm = ({
     <Formik
       enableReinitialize
       initialValues={{
+        date: transaction?.date ? moment.utc(transaction.date).local().format('YYYY-MM-D HH:mm:ss') : moment().format('YYYY-MM-D HH:mm:ss'),
         description: transaction?.description ?? "",
         value: transaction?.value.toString() ?? "",
         type: transaction?.type ?? TransactionType.Expense,
@@ -177,9 +188,19 @@ const TransactionForm = ({
       validationSchema={schema}
       onSubmit={onSubmit}
     >
-      {({ errors, touched, values, handleChange }) => (
+      {({ errors, touched, values, handleChange, setFieldValue }) => (
         <Form>
           <Grid container direction="column">
+            <Grid item>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6} lg={6}>
+                  <DatePicker name="date" date={values.date} onChange={(date: string) => setFieldValue('date', date)} />
+                </Grid>
+                <Grid item xs={12} md={6} lg={6}>
+                  <TimePicker name="date" date={values.date} onChange={(date: string) => setFieldValue('date', date)} />
+                </Grid>
+              </Grid>
+            </Grid>
             <Grid item>
               <Select
                 label="Wallet"
@@ -253,6 +274,7 @@ const TransactionForm = ({
 
 TransactionForm.fragment = gql`
   mutation CreateTransaction(
+    $date: String!
     $description: String!
     $value: Float!
     $type: TransactionType!
@@ -261,6 +283,7 @@ TransactionForm.fragment = gql`
   ) {
     createTransaction(
       input: {
+        date: $date
         description: $description
         value: $value
         type: $type

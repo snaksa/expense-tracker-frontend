@@ -200,6 +200,7 @@ export interface Transaction {
 }
 
 export interface TransactionCreateRequestInput {
+  date: Scalars['String'],
   description: Scalars['String'],
   value: Scalars['Float'],
   type: TransactionType,
@@ -236,6 +237,7 @@ export enum TransactionType {
 }
 
 export interface TransactionUpdateRequestInput {
+  date: Maybe<Scalars['String']>,
   id: Scalars['Int'],
   description: Maybe<Scalars['String']>,
   value: Maybe<Scalars['Float']>,
@@ -459,6 +461,7 @@ export type RegisterMutation = (
 );
 
 export type CreateTransactionMutationVariables = {
+  date: Scalars['String'],
   description: Scalars['String'],
   value: Scalars['Float'],
   type: TransactionType,
@@ -508,6 +511,7 @@ export type DeleteTransactionMutation = (
 
 export type UpdateTransactionMutationVariables = {
   id: Scalars['Int'],
+  date: Maybe<Scalars['String']>,
   description: Maybe<Scalars['String']>,
   value: Maybe<Scalars['Float']>,
   type: Maybe<TransactionType>,
@@ -1017,8 +1021,8 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const CreateTransactionDocument = gql`
-    mutation CreateTransaction($description: String!, $value: Float!, $type: TransactionType!, $categoryId: Int!, $walletId: Int!) {
-  createTransaction(input: {description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId}) {
+    mutation CreateTransaction($date: String!, $description: String!, $value: Float!, $type: TransactionType!, $categoryId: Int!, $walletId: Int!) {
+  createTransaction(input: {date: $date, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId}) {
     id
     description
     value
@@ -1061,6 +1065,7 @@ export type CreateTransactionMutationFn = ApolloReactCommon.MutationFunction<Cre
  * @example
  * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
  *   variables: {
+ *      date: // value for 'date'
  *      description: // value for 'description'
  *      value: // value for 'value'
  *      type: // value for 'type'
@@ -1121,8 +1126,8 @@ export type DeleteTransactionMutationHookResult = ReturnType<typeof useDeleteTra
 export type DeleteTransactionMutationResult = ApolloReactCommon.MutationResult<DeleteTransactionMutation>;
 export type DeleteTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteTransactionMutation, DeleteTransactionMutationVariables>;
 export const UpdateTransactionDocument = gql`
-    mutation UpdateTransaction($id: Int!, $description: String, $value: Float, $type: TransactionType, $categoryId: Int, $walletId: Int) {
-  updateTransaction(input: {id: $id, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId}) {
+    mutation UpdateTransaction($id: Int!, $date: String, $description: String, $value: Float, $type: TransactionType, $categoryId: Int, $walletId: Int) {
+  updateTransaction(input: {id: $id, date: $date, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId}) {
     id
     description
     value
@@ -1160,6 +1165,7 @@ export type UpdateTransactionMutationFn = ApolloReactCommon.MutationFunction<Upd
  * const [updateTransactionMutation, { data, loading, error }] = useUpdateTransactionMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      date: // value for 'date'
  *      description: // value for 'description'
  *      value: // value for 'value'
  *      type: // value for 'type'

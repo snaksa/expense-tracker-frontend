@@ -10,6 +10,8 @@ import AuthDataProvider from "./services/auth-provider";
 import NotificationProvider from "./services/notification-provider";
 import SharedDataProvider from "./services/shared-data-provider";
 import UpdateDetectionProvider from "./services/update-detection-provider";
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import {
   BrowserRouter as Router,
   Switch,
@@ -61,14 +63,16 @@ const App = () => {
             <NotificationProvider>
               <SharedDataProvider>
                 <UpdateDetectionProvider>
-                  <Switch>
-                    <Route path="/admin">
-                      <AdminPages />
-                    </Route>
-                    <Route path="/">
-                      <HomePages />
-                    </Route>
-                  </Switch>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Switch>
+                      <Route path="/admin">
+                        <AdminPages />
+                      </Route>
+                      <Route path="/">
+                        <HomePages />
+                      </Route>
+                    </Switch>
+                  </MuiPickersUtilsProvider>
                 </UpdateDetectionProvider>
               </SharedDataProvider>
             </NotificationProvider>
