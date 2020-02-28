@@ -18,6 +18,7 @@ import Modal from "components/molecules/modal";
 import TransactionForm from "../transaction-form";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import useCurrencyFormatter from "services/currency-formatter";
 
 interface Props {
   selectedDate: string;
@@ -32,6 +33,7 @@ const TransactionsTable = ({
   onDelete,
   onEdit
 }: Props) => {
+  const {formatCurrency} = useCurrencyFormatter();
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
@@ -146,6 +148,63 @@ const TransactionsTable = ({
     }
   };
 
+  const columns = [
+    {
+      type: "text",
+      id: "description",
+      label: "Description",
+      minWidth: 100,
+      align: "left"
+    },
+    {
+      type: "number",
+      id: "value",
+      label: "Amount",
+      minWidth: 50,
+      align: "right",
+      format: (value: number) => formatCurrency(value),
+      color: (row: any) =>
+        row.type === TransactionType.Expense ? "red" : "green",
+      sign: (row: any) =>
+        row.type === TransactionType.Expense ? "-" : ""
+    },
+    {
+      type: "colorName",
+      id: "category",
+      label: "Category",
+      minWidth: 100,
+      align: "left"
+    },
+    {
+      type: "colorName",
+      id: "wallet",
+      label: "Wallet",
+      minWidth: 100,
+      align: "left"
+    },
+    {
+      type: "text",
+      id: "date",
+      label: "Date",
+      minWidth: 100,
+      align: "left"
+    },
+    {
+      type: "actions",
+      id: "id",
+      actions: [
+        {
+          id: "edit",
+          icon: <EditIcon />
+        },
+        {
+          id: "delete",
+          icon: <DeleteIcon />
+        }
+      ]
+    }
+  ];
+
   return (
     <Box>
       <Table
@@ -256,61 +315,5 @@ TransactionsTable.fragment = gql`
   }
 `;
 
-const columns = [
-  {
-    type: "text",
-    id: "description",
-    label: "Description",
-    minWidth: 100,
-    align: "left"
-  },
-  {
-    type: "number",
-    id: "value",
-    label: "Amount",
-    minWidth: 50,
-    align: "right",
-    format: (value: number) => value.toFixed(2),
-    color: (row: any) =>
-      row.type === TransactionType.Expense ? "red" : "green",
-    sign: (row: any) =>
-      row.type === TransactionType.Expense ? "-BGN " : "BGN "
-  },
-  {
-    type: "colorName",
-    id: "category",
-    label: "Category",
-    minWidth: 100,
-    align: "left"
-  },
-  {
-    type: "colorName",
-    id: "wallet",
-    label: "Wallet",
-    minWidth: 100,
-    align: "left"
-  },
-  {
-    type: "text",
-    id: "date",
-    label: "Date",
-    minWidth: 100,
-    align: "left"
-  },
-  {
-    type: "actions",
-    id: "id",
-    actions: [
-      {
-        id: "edit",
-        icon: <EditIcon />
-      },
-      {
-        id: "delete",
-        icon: <DeleteIcon />
-      }
-    ]
-  }
-];
 
 export default TransactionsTable;

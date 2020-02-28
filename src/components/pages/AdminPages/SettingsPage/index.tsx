@@ -18,7 +18,7 @@ const SettingsPage = () => {
   const {
     lastTransactionAction,
     lastCategoryAction,
-    lastWalletAction
+    lastWalletAction  
   } = useUpdateDetectionContext();
 
   const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);

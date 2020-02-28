@@ -3,6 +3,7 @@ import { Grid, Box } from "@material-ui/core";
 import useStyles from "./styles";
 import { Transaction, TransactionType } from "api";
 import RoundBox from "components/atoms/round-box";
+import useCurrencyFormatter from "services/currency-formatter";
 
 interface Props {
   transaction: Transaction;
@@ -10,6 +11,7 @@ interface Props {
 
 const TransactionSummary = ({ transaction }: Props) => {
   const classes = useStyles();
+  const {formatCurrency} = useCurrencyFormatter();
 
   return (
     <Box p={2} className={classes.wrapper}>
@@ -56,8 +58,8 @@ const TransactionSummary = ({ transaction }: Props) => {
                     : "green"
               }}
             >
-              {transaction?.type === TransactionType.Expense ? "-" : ""}BGN{" "}
-              {transaction?.value.toFixed(2)}
+              {transaction?.type === TransactionType.Expense ? "-" : ""}
+              {formatCurrency(transaction?.value ?? '')}
             </Grid>
             <Grid item className={classes.bottom}>
               {transaction.date}

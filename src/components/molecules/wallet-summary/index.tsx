@@ -19,6 +19,7 @@ import {
   WalletsDocument
 } from "../../../api";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import useCurrencyFormatter from "services/currency-formatter";
 
 interface Props {
   id: number;
@@ -35,6 +36,7 @@ export interface FormFields {
 
 const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
   const classes = useStyles();
+  const {formatCurrency} = useCurrencyFormatter();
 
   const {
     setWalletUpdate
@@ -209,7 +211,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
         <Grid item>
           <Box p={1}>
             <Title variant="subtitle2">{name}</Title>
-            <Title variant="subtitle1">${amount.toFixed(2)}</Title>
+            <Title variant="subtitle1">{formatCurrency(amount)}</Title>
           </Box>
         </Grid>
       </Grid>

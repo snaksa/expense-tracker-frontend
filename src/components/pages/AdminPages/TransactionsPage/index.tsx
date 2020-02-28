@@ -15,9 +15,11 @@ import DateRangePicker, {
 } from "components/molecules/date-range-picker";
 import Loader from "components/atoms/loader";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import useCurrencyFormatter from "services/currency-formatter";
 
 const TransactionsPage = () => {
   const classes = useStyles();
+  const { getCurrency } = useCurrencyFormatter();
 
   const {
     lastTransactionAction,
@@ -48,12 +50,7 @@ const TransactionsPage = () => {
   useEffect(() => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    backDate,
-    lastTransactionAction,
-    lastCategoryAction,
-    lastWalletAction
-  ]);
+  }, [backDate, lastTransactionAction, lastCategoryAction, lastWalletAction]);
 
   const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
   let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
@@ -91,8 +88,20 @@ const TransactionsPage = () => {
               data={
                 chartData && chartData[0].length
                   ? chartData
-                  : [['', ''], ['', 0]]
+                  : [
+                      ["", ""],
+                      ["", 0]
+                    ]
               }
+              formatters={[
+                {
+                  type: "NumberFormat",
+                  column: 1,
+                  options: {
+                    suffix: ` ${getCurrency()}`
+                  }
+                }
+              ]}
               options={{
                 hAxis: {
                   title: "Time",

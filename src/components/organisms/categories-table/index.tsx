@@ -17,6 +17,7 @@ import Modal from "components/molecules/modal";
 import CategoryForm from "../category-form";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import useCurrencyFormatter from "services/currency-formatter";
 
 interface Props {
   categories: Category[];
@@ -26,6 +27,7 @@ interface Props {
 }
 
 const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
+  const {formatCurrency} = useCurrencyFormatter();
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
@@ -114,6 +116,54 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     }
   };
 
+  const columns = [
+    {
+      type: "color",
+      id: "color",
+      label: "Color",
+      minWidth: 100,
+      align: "center"
+    },
+    {
+      type: "text",
+      id: "name",
+      label: "Name",
+      minWidth: 100,
+      align: "left"
+    },
+    {
+      type: "number",
+      id: "transactionsCount",
+      label: "Records",
+      minWidth: 100,
+      align: "center"
+    },
+    {
+      type: "number",
+      id: "balance",
+      label: "Balance",
+      minWidth: 100,
+      align: "center",
+      prefix: "BGN",
+      format: (value: number) => formatCurrency(value),
+      color: (row: any) => (row.balance < 0 ? "red" : "green")
+    },
+    {
+      type: "actions",
+      id: "id",
+      actions: [
+        {
+          id: "edit",
+          icon: <EditIcon />
+        },
+        {
+          id: "delete",
+          icon: <DeleteIcon />
+        }
+      ]
+    }
+  ];
+
   return (
     <Box>
       <Table
@@ -173,54 +223,5 @@ CategoriesTable.fragment = gql`
     }
   }
 `;
-
-const columns = [
-  {
-    type: "color",
-    id: "color",
-    label: "Color",
-    minWidth: 100,
-    align: "center"
-  },
-  {
-    type: "text",
-    id: "name",
-    label: "Name",
-    minWidth: 100,
-    align: "left"
-  },
-  {
-    type: "number",
-    id: "transactionsCount",
-    label: "Records",
-    minWidth: 100,
-    align: "center"
-  },
-  {
-    type: "number",
-    id: "balance",
-    label: "Balance",
-    minWidth: 100,
-    align: "center",
-    prefix: "BGN",
-    format: (value: number) => Math.abs(value).toFixed(2),
-    color: (row: any) => (row.balance < 0 ? "red" : "green"),
-    sign: (row: any) => (row.balance < 0 ? "-BGN " : "BGN ")
-  },
-  {
-    type: "actions",
-    id: "id",
-    actions: [
-      {
-        id: "edit",
-        icon: <EditIcon />
-      },
-      {
-        id: "delete",
-        icon: <DeleteIcon />
-      }
-    ]
-  }
-];
 
 export default CategoriesTable;

@@ -1,5 +1,6 @@
 import React from "react";
 import Chart from "react-google-charts";
+import useCurrencyFormatter from "services/currency-formatter";
 
 interface Props {
   hTitle: string;
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const LineChart = ({ data, hTitle, vTitle }: Props): JSX.Element => {
-
+  const { getCurrency } = useCurrencyFormatter();
   const chartData = data.header?.length ? [data.header, ...data.data] : [];
 
   return (
@@ -22,6 +23,15 @@ const LineChart = ({ data, hTitle, vTitle }: Props): JSX.Element => {
         height={"300px"}
         chartType="LineChart"
         data={data.data.length ? chartData : [['', ''], ['', 0]]}
+        formatters={[
+          {
+            type: "NumberFormat",
+            column: 1,
+            options: {
+              suffix: ` ${getCurrency()}`
+            }
+          }
+        ]}
         options={{
           hAxis: {
             title: hTitle,

@@ -19,9 +19,11 @@ import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
 import Loader from "components/atoms/loader";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import useCurrencyFormatter from "services/currency-formatter";
 
 const MainPage = () => {
   const classes = useStyles();
+  const { getCurrency } = useCurrencyFormatter();
 
   const {
     lastTransactionAction,
@@ -143,11 +145,7 @@ const MainPage = () => {
     refetchIncomePie();
     refetchSpendingFlow();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    lastTransactionAction,
-    lastCategoryAction,
-    lastWalletAction
-  ]);
+  }, [lastTransactionAction, lastCategoryAction, lastWalletAction]);
 
   return (
     <Box className={classes.main} p={10}>
@@ -183,8 +181,20 @@ const MainPage = () => {
                       data={
                         chartData.length > 1
                           ? chartData
-                          : [['', ''], ['', 0]]
+                          : [
+                              ["", ""],
+                              ["", 0]
+                            ]
                       }
+                      formatters={[
+                        {
+                          type: "NumberFormat",
+                          column: 1,
+                          options: {
+                            suffix: ` ${getCurrency()}`
+                          }
+                        }
+                      ]}
                       options={{
                         hAxis: {
                           title: "Time",
@@ -200,9 +210,7 @@ const MainPage = () => {
                 </Grid>
                 <Grid item xs={12} md={12} lg={3}>
                   <SummaryBox header="Spending">
-                    <PieChart
-                      data={spendingData}
-                    />
+                    <PieChart data={spendingData} />
                   </SummaryBox>
                 </Grid>
               </Grid>

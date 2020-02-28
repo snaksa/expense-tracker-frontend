@@ -16,9 +16,11 @@ import { useAuthDataContext } from "../../../services/auth-provider";
 import { useNotificationContext } from "services/notification-provider";
 import Notification from "../../molecules/notification";
 import TransactionsPage from "./TransactionsPage";
+import useTranslations from 'translations';
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const {t} = useTranslations();
 
   const { isAuthenticated } = useAuthDataContext();
   isAuthenticated();
@@ -38,7 +40,7 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
             onOptionClick={() => setIsSidebarVisible(false)}
             isVisible={isSidebarVisible}
             options={[
-              { label: "Home", to: "/admin", icon: <HomeIcon /> },
+              { label: t("Dashboard"), to: "/admin", icon: <HomeIcon /> },
               {
                 label: "Records",
                 to: "/admin/records",
