@@ -9,6 +9,7 @@ import { PropTypes, Icon } from "@material-ui/core";
 import useStyles from "./styles";
 import RoundBox from "../round-box";
 import { StringValueNode } from "graphql";
+import formatDate from "services/date-formatter";
 
 export interface Props {
   row?: any;
@@ -95,6 +96,18 @@ const TableCell: React.FunctionComponent<Props> = ({
         className={classes.cell}
       >
         <RoundBox width={20} height={20} color={value} centered={true} />
+      </TableCellMaterial>
+    );
+  }
+
+  if (column.type === "date") {
+    return (
+      <TableCellMaterial
+        key={column.id}
+        align={column.align}
+        className={classes.cell}
+      >
+        {formatDate(value)}
       </TableCellMaterial>
     );
   }

@@ -23,6 +23,7 @@ const TimePicker: React.FunctionComponent<Props> = ({
   return (
     <Box>
         <KeyboardTimePicker
+          ampm={false}
           open={open}
           onClick={() => setOpen(true)}
           onAccept={() => setOpen(false)}

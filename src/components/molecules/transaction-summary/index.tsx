@@ -4,6 +4,7 @@ import useStyles from "./styles";
 import { Transaction, TransactionType } from "api";
 import RoundBox from "components/atoms/round-box";
 import useCurrencyFormatter from "services/currency-formatter";
+import formatDate from "services/date-formatter";
 
 interface Props {
   transaction: Transaction;
@@ -62,7 +63,7 @@ const TransactionSummary = ({ transaction }: Props) => {
               {formatCurrency(transaction?.value ?? '')}
             </Grid>
             <Grid item className={classes.bottom}>
-              {transaction.date}
+              {formatDate(transaction.date)}
             </Grid>
           </Grid>
         </Grid>

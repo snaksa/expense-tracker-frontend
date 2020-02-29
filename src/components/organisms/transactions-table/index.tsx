@@ -183,7 +183,7 @@ const TransactionsTable = ({
       align: "left"
     },
     {
-      type: "text",
+      type: "date",
       id: "date",
       label: "Date",
       minWidth: 100,

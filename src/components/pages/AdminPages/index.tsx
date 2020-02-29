@@ -42,13 +42,13 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
             options={[
               { label: t("Dashboard"), to: "/admin", icon: <HomeIcon /> },
               {
-                label: "Records",
+                label: t("Records"),
                 to: "/admin/records",
                 icon: <ReceiptIcon />
               },
-              { label: "Stats", icon: <BarChartIcon /> },
+              { label: t("Stats"), icon: <BarChartIcon /> },
               {
-                label: "Settings",
+                label: t("Settings"),
                 to: "/admin/settings",
                 icon: <SettingsIcon />
               },
