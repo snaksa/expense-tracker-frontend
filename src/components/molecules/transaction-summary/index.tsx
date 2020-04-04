@@ -12,7 +12,7 @@ interface Props {
 
 const TransactionSummary = ({ transaction }: Props) => {
   const classes = useStyles();
-  const {formatCurrency} = useCurrencyFormatter();
+  const { formatCurrency } = useCurrencyFormatter();
 
   return (
     <Box p={2} className={classes.wrapper}>
@@ -24,12 +24,32 @@ const TransactionSummary = ({ transaction }: Props) => {
         alignItems="center"
       >
         <Grid item xs={2}>
-          <RoundBox color={transaction?.category?.color} width={32} height={32} />
+          <RoundBox
+            color={transaction?.category?.color}
+            background={
+              transaction?.type === TransactionType.Transfer
+                ? `linear-gradient(90deg, ${transaction.wallet?.color ??
+                    "#ccc"} 50%, ${transaction.walletReceiver?.color ??
+                    "#ccc"} 50%)`
+                : transaction?.category?.color
+            }
+            width={32}
+            height={32}
+          />
         </Grid>
         <Grid item xs={6}>
-          <Grid container direction="column" alignItems="flex-start" spacing={1}>
+          <Grid
+            container
+            direction="column"
+            alignItems="flex-start"
+            spacing={1}
+          >
             <Grid item className={classes.top}>
               {transaction?.category?.name}
+              {transaction?.type === TransactionType.Transfer &&
+                (transaction.wallet?.name ?? "Unknown") +
+                  " => " +
+                  (transaction.walletReceiver?.name ?? "Unknown")}
             </Grid>
             <Grid item className={classes.bottom}>
               <Grid
@@ -40,7 +60,11 @@ const TransactionSummary = ({ transaction }: Props) => {
                 justify="center"
               >
                 <Grid item>
-                  <RoundBox color={transaction?.wallet?.color} width={10} height={10} />
+                  <RoundBox
+                    color={transaction?.wallet?.color ?? '#ccc'}
+                    width={10}
+                    height={10}
+                  />
                 </Grid>
                 <Grid item>{transaction?.wallet?.name}</Grid>
               </Grid>
@@ -60,7 +84,7 @@ const TransactionSummary = ({ transaction }: Props) => {
               }}
             >
               {transaction?.type === TransactionType.Expense ? "-" : ""}
-              {formatCurrency(transaction?.value ?? '')}
+              {formatCurrency(transaction?.value ?? "")}
             </Grid>
             <Grid item className={classes.bottom}>
               {formatDate(transaction.date)}

@@ -4,8 +4,8 @@ import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import Button from "components/atoms/button";
-import TextField from "components/atoms/text-field";
-import Select from "components/atoms/select";
+import TextField from "components/atoms/form/text-field";
+import Select from "components/atoms/form/select";
 import RoundBox from "components/atoms/round-box";
 import { useNotificationContext } from "services/notification-provider";
 import {
@@ -14,19 +14,19 @@ import {
   Wallet,
   useCreateTransactionMutation,
   Transaction,
-  useCategoriesQuery,
   useUpdateTransactionMutation,
   TransactionsDocument
 } from "api";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
-import DatePicker from "components/atoms/datepicker";
-import TimePicker from "components/atoms/timepicker";
+import DatePicker from "components/atoms/form/datepicker";
+import TimePicker from "components/atoms/form/timepicker";
 import moment from "moment";
 
 interface Props {
   transaction?: Transaction;
   wallets: Wallet[];
+  categories: Category[];
   onComplete: Function;
   onError: Function;
 }
@@ -36,8 +36,9 @@ export interface FormFields {
   description: string;
   value: string;
   type: TransactionType;
-  categoryId: number;
+  categoryId: any;
   walletId: number;
+  walletReceiverId: any;
 }
 
 const schema = () => {
@@ -46,7 +47,6 @@ const schema = () => {
     description: Yup.string().required("Enter record description"),
     value: Yup.string().required("Set record amount"),
     type: Yup.string().required("Choose record type"),
-    categoryId: Yup.number().required("Choose record category"),
     walletId: Yup.number().required("Choose record wallet")
   });
 };
@@ -54,13 +54,11 @@ const schema = () => {
 const TransactionForm = ({
   transaction,
   wallets,
+  categories,
   onComplete,
   onError
 }: Props): JSX.Element => {
   const { setTransactionUpdate } = useUpdateDetectionContext();
-
-  const { data: categoriesData } = useCategoriesQuery();
-  const categories: any = categoriesData?.categories ?? [];
 
   const walletOptions = wallets.map((wallet: Wallet) => {
     return {
@@ -138,29 +136,35 @@ const TransactionForm = ({
   });
 
   const onSubmit = (values: FormFields) => {
-    console.log(values);
     if (transaction) {
-      console.log(values.date, moment(values.date).utc().format('YYYY-MM-D HH:mm:ss'));
       updateTransaction({
         variables: {
           id: transaction.id,
-          date: moment(values.date).utc().format('YYYY-MM-D HH:mm:ss'),
+          date: moment(values.date)
+            .utc()
+            .format("YYYY-MM-D HH:mm:ss"),
           description: values.description,
           value: parseFloat(values.value ?? 0),
           type: values.type,
-          categoryId: values.categoryId,
-          walletId: values.walletId
+          categoryId:
+            values.type === TransactionType.Transfer ? null : values.categoryId,
+          walletId: values.walletId,
+          walletReceiverId: values.walletReceiverId ?? null
         }
       });
     } else {
       createTransaction({
         variables: {
-          date: moment(values.date).utc().format('YYYY-MM-D HH:mm:ss'),
+          date: moment(values.date)
+            .utc()
+            .format("YYYY-MM-D HH:mm:ss"),
           description: values.description,
           value: parseFloat(values.value ?? 0),
           type: values.type,
-          categoryId: values.categoryId,
-          walletId: values.walletId
+          categoryId:
+            values.type === TransactionType.Transfer ? null : values.categoryId,
+          walletId: values.walletId,
+          walletReceiverId: values.walletReceiverId ?? null
         }
       });
     }
@@ -168,9 +172,13 @@ const TransactionForm = ({
 
   return (
     <Formik
-      enableReinitialize
       initialValues={{
-        date: transaction?.date ? moment.utc(transaction.date).local().format('YYYY-MM-D HH:mm:ss') : moment().format('YYYY-MM-D HH:mm:ss'),
+        date: transaction?.date
+          ? moment
+              .utc(transaction.date)
+              .local()
+              .format("YYYY-MM-D HH:mm:ss")
+          : moment().format("YYYY-MM-D HH:mm:ss"),
         description: transaction?.description ?? "",
         value: transaction?.value.toString() ?? "",
         type: transaction?.type ?? TransactionType.Expense,
@@ -183,7 +191,8 @@ const TransactionForm = ({
           ? transaction.wallet.id
           : walletOptions.length
           ? walletOptions[0].id
-          : 0
+          : 0,
+        walletReceiverId: null
       }}
       validationSchema={schema}
       onSubmit={onSubmit}
@@ -194,10 +203,18 @@ const TransactionForm = ({
             <Grid item>
               <Grid container spacing={2}>
                 <Grid item xs={12} md={6} lg={6}>
-                  <DatePicker name="date" date={values.date} onChange={(date: string) => setFieldValue('date', date)} />
+                  <DatePicker
+                    name="date"
+                    date={values.date}
+                    onChange={(date: string) => setFieldValue("date", date)}
+                  />
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
-                  <TimePicker name="date" date={values.date} onChange={(date: string) => setFieldValue('date', date)} />
+                  <TimePicker
+                    name="date"
+                    date={values.date}
+                    onChange={(date: string) => setFieldValue("date", date)}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -223,11 +240,26 @@ const TransactionForm = ({
                   {
                     id: TransactionType.Income,
                     value: "Income"
+                  },
+                  {
+                    id: TransactionType.Transfer,
+                    value: "Transfer"
                   }
                 ]}
                 onChange={handleChange}
               />
             </Grid>
+            {values.type === TransactionType.Transfer && (
+              <Grid item>
+                <Select
+                  label="Transfer to"
+                  name="walletReceiverId"
+                  selected={values.walletReceiverId}
+                  options={walletOptions}
+                  onChange={handleChange}
+                />
+              </Grid>
+            )}
             <Grid item>
               <TextField
                 label="Description"
@@ -251,15 +283,17 @@ const TransactionForm = ({
                 helperText={errors.value}
               />
             </Grid>
-            <Grid item>
-              <Select
-                label="Category"
-                name="categoryId"
-                selected={values.categoryId}
-                options={categoryOptions}
-                onChange={handleChange}
-              />
-            </Grid>
+            {values.type !== TransactionType.Transfer && (
+              <Grid item>
+                <Select
+                  label="Category"
+                  name="categoryId"
+                  selected={values.categoryId}
+                  options={categoryOptions}
+                  onChange={handleChange}
+                />
+              </Grid>
+            )}
             <Grid>
               <Box mt={1}>
                 <Button type="submit">Add</Button>
@@ -278,8 +312,9 @@ TransactionForm.fragment = gql`
     $description: String!
     $value: Float!
     $type: TransactionType!
-    $categoryId: Int!
+    $categoryId: Int
     $walletId: Int!
+    $walletReceiverId: Int
   ) {
     createTransaction(
       input: {
@@ -289,6 +324,7 @@ TransactionForm.fragment = gql`
         type: $type
         categoryId: $categoryId
         walletId: $walletId
+        walletReceiverId: $walletReceiverId
       }
     ) {
       id
@@ -297,6 +333,12 @@ TransactionForm.fragment = gql`
       type
       date
       wallet {
+        id
+        name
+        color
+        amount
+      }
+      walletReceiver {
         id
         name
         color

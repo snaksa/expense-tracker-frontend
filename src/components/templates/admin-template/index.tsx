@@ -9,7 +9,7 @@ const AdminTemplate = ({ header, sidebar, content }: any) => {
       <Grid item>{header}</Grid>
       <Grid item style={{ flexGrow: 1 }}>
         <Grid container direction="row" style={{ height: "100%" }}>
-          <Grid item xs={12} sm={12} md={2} lg={1}>
+          <Grid item xs={12} sm={12} md={2} lg={2} xl={1}>
             {sidebar}
           </Grid>
           <Grid
@@ -17,7 +17,8 @@ const AdminTemplate = ({ header, sidebar, content }: any) => {
             xs={12}
             sm={12}
             md={10}
-            lg={11}
+            lg={10}
+            xl={11}
             className={classes.content}
           >
             {content}

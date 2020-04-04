@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import useStyles from "./styles";
 import Modal from "../../molecules/modal";
 import Button from "../../atoms/button";
-import TextField from "../../atoms/text-field";
+import TextField from "../../atoms/form/text-field";
 import WalletSummary from "../../molecules/wallet-summary";
 import {
   useCreateWalletMutation,

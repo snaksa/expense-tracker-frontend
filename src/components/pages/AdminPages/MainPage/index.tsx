@@ -9,8 +9,9 @@ import {
   useCategoriesSpendingPieQuery,
   TransactionType,
   useCategoriesSpendingFlowQuery,
-  useTransactionSpendingFlowQuery
-} from "../../../../api";
+  useTransactionSpendingFlowQuery,
+  useCategoriesQuery
+} from "api";
 import LastTransactions from "components/organisms/last-transactions";
 import SummaryBox from "components/molecules/summary-box";
 import Chart from "react-google-charts";
@@ -30,6 +31,9 @@ const MainPage = () => {
     lastCategoryAction,
     lastWalletAction
   } = useUpdateDetectionContext();
+
+  const { data: categoriesData } = useCategoriesQuery();
+  const categories: any = categoriesData?.categories ?? [];
 
   const [chosenWallets, setChosenWallets] = useState<number[]>([]);
 
@@ -166,6 +170,7 @@ const MainPage = () => {
                   <Box className={classes.transactions}>
                     <LastTransactions
                       wallets={chosenWallets}
+                      categories={categories}
                       onChange={() => {}}
                     />
                   </Box>

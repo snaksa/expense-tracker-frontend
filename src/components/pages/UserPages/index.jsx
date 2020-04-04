@@ -4,23 +4,23 @@ import {
     Route,
     Switch
 } from "react-router-dom";
-import Login from '../../organisms/login';
-import Register from '../../organisms/register';
+import RegisterPage from './RegisterPage';
 import HeroTemplate from '../../templates/hero-template';
+import HomePage from './HomePage';
 
 
-const HomePage = () => {
+const AnonPages = () => {
     return (
         <Box>
             <Switch>
                 <Route path="/register">
                     <HeroTemplate
-                        hero={<Register />}
+                        hero={<RegisterPage />}
                     />
                 </Route>
                 <Route path="/">
                     <HeroTemplate
-                        hero={<Login />}
+                        hero={<HomePage />}
                     />
                 </Route>
             </Switch>
@@ -28,4 +28,4 @@ const HomePage = () => {
     );
 }
 
-export default HomePage;
+export default AnonPages;

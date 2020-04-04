@@ -15,10 +15,10 @@ import { gql } from "apollo-boost";
 import { Box } from "@material-ui/core";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
 import Modal from "components/molecules/modal";
-import TransactionForm from "../transaction-form";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
+import TransactionFormWrapper from "components/molecules/forms/transaction-form";
 
 interface Props {
   selectedDate: string;
@@ -33,7 +33,7 @@ const TransactionsTable = ({
   onDelete,
   onEdit
 }: Props) => {
-  const {formatCurrency} = useCurrencyFormatter();
+  const { formatCurrency } = useCurrencyFormatter();
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
@@ -54,9 +54,7 @@ const TransactionsTable = ({
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
 
-  const {
-    setTransactionUpdate
-  } = useUpdateDetectionContext();
+  const { setTransactionUpdate } = useUpdateDetectionContext();
 
   const {
     showSuccessNotification,
@@ -153,7 +151,7 @@ const TransactionsTable = ({
       type: "text",
       id: "description",
       label: "Description",
-      minWidth: 100,
+      minWidth: 70,
       align: "left"
     },
     {
@@ -164,9 +162,13 @@ const TransactionsTable = ({
       align: "right",
       format: (value: number) => formatCurrency(value),
       color: (row: any) =>
-        row.type === TransactionType.Expense ? "red" : "green",
+        [TransactionType.Expense, TransactionType.Transfer].includes(row.type)
+          ? "red"
+          : "green",
       sign: (row: any) =>
-        row.type === TransactionType.Expense ? "-" : ""
+        [TransactionType.Expense, TransactionType.Transfer].includes(row.type)
+          ? "-"
+          : ""
     },
     {
       type: "colorName",
@@ -234,8 +236,7 @@ const TransactionsTable = ({
           setEditModalIsOpen(false);
         }}
       >
-        <TransactionForm
-          wallets={wallets}
+        <TransactionFormWrapper
           transaction={
             selectedRow
               ? transactions.filter(
@@ -266,6 +267,12 @@ TransactionsTable.fragment = gql`
         color
         amount
       }
+      walletReceiver {
+        id
+        name
+        color
+        amount
+      }
       category {
         id
         name
@@ -277,12 +284,13 @@ TransactionsTable.fragment = gql`
   }
   mutation UpdateTransaction(
     $id: Int!
-    $date: String,
+    $date: String
     $description: String
     $value: Float
     $type: TransactionType
     $categoryId: Int
     $walletId: Int
+    $walletReceiverId: Int
   ) {
     updateTransaction(
       input: {
@@ -293,6 +301,7 @@ TransactionsTable.fragment = gql`
         type: $type
         categoryId: $categoryId
         walletId: $walletId
+        walletReceiverId: $walletReceiverId
       }
     ) {
       id
@@ -301,6 +310,12 @@ TransactionsTable.fragment = gql`
       type
       date
       wallet {
+        id
+        name
+        color
+        amount
+      }
+      walletReceiver {
         id
         name
         color
@@ -316,6 +331,5 @@ TransactionsTable.fragment = gql`
     }
   }
 `;
-
 
 export default TransactionsTable;

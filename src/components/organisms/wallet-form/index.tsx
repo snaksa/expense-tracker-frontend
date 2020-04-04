@@ -3,7 +3,7 @@ import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import Button from "components/atoms/button";
-import TextField from "components/atoms/text-field";
+import TextField from "components/atoms/form/text-field";
 import { useNotificationContext } from "services/notification-provider";
 import {
   useCreateWalletMutation,

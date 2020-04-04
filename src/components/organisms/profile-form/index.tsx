@@ -2,11 +2,11 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import TextField from "components/atoms/text-field";
+import TextField from "components/atoms/form/text-field";
 import { useNotificationContext } from "services/notification-provider";
 import { useCurrenciesQuery, useUpdateUserMutation } from "api";
 import { gql } from "apollo-boost";
-import Select from "components/atoms/select";
+import Select from "components/atoms/form/select";
 import Button from "components/atoms/button";
 
 interface Props {

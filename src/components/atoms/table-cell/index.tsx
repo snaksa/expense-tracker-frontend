@@ -80,9 +80,13 @@ const TableCell: React.FunctionComponent<Props> = ({
       >
         <Grid container spacing={2}>
           <Grid item>
-            <Box p={1} width={0} style={{ backgroundColor: value.color }}></Box>
+            <Box
+              p={1}
+              width={0}
+              style={{ backgroundColor: value?.color }}
+            ></Box>
           </Grid>
-          <Grid item>{value.name ? value.name : ""}</Grid>
+          <Grid item>{value?.name ? value.name : ""}</Grid>
         </Grid>
       </TableCellMaterial>
     );
@@ -119,12 +123,28 @@ const TableCell: React.FunctionComponent<Props> = ({
         align={column.align}
         className={classes.cell}
       >
-        <Grid container spacing={1} alignItems="center" justify="flex-start">
-          <Grid item>
-            <RoundBox width={15} height={15} color={value.color} />
+        {row &&
+        row.type === TransactionType.Transfer &&
+        column.id === "category" ? (
+          <Grid container spacing={1} alignItems="center" justify="flex-start">
+            <Grid item>
+              <RoundBox width={15} height={15} color={row.wallet?.color ?? '#ccc'} />
+            </Grid>
+            <Grid item>{row.wallet?.name ?? "Unknown"}</Grid>
+            <Grid item> => </Grid>
+            <Grid item>
+              <RoundBox width={15} height={15} color={row.walletReceiver?.color ?? '#ccc'} />
+            </Grid>
+            <Grid item>{row.walletReceiver?.name ?? "Unknown"}</Grid>
           </Grid>
-          <Grid item>{value.name}</Grid>
-        </Grid>
+        ) : (
+          <Grid container spacing={1} alignItems="center" justify="flex-start">
+            <Grid item>
+              <RoundBox width={15} height={15} color={value?.color ?? '#ccc'} />
+            </Grid>
+            <Grid item>{value?.name ?? 'Unknown'}</Grid>
+          </Grid>
+        )}
       </TableCellMaterial>
     );
   }

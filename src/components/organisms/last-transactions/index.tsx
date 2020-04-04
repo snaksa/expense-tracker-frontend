@@ -3,8 +3,8 @@ import { gql } from "apollo-boost";
 import SummaryBox from "components/molecules/summary-box";
 import TransactionSummary from "components/molecules/transaction-summary";
 import Modal from "components/molecules/modal";
-import TransactionForm from "components/organisms/transaction-form";
-import { useTransactionsQuery, Transaction, useWalletsQuery } from "api";
+import TransactionForm from "components/molecules/forms/transaction-form/form";
+import { useTransactionsQuery, Transaction, useWalletsQuery, Category } from "api";
 import Loader from "components/atoms/loader";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useStyles from "./styles";
@@ -13,9 +13,11 @@ let backupData: any[] = [];
 
 const LastTransactions = ({
   wallets,
+  categories,
   onChange
 }: {
   wallets: number[];
+  categories: Category[];
   onChange: Function;
 }) => {
   const classes = useStyles();
@@ -76,6 +78,7 @@ const LastTransactions = ({
       >
         <TransactionForm
           wallets={userWallets}
+          categories={categories}
           onComplete={() => {
             setTransactionUpdate();
             refetch();
@@ -113,6 +116,11 @@ LastTransactions.fragment = gql`
         value
         date
         wallet {
+          id
+          name
+          color
+        }
+        walletReceiver {
           id
           name
           color

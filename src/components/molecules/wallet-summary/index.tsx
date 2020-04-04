@@ -9,7 +9,7 @@ import useStyles from "./styles";
 import Title from "../../atoms/title";
 import Modal from "../modal";
 import Button from "../../atoms/button";
-import TextField from "../../atoms/text-field";
+import TextField from "../../atoms/form/text-field";
 import ConfirmationDialog from "../confirmation-dialog";
 import { useNotificationContext } from "services/notification-provider";
 import {

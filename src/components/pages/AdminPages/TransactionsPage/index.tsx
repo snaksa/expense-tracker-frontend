@@ -4,7 +4,6 @@ import useStyles from "./styles";
 import { useWalletsQuery, useTransactionSpendingFlowQuery, Wallet } from "api";
 import TransactionsTable from "components/organisms/transactions-table";
 import Modal from "components/molecules/modal";
-import TransactionForm from "components/organisms/transaction-form";
 import { gql } from "apollo-boost";
 import SummaryBox from "components/molecules/summary-box";
 import Chart from "react-google-charts";
@@ -16,6 +15,7 @@ import DateRangePicker, {
 import Loader from "components/atoms/loader";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
+import TransactionFormWrapper from "components/molecules/forms/transaction-form";
 
 const TransactionsPage = () => {
   const classes = useStyles();
@@ -123,8 +123,7 @@ const TransactionsPage = () => {
           setNewModalIsOpen(false);
         }}
       >
-        <TransactionForm
-          wallets={wallets}
+        <TransactionFormWrapper
           onComplete={() => {
             setNewModalIsOpen(false);
           }}

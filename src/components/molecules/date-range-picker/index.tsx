@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box } from "@material-ui/core";
 import useStyles from "./styles";
-import Select from "../../atoms/select";
+import Select from "../../atoms/form/select";
 import moment from "moment";
 
 interface Props {

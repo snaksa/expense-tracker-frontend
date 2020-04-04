@@ -12,18 +12,12 @@ const useStyles = makeStyles(theme => ({
             paddingTop: 20,
         }
     },
-    heading: {
-        width: '50%',
-        [theme.breakpoints.down('md')]: {
-            width: '90%'
-        }
-    },
     form: {
         width: '400px',
         border: `2px solid ${theme.palette.primary.main}`,
         padding: '30px',
         borderRadius: '10px',
-        margin: '50px auto',
+        margin: '0 auto',
         backgroundColor: '#FFF',
         [theme.breakpoints.down('sm')]: {
             width: '90%',
@@ -32,10 +26,6 @@ const useStyles = makeStyles(theme => ({
     },
     image: {
         width: '100px',
-    },
-    errorMessage: {
-        textAlign: 'center',
-        color: theme.palette.primary.main
     }
 }));
 

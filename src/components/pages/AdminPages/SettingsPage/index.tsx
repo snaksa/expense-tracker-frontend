@@ -4,7 +4,7 @@ import useStyles from "./styles";
 import { useCategoriesQuery, useWalletsQuery, useCurrentUserQuery } from "api";
 import CategoriesTable from "components/organisms/categories-table";
 import Modal from "components/molecules/modal";
-import CategoryForm from "components/organisms/category-form";
+import CategoryForm from "components/molecules/forms/category-form";
 import WalletsTable from "components/organisms/wallets-table";
 import WalletForm from "components/organisms/wallet-form";
 import { gql } from "apollo-boost";

@@ -14,7 +14,7 @@ import { useNotificationContext } from "services/notification-provider";
 import { gql } from "apollo-boost";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import Modal from "components/molecules/modal";
-import CategoryForm from "../category-form";
+import CategoryForm from "../../molecules/forms/category-form";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
@@ -27,14 +27,14 @@ interface Props {
 }
 
 const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
-  const {formatCurrency} = useCurrencyFormatter();
+  const { formatCurrency } = useCurrencyFormatter();
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
   const [selectedRow, setSelectedRow] = useState(0);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
-  const {setCategoryUpdate} = useUpdateDetectionContext();
+  const { setCategoryUpdate } = useUpdateDetectionContext();
 
   const { usedTranasctionParams } = useSharedDataContext();
 

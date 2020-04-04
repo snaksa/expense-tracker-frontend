@@ -196,6 +196,7 @@ export interface Transaction {
   type: TransactionType,
   date: Maybe<Scalars['DateTime']>,
   wallet: Maybe<Wallet>,
+  walletReceiver: Maybe<Wallet>,
   category: Maybe<Category>,
 }
 
@@ -204,8 +205,9 @@ export interface TransactionCreateRequestInput {
   description: Scalars['String'],
   value: Scalars['Float'],
   type: TransactionType,
-  categoryId: Scalars['Int'],
+  categoryId: Maybe<Scalars['Int']>,
   walletId: Scalars['Int'],
+  walletReceiverId: Maybe<Scalars['Int']>,
 }
 
 export interface TransactionDeleteRequestInput {
@@ -233,7 +235,8 @@ export interface TransactionsPaginatedResult {
 
 export enum TransactionType {
   Income = 'INCOME',
-  Expense = 'EXPENSE'
+  Expense = 'EXPENSE',
+  Transfer = 'TRANSFER'
 }
 
 export interface TransactionUpdateRequestInput {
@@ -244,6 +247,7 @@ export interface TransactionUpdateRequestInput {
   type: Maybe<TransactionType>,
   categoryId: Maybe<Scalars['Int']>,
   walletId: Maybe<Scalars['Int']>,
+  walletReceiverId: Maybe<Scalars['Int']>,
 }
 
 export interface User {
@@ -286,6 +290,7 @@ export interface Wallet {
   initial_amount: Scalars['Float'],
   user: Maybe<User>,
   transactions: Maybe<Array<Maybe<Transaction>>>,
+  transferInTransactions: Maybe<Array<Maybe<Transaction>>>,
 }
 
 export interface WalletCreateRequestInput {
@@ -398,6 +403,9 @@ export type TransactionsQuery = (
       & { wallet: Maybe<(
         { __typename?: 'Wallet' }
         & Pick<Wallet, 'id' | 'name' | 'color'>
+      )>, walletReceiver: Maybe<(
+        { __typename?: 'Wallet' }
+        & Pick<Wallet, 'id' | 'name' | 'color'>
       )>, category: Maybe<(
         { __typename?: 'Category' }
         & Pick<Category, 'id' | 'name' | 'color'>
@@ -465,8 +473,9 @@ export type CreateTransactionMutationVariables = {
   description: Scalars['String'],
   value: Scalars['Float'],
   type: TransactionType,
-  categoryId: Scalars['Int'],
-  walletId: Scalars['Int']
+  categoryId: Maybe<Scalars['Int']>,
+  walletId: Scalars['Int'],
+  walletReceiverId: Maybe<Scalars['Int']>
 };
 
 
@@ -476,6 +485,9 @@ export type CreateTransactionMutation = (
     { __typename?: 'Transaction' }
     & Pick<Transaction, 'id' | 'description' | 'value' | 'type' | 'date'>
     & { wallet: Maybe<(
+      { __typename?: 'Wallet' }
+      & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+    )>, walletReceiver: Maybe<(
       { __typename?: 'Wallet' }
       & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
     )>, category: Maybe<(
@@ -502,6 +514,9 @@ export type DeleteTransactionMutation = (
     & { wallet: Maybe<(
       { __typename?: 'Wallet' }
       & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+    )>, walletReceiver: Maybe<(
+      { __typename?: 'Wallet' }
+      & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
     )>, category: Maybe<(
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'name' | 'color' | 'balance' | 'transactionsCount'>
@@ -516,7 +531,8 @@ export type UpdateTransactionMutationVariables = {
   value: Maybe<Scalars['Float']>,
   type: Maybe<TransactionType>,
   categoryId: Maybe<Scalars['Int']>,
-  walletId: Maybe<Scalars['Int']>
+  walletId: Maybe<Scalars['Int']>,
+  walletReceiverId: Maybe<Scalars['Int']>
 };
 
 
@@ -526,6 +542,9 @@ export type UpdateTransactionMutation = (
     { __typename?: 'Transaction' }
     & Pick<Transaction, 'id' | 'description' | 'value' | 'type' | 'date'>
     & { wallet: Maybe<(
+      { __typename?: 'Wallet' }
+      & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+    )>, walletReceiver: Maybe<(
       { __typename?: 'Wallet' }
       & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
     )>, category: Maybe<(
@@ -832,6 +851,11 @@ export const TransactionsDocument = gql`
         name
         color
       }
+      walletReceiver {
+        id
+        name
+        color
+      }
       category {
         id
         name
@@ -1021,14 +1045,20 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const CreateTransactionDocument = gql`
-    mutation CreateTransaction($date: String!, $description: String!, $value: Float!, $type: TransactionType!, $categoryId: Int!, $walletId: Int!) {
-  createTransaction(input: {date: $date, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId}) {
+    mutation CreateTransaction($date: String!, $description: String!, $value: Float!, $type: TransactionType!, $categoryId: Int, $walletId: Int!, $walletReceiverId: Int) {
+  createTransaction(input: {date: $date, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId, walletReceiverId: $walletReceiverId}) {
     id
     description
     value
     type
     date
     wallet {
+      id
+      name
+      color
+      amount
+    }
+    walletReceiver {
       id
       name
       color
@@ -1071,6 +1101,7 @@ export type CreateTransactionMutationFn = ApolloReactCommon.MutationFunction<Cre
  *      type: // value for 'type'
  *      categoryId: // value for 'categoryId'
  *      walletId: // value for 'walletId'
+ *      walletReceiverId: // value for 'walletReceiverId'
  *   },
  * });
  */
@@ -1085,6 +1116,12 @@ export const DeleteTransactionDocument = gql`
   deleteTransaction(input: {id: $id}) {
     id
     wallet {
+      id
+      name
+      color
+      amount
+    }
+    walletReceiver {
       id
       name
       color
@@ -1126,14 +1163,20 @@ export type DeleteTransactionMutationHookResult = ReturnType<typeof useDeleteTra
 export type DeleteTransactionMutationResult = ApolloReactCommon.MutationResult<DeleteTransactionMutation>;
 export type DeleteTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteTransactionMutation, DeleteTransactionMutationVariables>;
 export const UpdateTransactionDocument = gql`
-    mutation UpdateTransaction($id: Int!, $date: String, $description: String, $value: Float, $type: TransactionType, $categoryId: Int, $walletId: Int) {
-  updateTransaction(input: {id: $id, date: $date, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId}) {
+    mutation UpdateTransaction($id: Int!, $date: String, $description: String, $value: Float, $type: TransactionType, $categoryId: Int, $walletId: Int, $walletReceiverId: Int) {
+  updateTransaction(input: {id: $id, date: $date, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId, walletReceiverId: $walletReceiverId}) {
     id
     description
     value
     type
     date
     wallet {
+      id
+      name
+      color
+      amount
+    }
+    walletReceiver {
       id
       name
       color
@@ -1171,6 +1214,7 @@ export type UpdateTransactionMutationFn = ApolloReactCommon.MutationFunction<Upd
  *      type: // value for 'type'
  *      categoryId: // value for 'categoryId'
  *      walletId: // value for 'walletId'
+ *      walletReceiverId: // value for 'walletReceiverId'
  *   },
  * });
  */
