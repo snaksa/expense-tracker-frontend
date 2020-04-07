@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Transaction,
   TransactionType,
-  Wallet,
   useDeleteTransactionMutation,
-  useWalletsQuery,
   useTransactionsLazyQuery,
   TransactionsDocument
 } from "api";
@@ -22,6 +20,8 @@ import TransactionFormWrapper from "components/molecules/forms/transaction-form"
 
 interface Props {
   selectedDate: string;
+  walletIds?: number[];
+  cateogryIds?: number[];
   onNewClick?: Function;
   onEdit?: Function;
   onDelete?: Function;
@@ -29,6 +29,8 @@ interface Props {
 
 const TransactionsTable = ({
   selectedDate,
+  walletIds,
+  cateogryIds,
   onNewClick,
   onDelete,
   onEdit
@@ -51,9 +53,6 @@ const TransactionsTable = ({
 
   const responseData: any = !loading ? data : oldData.current;
 
-  const { data: walletsData } = useWalletsQuery();
-  const wallets: any = walletsData?.wallets ?? [];
-
   const { setTransactionUpdate } = useUpdateDetectionContext();
 
   const {
@@ -73,7 +72,8 @@ const TransactionsTable = ({
   useEffect(() => {
     const params = {
       date: selectedDate,
-      walletIds: wallets.map((wallet: Wallet) => wallet.id),
+      walletIds: walletIds ?? [],
+      categoryIds: cateogryIds ?? [],
       page: currentPage + 1,
       limit: currentLimit,
       unlimited: false
@@ -89,7 +89,8 @@ const TransactionsTable = ({
     }
   }, [
     getTransactions,
-    wallets,
+    walletIds,
+    cateogryIds,
     selectedDate,
     currentLimit,
     currentPage,
@@ -117,7 +118,7 @@ const TransactionsTable = ({
       showSuccessNotification("Record deleted successfully!");
       setTransactionUpdate();
       if (onDelete) {
-        onDelete();
+        onDelete(); 
       }
     },
     onError() {

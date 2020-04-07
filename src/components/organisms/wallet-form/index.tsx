@@ -12,7 +12,7 @@ import {
   Wallet,
   useUpdateWalletMutation
 } from "api";
-import ColorPicker from "material-ui-color-picker";
+// import ColorPicker from "material-ui-color-picker";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 
 interface Props {
@@ -119,7 +119,7 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
       validationSchema={schema}
       onSubmit={onSubmit}
     >
-      {({ errors, touched, values, handleChange, setFieldValue }) => (
+      {({ errors, touched, values, handleChange }) => (
         <Form>
           <Grid container direction="column">
             <Grid item>
@@ -149,13 +149,13 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
             )}
             <Grid item>
               <Box style={{ backgroundColor: values.color }}>
-                <ColorPicker
+                {/* <ColorPicker
                   name="color"
                   defaultValue="#000"
                   value={values.color}
                   onChange={color => setFieldValue("color", color)}
                   fullWidth
-                />
+                /> */}
               </Box>
             </Grid>
             <Grid>

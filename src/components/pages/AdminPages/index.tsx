@@ -4,7 +4,7 @@ import {
   Home as HomeIcon,
   Receipt as ReceiptIcon,
   BarChart as BarChartIcon,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
 } from "@material-ui/icons";
 import AdminTemplate from "../../templates/admin-template";
 import MainPage from "./MainPage";
@@ -16,11 +16,12 @@ import { useAuthDataContext } from "../../../services/auth-provider";
 import { useNotificationContext } from "services/notification-provider";
 import Notification from "../../molecules/notification";
 import TransactionsPage from "./TransactionsPage";
-import useTranslations from 'translations';
+import useTranslations from "translations";
+import StatsPage from "./StatsPage";
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-  const {t} = useTranslations();
+  const { t } = useTranslations();
 
   const { isAuthenticated } = useAuthDataContext();
   isAuthenticated();
@@ -44,13 +45,17 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
               {
                 label: t("Records"),
                 to: "/admin/records",
-                icon: <ReceiptIcon />
+                icon: <ReceiptIcon />,
               },
-              { label: t("Stats"), icon: <BarChartIcon /> },
+              {
+                label: t("Stats"),
+                to: "/admin/stats",
+                icon: <BarChartIcon />,
+              },
               {
                 label: t("Settings"),
                 to: "/admin/settings",
-                icon: <SettingsIcon />
+                icon: <SettingsIcon />,
               },
             ]}
           />
@@ -59,6 +64,7 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
           <Switch>
             <Route path="/admin/records" component={TransactionsPage} />
             <Route path="/admin/settings" component={SettingsPage} />
+            <Route path="/admin/stats" component={StatsPage} />
             <Route path="/admin" component={MainPage} />
           </Switch>
         }

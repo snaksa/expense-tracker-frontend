@@ -15,19 +15,12 @@ const useStyles = makeStyles(theme => ({
     },
     header: {
         fontWeight: 'bold',
+        borderBottom: '1px solid #f2f2f2',
     },
     content: {
         position: 'relative',
         minHeight: '285px',
-        backgroundColor: '#FFF',
-        borderTop: '1px solid #f2f2f2',
-    },
-    noMinHeight: {
-        minHeight: 0
-    },
-    hiddenContent: {
-        display: 'none',
-        border: 0
+        backgroundColor: '#FFF'
     }
 }));
 

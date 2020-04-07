@@ -3,7 +3,7 @@ import { Grid, Box, Tooltip, Checkbox } from "@material-ui/core";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@material-ui/icons";
 import * as Yup from "yup";
 import { gql } from "apollo-boost";
-import ColorPicker from "material-ui-color-picker";
+// import ColorPicker from "material-ui-color-picker";
 import { Form, Formik } from "formik";
 import useStyles from "./styles";
 import Title from "../../atoms/title";
@@ -230,7 +230,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
           validationSchema={UpdateWalletSchema}
           onSubmit={onUpdateWalletSubmit}
         >
-          {({ errors, touched, values, handleChange, setFieldValue }) => (
+          {({ errors, touched, values, handleChange }) => (
             <Form>
               <Grid container direction="column">
                 <Grid item>
@@ -246,13 +246,13 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
                 </Grid>
                 <Grid item>
                   <Box style={{ backgroundColor: values.color }}>
-                    <ColorPicker
+                    {/* <ColorPicker
                       name="color"
                       defaultValue="#000"
                       value={values.color}
                       onChange={color => setFieldValue("color", color)}
                       fullWidth
-                    />
+                    /> */}
                   </Box>
                 </Grid>
                 <Grid>

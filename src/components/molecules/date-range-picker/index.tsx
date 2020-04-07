@@ -6,6 +6,7 @@ import moment from "moment";
 
 interface Props {
   onChange: Function;
+  responsive?: boolean;
 }
 
 interface optionProps {
@@ -38,7 +39,7 @@ export const calculateBackDate = (value: number) => {
   return backDate ? backDate.format("Y-M-D") : null;
 };
 
-const DateRangePicker = ({ onChange }: Props): JSX.Element => {
+const DateRangePicker = ({ onChange, responsive }: Props): JSX.Element => {
   const classes = useStyles({});
 
   const options: optionProps[] = [
@@ -51,7 +52,7 @@ const DateRangePicker = ({ onChange }: Props): JSX.Element => {
   const [selected, setSelected] = useState<number>(Range.Last7Days);
 
   return (
-    <Box mx="auto" className={classes.main}>
+    <Box mx="auto" className={`${classes.main} ${responsive ? classes.responsive : ''}`}>
       <Select
         options={options}
         onChange={(event: any) => {

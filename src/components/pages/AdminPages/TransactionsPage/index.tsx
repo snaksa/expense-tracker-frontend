@@ -73,6 +73,7 @@ const TransactionsPage = () => {
         <Grid item xs={12} md={6} lg={6}>
           <TransactionsTable
             selectedDate={backDate}
+            walletIds={wallets.map((wallet: Wallet) => wallet.id)}
             onNewClick={() => setNewModalIsOpen(true)}
             onDelete={() => {}}
             onEdit={() => {}}

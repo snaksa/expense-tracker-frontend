@@ -4,7 +4,7 @@ import SummaryBox from "components/molecules/summary-box";
 import TransactionSummary from "components/molecules/transaction-summary";
 import Modal from "components/molecules/modal";
 import TransactionForm from "components/molecules/forms/transaction-form/form";
-import { useTransactionsQuery, Transaction, useWalletsQuery, Category } from "api";
+import { useTransactionsQuery, Transaction, useWalletsQuery, Category, Wallet } from "api";
 import Loader from "components/atoms/loader";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useStyles from "./styles";
@@ -38,7 +38,8 @@ const LastTransactions = ({
   const { data, refetch, loading } = useTransactionsQuery({
     variables: {
       date: null,
-      walletIds: wallets,
+      walletIds: userWallets.map((wallet: Wallet) => wallet.id),
+      categoryIds: [],
       page: 1,
       limit: 5,
       unlimited: false
@@ -95,6 +96,7 @@ const LastTransactions = ({
 LastTransactions.fragment = gql`
   query Transactions(
     $walletIds: [Int]
+    $categoryIds: [Int]
     $page: Int
     $limit: Int
     $unlimited: Boolean
@@ -102,7 +104,8 @@ LastTransactions.fragment = gql`
   ) {
     transactions(
       input: {
-        walletIds: $walletIds
+        walletIds: $walletIds,
+        categoryIds: $categoryIds,
         page: $page
         limit: $limit
         unlimited: $unlimited

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
-import ColorPicker from "material-ui-color-picker";
+// import ColorPicker from "material-ui-color-picker";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import useStyles from "./styles";
@@ -133,7 +133,7 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
           validationSchema={CreateWalletSchema}
           onSubmit={onSubmit}
         >
-          {({ errors, touched, values, handleChange, setFieldValue }) => (
+          {({ errors, touched, values, handleChange }) => (
             <Form>
               <Grid container direction="column">
                 <Grid item>
@@ -161,13 +161,13 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
                 </Grid>
                 <Grid item>
                   <Box style={{ backgroundColor: values.color }}>
-                    <ColorPicker
+                    {/* <ColorPicker
                       name="color"
                       defaultValue="#000"
                       value={values.color}
                       onChange={color => setFieldValue("color", color)}
                       fullWidth
-                    />
+                    /> */}
                   </Box>
                 </Grid>
                 <Grid>

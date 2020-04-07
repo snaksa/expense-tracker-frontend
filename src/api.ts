@@ -4,233 +4,233 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export interface Scalars {
-  ID: string,
-  String: string,
-  Boolean: boolean,
-  Int: number,
-  Float: number,
-  DateTime: any,
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
+  DateTime: any;
 }
 
 export interface AreaChart {
-   __typename?: 'AreaChart',
-  header: Array<Maybe<Scalars['String']>>,
-  data: Maybe<Array<Maybe<Array<Maybe<Scalars['String']>>>>>,
-  colors: Maybe<Array<Maybe<Scalars['String']>>>,
+   __typename?: 'AreaChart';
+  header: Array<Maybe<Scalars['String']>>;
+  data: Maybe<Array<Maybe<Array<Maybe<Scalars['String']>>>>>;
+  colors: Maybe<Array<Maybe<Scalars['String']>>>;
 }
 
 export interface Category {
-   __typename?: 'Category',
-  id: Scalars['Int'],
-  name: Scalars['String'],
-  color: Scalars['String'],
-  icon: Maybe<Scalars['Int']>,
-  user: Maybe<User>,
-  transactions: Maybe<Array<Maybe<Transaction>>>,
-  transactionsCount: Maybe<Scalars['Int']>,
-  balance: Maybe<Scalars['Float']>,
+   __typename?: 'Category';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  color: Scalars['String'];
+  icon: Maybe<Scalars['Int']>;
+  user: Maybe<User>;
+  transactions: Maybe<Array<Maybe<Transaction>>>;
+  transactionsCount: Maybe<Scalars['Int']>;
+  balance: Maybe<Scalars['Float']>;
 }
 
 export interface CategoryCreateRequestInput {
-  name: Scalars['String'],
-  color: Scalars['String'],
+  name: Scalars['String'];
+  color: Scalars['String'];
 }
 
 export interface CategoryDeleteRequestInput {
-  id: Scalars['Int'],
+  id: Scalars['Int'];
 }
 
 export interface CategoryRecordsRequestInput {
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  type: Maybe<TransactionType>,
-  date: Maybe<Scalars['String']>,
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  type: Maybe<TransactionType>;
+  date: Maybe<Scalars['String']>;
 }
 
 export interface CategoryUpdateRequestInput {
-  id: Scalars['Int'],
-  name: Maybe<Scalars['String']>,
-  color: Maybe<Scalars['String']>,
-  icon: Maybe<Scalars['Int']>,
+  id: Scalars['Int'];
+  name: Maybe<Scalars['String']>;
+  color: Maybe<Scalars['String']>;
+  icon: Maybe<Scalars['Int']>;
 }
 
 export interface Currency {
-   __typename?: 'Currency',
-  id: Scalars['String'],
-  value: Scalars['String'],
+   __typename?: 'Currency';
+  id: Scalars['String'];
+  value: Scalars['String'];
 }
 
 
 export interface Mutation {
-   __typename?: 'Mutation',
-  registerUser: Maybe<User>,
-  loginUser: Maybe<Scalars['String']>,
-  updateUser: Maybe<User>,
-  createTransaction: Maybe<Transaction>,
-  updateTransaction: Maybe<Transaction>,
-  deleteTransaction: Maybe<Transaction>,
-  createWallet: Maybe<Wallet>,
-  updateWallet: Maybe<Wallet>,
-  deleteWallet: Maybe<Wallet>,
-  createCategory: Maybe<Category>,
-  updateCategory: Maybe<Category>,
-  deleteCategory: Maybe<Category>,
+   __typename?: 'Mutation';
+  registerUser: Maybe<User>;
+  loginUser: Maybe<Scalars['String']>;
+  updateUser: Maybe<User>;
+  createTransaction: Maybe<Transaction>;
+  updateTransaction: Maybe<Transaction>;
+  deleteTransaction: Maybe<Transaction>;
+  createWallet: Maybe<Wallet>;
+  updateWallet: Maybe<Wallet>;
+  deleteWallet: Maybe<Wallet>;
+  createCategory: Maybe<Category>;
+  updateCategory: Maybe<Category>;
+  deleteCategory: Maybe<Category>;
 }
 
 
 export interface MutationRegisterUserArgs {
-  input: UserRegisterRequestInput
+  input: UserRegisterRequestInput;
 }
 
 
 export interface MutationLoginUserArgs {
-  input: UserLoginRequestInput
+  input: UserLoginRequestInput;
 }
 
 
 export interface MutationUpdateUserArgs {
-  input: UserUpdateRequestInput
+  input: UserUpdateRequestInput;
 }
 
 
 export interface MutationCreateTransactionArgs {
-  input: TransactionCreateRequestInput
+  input: TransactionCreateRequestInput;
 }
 
 
 export interface MutationUpdateTransactionArgs {
-  input: TransactionUpdateRequestInput
+  input: TransactionUpdateRequestInput;
 }
 
 
 export interface MutationDeleteTransactionArgs {
-  input: TransactionDeleteRequestInput
+  input: TransactionDeleteRequestInput;
 }
 
 
 export interface MutationCreateWalletArgs {
-  input: WalletCreateRequestInput
+  input: WalletCreateRequestInput;
 }
 
 
 export interface MutationUpdateWalletArgs {
-  input: WalletUpdateRequestInput
+  input: WalletUpdateRequestInput;
 }
 
 
 export interface MutationDeleteWalletArgs {
-  input: WalletDeleteRequestInput
+  input: WalletDeleteRequestInput;
 }
 
 
 export interface MutationCreateCategoryArgs {
-  input: CategoryCreateRequestInput
+  input: CategoryCreateRequestInput;
 }
 
 
 export interface MutationUpdateCategoryArgs {
-  input: CategoryUpdateRequestInput
+  input: CategoryUpdateRequestInput;
 }
 
 
 export interface MutationDeleteCategoryArgs {
-  input: CategoryDeleteRequestInput
+  input: CategoryDeleteRequestInput;
 }
 
 export interface Query {
-   __typename?: 'Query',
-  users: Maybe<Array<Maybe<User>>>,
-  me: Maybe<User>,
-  transactionSpendingFlow: Maybe<AreaChart>,
-  categoriesSpendingFlow: Maybe<AreaChart>,
-  categoriesSpendingPieChart: Maybe<AreaChart>,
-  transactions: Maybe<TransactionsPaginatedResult>,
-  transaction: Maybe<Transaction>,
-  wallets: Maybe<Array<Maybe<Wallet>>>,
-  wallet: Maybe<Wallet>,
-  categories: Maybe<Array<Maybe<Category>>>,
-  category: Maybe<Category>,
-  currencies: Maybe<Array<Maybe<Currency>>>,
+   __typename?: 'Query';
+  users: Maybe<Array<Maybe<User>>>;
+  me: Maybe<User>;
+  transactionSpendingFlow: Maybe<AreaChart>;
+  categoriesSpendingFlow: Maybe<AreaChart>;
+  categoriesSpendingPieChart: Maybe<AreaChart>;
+  transactions: Maybe<TransactionsPaginatedResult>;
+  transaction: Maybe<Transaction>;
+  wallets: Maybe<Array<Maybe<Wallet>>>;
+  wallet: Maybe<Wallet>;
+  categories: Maybe<Array<Maybe<Category>>>;
+  category: Maybe<Category>;
+  currencies: Maybe<Array<Maybe<Currency>>>;
 }
 
 
 export interface QueryTransactionSpendingFlowArgs {
-  input: TransactionRecordsRequestInput
+  input: TransactionRecordsRequestInput;
 }
 
 
 export interface QueryCategoriesSpendingFlowArgs {
-  input: CategoryRecordsRequestInput
+  input: CategoryRecordsRequestInput;
 }
 
 
 export interface QueryCategoriesSpendingPieChartArgs {
-  input: CategoryRecordsRequestInput
+  input: CategoryRecordsRequestInput;
 }
 
 
 export interface QueryTransactionsArgs {
-  input: TransactionRecordsRequestInput
+  input: TransactionRecordsRequestInput;
 }
 
 
 export interface QueryTransactionArgs {
-  id: Scalars['Int']
+  id: Scalars['Int'];
 }
 
 
 export interface QueryWalletArgs {
-  id: Scalars['Int']
+  id: Scalars['Int'];
 }
 
 
 export interface QueryCategoryArgs {
-  id: Scalars['Int']
+  id: Scalars['Int'];
 }
 
 export interface Transaction {
-   __typename?: 'Transaction',
-  id: Scalars['Int'],
-  description: Scalars['String'],
-  value: Scalars['Float'],
-  type: TransactionType,
-  date: Maybe<Scalars['DateTime']>,
-  wallet: Maybe<Wallet>,
-  walletReceiver: Maybe<Wallet>,
-  category: Maybe<Category>,
+   __typename?: 'Transaction';
+  id: Scalars['Int'];
+  description: Scalars['String'];
+  value: Scalars['Float'];
+  type: TransactionType;
+  date: Maybe<Scalars['DateTime']>;
+  wallet: Maybe<Wallet>;
+  walletReceiver: Maybe<Wallet>;
+  category: Maybe<Category>;
 }
 
 export interface TransactionCreateRequestInput {
-  date: Scalars['String'],
-  description: Scalars['String'],
-  value: Scalars['Float'],
-  type: TransactionType,
-  categoryId: Maybe<Scalars['Int']>,
-  walletId: Scalars['Int'],
-  walletReceiverId: Maybe<Scalars['Int']>,
+  date: Scalars['String'];
+  description: Scalars['String'];
+  value: Scalars['Float'];
+  type: TransactionType;
+  categoryId: Maybe<Scalars['Int']>;
+  walletId: Scalars['Int'];
+  walletReceiverId: Maybe<Scalars['Int']>;
 }
 
 export interface TransactionDeleteRequestInput {
-  id: Scalars['Int'],
+  id: Scalars['Int'];
 }
 
 export interface TransactionRecordsRequestInput {
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  date: Maybe<Scalars['String']>,
-  limit: Maybe<Scalars['Int']>,
-  page: Maybe<Scalars['Int']>,
-  unlimited: Maybe<Scalars['Boolean']>,
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  date: Maybe<Scalars['String']>;
+  limit: Maybe<Scalars['Int']>;
+  page: Maybe<Scalars['Int']>;
+  unlimited: Maybe<Scalars['Boolean']>;
 }
 
 export interface TransactionsPaginatedResult {
-   __typename?: 'TransactionsPaginatedResult',
-  data: Array<Maybe<Transaction>>,
-  currentPage: Scalars['Int'],
-  totalPages: Scalars['Int'],
-  totalResults: Scalars['Int'],
-  hasNextPage: Scalars['Boolean'],
-  hasPrevPage: Scalars['Boolean'],
+   __typename?: 'TransactionsPaginatedResult';
+  data: Array<Maybe<Transaction>>;
+  currentPage: Scalars['Int'];
+  totalPages: Scalars['Int'];
+  totalResults: Scalars['Int'];
+  hasNextPage: Scalars['Boolean'];
+  hasPrevPage: Scalars['Boolean'];
 }
 
 export enum TransactionType {
@@ -240,134 +240,78 @@ export enum TransactionType {
 }
 
 export interface TransactionUpdateRequestInput {
-  date: Maybe<Scalars['String']>,
-  id: Scalars['Int'],
-  description: Maybe<Scalars['String']>,
-  value: Maybe<Scalars['Float']>,
-  type: Maybe<TransactionType>,
-  categoryId: Maybe<Scalars['Int']>,
-  walletId: Maybe<Scalars['Int']>,
-  walletReceiverId: Maybe<Scalars['Int']>,
+  date: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  description: Maybe<Scalars['String']>;
+  value: Maybe<Scalars['Float']>;
+  type: Maybe<TransactionType>;
+  categoryId: Maybe<Scalars['Int']>;
+  walletId: Maybe<Scalars['Int']>;
+  walletReceiverId: Maybe<Scalars['Int']>;
 }
 
 export interface User {
-   __typename?: 'User',
-  id: Scalars['Int'],
-  firstName: Maybe<Scalars['String']>,
-  lastName: Maybe<Scalars['String']>,
-  email: Scalars['String'],
-  currency: Maybe<Scalars['String']>,
-  language: Maybe<Scalars['String']>,
-  categories: Maybe<Array<Maybe<Category>>>,
-  wallets: Maybe<Array<Maybe<Wallet>>>,
+   __typename?: 'User';
+  id: Scalars['Int'];
+  firstName: Maybe<Scalars['String']>;
+  lastName: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  currency: Maybe<Scalars['String']>;
+  language: Maybe<Scalars['String']>;
+  categories: Maybe<Array<Maybe<Category>>>;
+  wallets: Maybe<Array<Maybe<Wallet>>>;
 }
 
 export interface UserLoginRequestInput {
-  email: Scalars['String'],
-  password: Scalars['String'],
+  email: Scalars['String'];
+  password: Scalars['String'];
 }
 
 export interface UserRegisterRequestInput {
-  email: Scalars['String'],
-  password: Scalars['String'],
-  confirmPassword: Scalars['String'],
+  email: Scalars['String'];
+  password: Scalars['String'];
+  confirmPassword: Scalars['String'];
 }
 
 export interface UserUpdateRequestInput {
-  firstName: Maybe<Scalars['String']>,
-  lastName: Maybe<Scalars['String']>,
-  email: Maybe<Scalars['String']>,
-  currency: Maybe<Scalars['String']>,
-  language: Maybe<Scalars['String']>,
+  firstName: Maybe<Scalars['String']>;
+  lastName: Maybe<Scalars['String']>;
+  email: Maybe<Scalars['String']>;
+  currency: Maybe<Scalars['String']>;
+  language: Maybe<Scalars['String']>;
 }
 
 export interface Wallet {
-   __typename?: 'Wallet',
-  id: Scalars['Int'],
-  name: Scalars['String'],
-  color: Scalars['String'],
-  amount: Scalars['Float'],
-  initial_amount: Scalars['Float'],
-  user: Maybe<User>,
-  transactions: Maybe<Array<Maybe<Transaction>>>,
-  transferInTransactions: Maybe<Array<Maybe<Transaction>>>,
+   __typename?: 'Wallet';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  color: Scalars['String'];
+  amount: Scalars['Float'];
+  initial_amount: Scalars['Float'];
+  user: Maybe<User>;
+  transactions: Maybe<Array<Maybe<Transaction>>>;
+  transferInTransactions: Maybe<Array<Maybe<Transaction>>>;
 }
 
 export interface WalletCreateRequestInput {
-  name: Scalars['String'],
-  color: Scalars['String'],
-  amount: Maybe<Scalars['Float']>,
+  name: Scalars['String'];
+  color: Scalars['String'];
+  amount: Maybe<Scalars['Float']>;
 }
 
 export interface WalletDeleteRequestInput {
-  id: Scalars['Int'],
+  id: Scalars['Int'];
 }
 
 export interface WalletUpdateRequestInput {
-  id: Scalars['Int'],
-  name: Maybe<Scalars['String']>,
-  color: Maybe<Scalars['String']>,
+  id: Scalars['Int'];
+  name: Maybe<Scalars['String']>;
+  color: Maybe<Scalars['String']>;
 }
 
-export type DeleteWalletMutationVariables = {
-  id: Scalars['Int']
-};
-
-
-export type DeleteWalletMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteWallet: Maybe<(
-    { __typename?: 'Wallet' }
-    & Pick<Wallet, 'id'>
-  )> }
-);
-
-export type UpdateWalletMutationVariables = {
-  id: Scalars['Int'],
-  name: Maybe<Scalars['String']>,
-  color: Maybe<Scalars['String']>
-};
-
-
-export type UpdateWalletMutation = (
-  { __typename?: 'Mutation' }
-  & { updateWallet: Maybe<(
-    { __typename?: 'Wallet' }
-    & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
-  )> }
-);
-
-export type DeleteCategoryMutationVariables = {
-  id: Scalars['Int']
-};
-
-
-export type DeleteCategoryMutation = (
-  { __typename?: 'Mutation' }
-  & { deleteCategory: Maybe<(
-    { __typename?: 'Category' }
-    & Pick<Category, 'id'>
-  )> }
-);
-
-export type UpdateCategoryMutationVariables = {
-  id: Scalars['Int'],
-  name: Maybe<Scalars['String']>,
-  color: Maybe<Scalars['String']>
-};
-
-
-export type UpdateCategoryMutation = (
-  { __typename?: 'Mutation' }
-  & { updateCategory: Maybe<(
-    { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'name' | 'color' | 'icon' | 'transactionsCount' | 'balance'>
-  )> }
-);
-
 export type CreateCategoryMutationVariables = {
-  name: Scalars['String'],
-  color: Scalars['String']
+  name: Scalars['String'];
+  color: Scalars['String'];
 };
 
 
@@ -383,40 +327,9 @@ export type CreateCategoryMutation = (
   )> }
 );
 
-export type TransactionsQueryVariables = {
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  page: Maybe<Scalars['Int']>,
-  limit: Maybe<Scalars['Int']>,
-  unlimited: Maybe<Scalars['Boolean']>,
-  date: Maybe<Scalars['String']>
-};
-
-
-export type TransactionsQuery = (
-  { __typename?: 'Query' }
-  & { transactions: Maybe<(
-    { __typename?: 'TransactionsPaginatedResult' }
-    & Pick<TransactionsPaginatedResult, 'currentPage' | 'totalPages' | 'totalResults' | 'hasNextPage' | 'hasPrevPage'>
-    & { data: Array<Maybe<(
-      { __typename?: 'Transaction' }
-      & Pick<Transaction, 'id' | 'description' | 'type' | 'value' | 'date'>
-      & { wallet: Maybe<(
-        { __typename?: 'Wallet' }
-        & Pick<Wallet, 'id' | 'name' | 'color'>
-      )>, walletReceiver: Maybe<(
-        { __typename?: 'Wallet' }
-        & Pick<Wallet, 'id' | 'name' | 'color'>
-      )>, category: Maybe<(
-        { __typename?: 'Category' }
-        & Pick<Category, 'id' | 'name' | 'color'>
-      )> }
-    )>> }
-  )> }
-);
-
 export type LoginMutationVariables = {
-  email: Scalars['String'],
-  password: Scalars['String']
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 
@@ -436,27 +349,10 @@ export type CurrentUserQuery = (
   )> }
 );
 
-export type UpdateUserMutationVariables = {
-  email: Maybe<Scalars['String']>,
-  firstName: Maybe<Scalars['String']>,
-  lastName: Maybe<Scalars['String']>,
-  currency: Maybe<Scalars['String']>,
-  language: Maybe<Scalars['String']>
-};
-
-
-export type UpdateUserMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUser: Maybe<(
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'currency' | 'language'>
-  )> }
-);
-
 export type RegisterMutationVariables = {
-  email: Scalars['String'],
-  password: Scalars['String'],
-  confirmPassword: Scalars['String']
+  email: Scalars['String'];
+  password: Scalars['String'];
+  confirmPassword: Scalars['String'];
 };
 
 
@@ -469,13 +365,13 @@ export type RegisterMutation = (
 );
 
 export type CreateTransactionMutationVariables = {
-  date: Scalars['String'],
-  description: Scalars['String'],
-  value: Scalars['Float'],
-  type: TransactionType,
-  categoryId: Maybe<Scalars['Int']>,
-  walletId: Scalars['Int'],
-  walletReceiverId: Maybe<Scalars['Int']>
+  date: Scalars['String'];
+  description: Scalars['String'];
+  value: Scalars['Float'];
+  type: TransactionType;
+  categoryId: Maybe<Scalars['Int']>;
+  walletId: Scalars['Int'];
+  walletReceiverId: Maybe<Scalars['Int']>;
 };
 
 
@@ -501,8 +397,113 @@ export type CreateTransactionMutation = (
   )> }
 );
 
+export type DeleteWalletMutationVariables = {
+  id: Scalars['Int'];
+};
+
+
+export type DeleteWalletMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteWallet: Maybe<(
+    { __typename?: 'Wallet' }
+    & Pick<Wallet, 'id'>
+  )> }
+);
+
+export type UpdateWalletMutationVariables = {
+  id: Scalars['Int'];
+  name: Maybe<Scalars['String']>;
+  color: Maybe<Scalars['String']>;
+};
+
+
+export type UpdateWalletMutation = (
+  { __typename?: 'Mutation' }
+  & { updateWallet: Maybe<(
+    { __typename?: 'Wallet' }
+    & Pick<Wallet, 'id' | 'name' | 'color' | 'amount'>
+  )> }
+);
+
+export type DeleteCategoryMutationVariables = {
+  id: Scalars['Int'];
+};
+
+
+export type DeleteCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteCategory: Maybe<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+  )> }
+);
+
+export type UpdateCategoryMutationVariables = {
+  id: Scalars['Int'];
+  name: Maybe<Scalars['String']>;
+  color: Maybe<Scalars['String']>;
+};
+
+
+export type UpdateCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCategory: Maybe<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name' | 'color' | 'icon' | 'transactionsCount' | 'balance'>
+  )> }
+);
+
+export type TransactionsQueryVariables = {
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  page: Maybe<Scalars['Int']>;
+  limit: Maybe<Scalars['Int']>;
+  unlimited: Maybe<Scalars['Boolean']>;
+  date: Maybe<Scalars['String']>;
+};
+
+
+export type TransactionsQuery = (
+  { __typename?: 'Query' }
+  & { transactions: Maybe<(
+    { __typename?: 'TransactionsPaginatedResult' }
+    & Pick<TransactionsPaginatedResult, 'currentPage' | 'totalPages' | 'totalResults' | 'hasNextPage' | 'hasPrevPage'>
+    & { data: Array<Maybe<(
+      { __typename?: 'Transaction' }
+      & Pick<Transaction, 'id' | 'description' | 'type' | 'value' | 'date'>
+      & { wallet: Maybe<(
+        { __typename?: 'Wallet' }
+        & Pick<Wallet, 'id' | 'name' | 'color'>
+      )>, walletReceiver: Maybe<(
+        { __typename?: 'Wallet' }
+        & Pick<Wallet, 'id' | 'name' | 'color'>
+      )>, category: Maybe<(
+        { __typename?: 'Category' }
+        & Pick<Category, 'id' | 'name' | 'color'>
+      )> }
+    )>> }
+  )> }
+);
+
+export type UpdateUserMutationVariables = {
+  email: Maybe<Scalars['String']>;
+  firstName: Maybe<Scalars['String']>;
+  lastName: Maybe<Scalars['String']>;
+  currency: Maybe<Scalars['String']>;
+  language: Maybe<Scalars['String']>;
+};
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'currency' | 'language'>
+  )> }
+);
+
 export type DeleteTransactionMutationVariables = {
-  id: Scalars['Int']
+  id: Scalars['Int'];
 };
 
 
@@ -525,14 +526,14 @@ export type DeleteTransactionMutation = (
 );
 
 export type UpdateTransactionMutationVariables = {
-  id: Scalars['Int'],
-  date: Maybe<Scalars['String']>,
-  description: Maybe<Scalars['String']>,
-  value: Maybe<Scalars['Float']>,
-  type: Maybe<TransactionType>,
-  categoryId: Maybe<Scalars['Int']>,
-  walletId: Maybe<Scalars['Int']>,
-  walletReceiverId: Maybe<Scalars['Int']>
+  id: Scalars['Int'];
+  date: Maybe<Scalars['String']>;
+  description: Maybe<Scalars['String']>;
+  value: Maybe<Scalars['Float']>;
+  type: Maybe<TransactionType>;
+  categoryId: Maybe<Scalars['Int']>;
+  walletId: Maybe<Scalars['Int']>;
+  walletReceiverId: Maybe<Scalars['Int']>;
 };
 
 
@@ -555,9 +556,9 @@ export type UpdateTransactionMutation = (
 );
 
 export type CreateWalletMutationVariables = {
-  name: Scalars['String'],
-  amount: Maybe<Scalars['Float']>,
-  color: Scalars['String']
+  name: Scalars['String'];
+  amount: Maybe<Scalars['Float']>;
+  color: Scalars['String'];
 };
 
 
@@ -596,9 +597,9 @@ export type CategoriesQuery = (
 );
 
 export type CategoriesSpendingFlowQueryVariables = {
-  date: Maybe<Scalars['String']>,
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>
+  date: Maybe<Scalars['String']>;
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 
@@ -611,10 +612,10 @@ export type CategoriesSpendingFlowQuery = (
 );
 
 export type CategoriesSpendingPieQueryVariables = {
-  date: Maybe<Scalars['String']>,
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  type: Maybe<TransactionType>
+  date: Maybe<Scalars['String']>;
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  type: Maybe<TransactionType>;
 };
 
 
@@ -638,9 +639,9 @@ export type CurrenciesQuery = (
 );
 
 export type TransactionSpendingFlowQueryVariables = {
-  date: Maybe<Scalars['String']>,
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>,
-  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>
+  date: Maybe<Scalars['String']>;
+  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
 };
 
 
@@ -653,6 +654,220 @@ export type TransactionSpendingFlowQuery = (
 );
 
 
+export const CreateCategoryDocument = gql`
+    mutation CreateCategory($name: String!, $color: String!) {
+  createCategory(input: {name: $name, color: $color}) {
+    id
+    color
+    name
+    icon
+    transactionsCount
+    balance
+    transactions {
+      id
+      value
+      type
+      date
+    }
+  }
+}
+    `;
+export type CreateCategoryMutationFn = ApolloReactCommon.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      color: // value for 'color'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, baseOptions);
+      }
+export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
+export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($email: String!, $password: String!) {
+  loginUser(input: {email: $email, password: $password})
+}
+    `;
+export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
+export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const CurrentUserDocument = gql`
+    query CurrentUser {
+  me {
+    id
+    email
+    firstName
+    lastName
+    currency
+    language
+  }
+}
+    `;
+
+/**
+ * __useCurrentUserQuery__
+ *
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        return ApolloReactHooks.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+        }
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const RegisterDocument = gql`
+    mutation Register($email: String!, $password: String!, $confirmPassword: String!) {
+  registerUser(input: {email: $email, password: $password, confirmPassword: $confirmPassword}) {
+    id
+    email
+  }
+}
+    `;
+export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
+
+/**
+ * __useRegisterMutation__
+ *
+ * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerMutation, { data, loading, error }] = useRegisterMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *      confirmPassword: // value for 'confirmPassword'
+ *   },
+ * });
+ */
+export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        return ApolloReactHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+      }
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
+export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CreateTransactionDocument = gql`
+    mutation CreateTransaction($date: String!, $description: String!, $value: Float!, $type: TransactionType!, $categoryId: Int, $walletId: Int!, $walletReceiverId: Int) {
+  createTransaction(input: {date: $date, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId, walletReceiverId: $walletReceiverId}) {
+    id
+    description
+    value
+    type
+    date
+    wallet {
+      id
+      name
+      color
+      amount
+    }
+    walletReceiver {
+      id
+      name
+      color
+      amount
+    }
+    category {
+      id
+      name
+      color
+      balance
+      transactionsCount
+      transactions {
+        id
+        value
+        type
+        date
+      }
+    }
+  }
+}
+    `;
+export type CreateTransactionMutationFn = ApolloReactCommon.MutationFunction<CreateTransactionMutation, CreateTransactionMutationVariables>;
+
+/**
+ * __useCreateTransactionMutation__
+ *
+ * To run a mutation, you first call `useCreateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
+ *   variables: {
+ *      date: // value for 'date'
+ *      description: // value for 'description'
+ *      value: // value for 'value'
+ *      type: // value for 'type'
+ *      categoryId: // value for 'categoryId'
+ *      walletId: // value for 'walletId'
+ *      walletReceiverId: // value for 'walletReceiverId'
+ *   },
+ * });
+ */
+export function useCreateTransactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTransactionMutation, CreateTransactionMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateTransactionMutation, CreateTransactionMutationVariables>(CreateTransactionDocument, baseOptions);
+      }
+export type CreateTransactionMutationHookResult = ReturnType<typeof useCreateTransactionMutation>;
+export type CreateTransactionMutationResult = ApolloReactCommon.MutationResult<CreateTransactionMutation>;
+export type CreateTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTransactionMutation, CreateTransactionMutationVariables>;
 export const DeleteWalletDocument = gql`
     mutation DeleteWallet($id: Int!) {
   deleteWallet(input: {id: $id}) {
@@ -793,53 +1008,9 @@ export function useUpdateCategoryMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
 export type UpdateCategoryMutationResult = ApolloReactCommon.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
-export const CreateCategoryDocument = gql`
-    mutation CreateCategory($name: String!, $color: String!) {
-  createCategory(input: {name: $name, color: $color}) {
-    id
-    color
-    name
-    icon
-    transactionsCount
-    balance
-    transactions {
-      id
-      value
-      type
-      date
-    }
-  }
-}
-    `;
-export type CreateCategoryMutationFn = ApolloReactCommon.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
-
-/**
- * __useCreateCategoryMutation__
- *
- * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
- *   variables: {
- *      name: // value for 'name'
- *      color: // value for 'color'
- *   },
- * });
- */
-export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, baseOptions);
-      }
-export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
-export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
-export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const TransactionsDocument = gql`
-    query Transactions($walletIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean, $date: String) {
-  transactions(input: {walletIds: $walletIds, page: $page, limit: $limit, unlimited: $unlimited, date: $date}) {
+    query Transactions($walletIds: [Int], $categoryIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean, $date: String) {
+  transactions(input: {walletIds: $walletIds, categoryIds: $categoryIds, page: $page, limit: $limit, unlimited: $unlimited, date: $date}) {
     data {
       id
       description
@@ -884,6 +1055,7 @@ export const TransactionsDocument = gql`
  * const { data, loading, error } = useTransactionsQuery({
  *   variables: {
  *      walletIds: // value for 'walletIds'
+ *      categoryIds: // value for 'categoryIds'
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      unlimited: // value for 'unlimited'
@@ -900,74 +1072,6 @@ export function useTransactionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type TransactionsQueryHookResult = ReturnType<typeof useTransactionsQuery>;
 export type TransactionsLazyQueryHookResult = ReturnType<typeof useTransactionsLazyQuery>;
 export type TransactionsQueryResult = ApolloReactCommon.QueryResult<TransactionsQuery, TransactionsQueryVariables>;
-export const LoginDocument = gql`
-    mutation Login($email: String!, $password: String!) {
-  loginUser(input: {email: $email, password: $password})
-}
-    `;
-export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
-
-/**
- * __useLoginMutation__
- *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
- *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
- *   },
- * });
- */
-export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        return ApolloReactHooks.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
-      }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
-export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
-export const CurrentUserDocument = gql`
-    query CurrentUser {
-  me {
-    id
-    email
-    firstName
-    lastName
-    currency
-    language
-  }
-}
-    `;
-
-/**
- * __useCurrentUserQuery__
- *
- * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCurrentUserQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCurrentUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-        return ApolloReactHooks.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
-      }
-export function useCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
-        }
-export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
-export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
-export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($email: String, $firstName: String, $lastName: String, $currency: String, $language: String) {
   updateUser(input: {email: $email, firstName: $firstName, lastName: $lastName, currency: $currency, language: $language}) {
@@ -1009,108 +1113,6 @@ export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
-export const RegisterDocument = gql`
-    mutation Register($email: String!, $password: String!, $confirmPassword: String!) {
-  registerUser(input: {email: $email, password: $password, confirmPassword: $confirmPassword}) {
-    id
-    email
-  }
-}
-    `;
-export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
-
-/**
- * __useRegisterMutation__
- *
- * To run a mutation, you first call `useRegisterMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRegisterMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [registerMutation, { data, loading, error }] = useRegisterMutation({
- *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
- *      confirmPassword: // value for 'confirmPassword'
- *   },
- * });
- */
-export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
-        return ApolloReactHooks.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
-      }
-export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
-export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
-export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const CreateTransactionDocument = gql`
-    mutation CreateTransaction($date: String!, $description: String!, $value: Float!, $type: TransactionType!, $categoryId: Int, $walletId: Int!, $walletReceiverId: Int) {
-  createTransaction(input: {date: $date, description: $description, value: $value, type: $type, categoryId: $categoryId, walletId: $walletId, walletReceiverId: $walletReceiverId}) {
-    id
-    description
-    value
-    type
-    date
-    wallet {
-      id
-      name
-      color
-      amount
-    }
-    walletReceiver {
-      id
-      name
-      color
-      amount
-    }
-    category {
-      id
-      name
-      color
-      balance
-      transactionsCount
-      transactions {
-        id
-        value
-        type
-        date
-      }
-    }
-  }
-}
-    `;
-export type CreateTransactionMutationFn = ApolloReactCommon.MutationFunction<CreateTransactionMutation, CreateTransactionMutationVariables>;
-
-/**
- * __useCreateTransactionMutation__
- *
- * To run a mutation, you first call `useCreateTransactionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTransactionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTransactionMutation, { data, loading, error }] = useCreateTransactionMutation({
- *   variables: {
- *      date: // value for 'date'
- *      description: // value for 'description'
- *      value: // value for 'value'
- *      type: // value for 'type'
- *      categoryId: // value for 'categoryId'
- *      walletId: // value for 'walletId'
- *      walletReceiverId: // value for 'walletReceiverId'
- *   },
- * });
- */
-export function useCreateTransactionMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTransactionMutation, CreateTransactionMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateTransactionMutation, CreateTransactionMutationVariables>(CreateTransactionDocument, baseOptions);
-      }
-export type CreateTransactionMutationHookResult = ReturnType<typeof useCreateTransactionMutation>;
-export type CreateTransactionMutationResult = ApolloReactCommon.MutationResult<CreateTransactionMutation>;
-export type CreateTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTransactionMutation, CreateTransactionMutationVariables>;
 export const DeleteTransactionDocument = gql`
     mutation DeleteTransaction($id: Int!) {
   deleteTransaction(input: {id: $id}) {
