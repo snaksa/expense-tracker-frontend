@@ -11,6 +11,7 @@ import { gql } from "apollo-boost";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import SummaryBox from "components/molecules/summary-box";
 import ProfileForm from "components/organisms/profile-form";
+import { Helmet } from "react-helmet";
 
 const SettingsPage = () => {
   const classes = useStyles();
@@ -42,6 +43,9 @@ const SettingsPage = () => {
 
   return (
     <Box className={classes.main} p={10}>
+      <Helmet>
+        <title>Settings | Expenses Tracker</title>
+      </Helmet>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={4}>
           <SummaryBox header="Profile Settings" responsiveHeight={true}>

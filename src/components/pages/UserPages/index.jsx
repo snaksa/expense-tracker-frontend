@@ -8,7 +8,6 @@ import RegisterPage from './RegisterPage';
 import HeroTemplate from '../../templates/hero-template';
 import HomePage from './HomePage';
 
-
 const AnonPages = () => {
     return (
         <Box>

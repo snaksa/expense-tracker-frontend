@@ -21,6 +21,7 @@ import LineChart from "components/organisms/line-chart";
 import Loader from "components/atoms/loader";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
+import { Helmet } from "react-helmet";
 
 const MainPage = () => {
   const classes = useStyles();
@@ -153,6 +154,9 @@ const MainPage = () => {
 
   return (
     <Box className={classes.main} p={10}>
+      <Helmet>
+        <title>Home | Expenses Tracker</title>
+      </Helmet>
       <Grid container direction="column">
         <Grid item xs={12} md={12} lg={12}>
           <Box mb={5} p={5} className={classes.collection}>

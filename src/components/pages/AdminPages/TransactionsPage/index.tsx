@@ -10,12 +10,13 @@ import Chart from "react-google-charts";
 import moment from "moment";
 import DateRangePicker, {
   Range,
-  calculateBackDate
+  calculateBackDate,
 } from "components/molecules/date-range-picker";
 import Loader from "components/atoms/loader";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import TransactionFormWrapper from "components/molecules/forms/transaction-form";
+import { Helmet } from "react-helmet";
 
 const TransactionsPage = () => {
   const classes = useStyles();
@@ -24,7 +25,7 @@ const TransactionsPage = () => {
   const {
     lastTransactionAction,
     lastCategoryAction,
-    lastWalletAction
+    lastWalletAction,
   } = useUpdateDetectionContext();
 
   const oldChartData: any = useRef([]);
@@ -37,14 +38,14 @@ const TransactionsPage = () => {
   const {
     data: spendingFlowData,
     refetch,
-    loading
+    loading,
   } = useTransactionSpendingFlowQuery({
     variables: {
       date: backDate,
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
-      categoryIds: []
+      categoryIds: [],
     },
-    fetchPolicy: "cache-and-network"
+    fetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const TransactionsPage = () => {
   let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
   flowChart = flowChart.map((row: any) => [
     moment.utc(row[0]).toDate(),
-    parseFloat(row[1])
+    parseFloat(row[1]),
   ]);
 
   const chartData = [flowColumns, ...flowChart];
@@ -66,6 +67,9 @@ const TransactionsPage = () => {
 
   return (
     <Box className={classes.main} p={10}>
+      <Helmet>
+        <title>Records | Expenses Tracker</title>
+      </Helmet>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={12}>
           <DateRangePicker onChange={(date: any) => setBackDate(date)} />
@@ -91,7 +95,7 @@ const TransactionsPage = () => {
                   ? chartData
                   : [
                       ["", ""],
-                      ["", 0]
+                      ["", 0],
                     ]
               }
               formatters={[
@@ -99,19 +103,19 @@ const TransactionsPage = () => {
                   type: "NumberFormat",
                   column: 1,
                   options: {
-                    suffix: ` ${getCurrency()}`
-                  }
-                }
+                    suffix: ` ${getCurrency()}`,
+                  },
+                },
               ]}
               options={{
                 hAxis: {
                   title: "Time",
                   type: "date",
-                  format: "Y-MM-dd"
+                  format: "Y-MM-dd",
                 },
                 vAxis: {
-                  title: "Money"
-                }
+                  title: "Money",
+                },
               }}
             />
           </SummaryBox>

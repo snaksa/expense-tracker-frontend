@@ -25,6 +25,7 @@ import DateRangePicker, {
   calculateBackDate,
 } from "components/molecules/date-range-picker";
 import TransactionsTable from "components/organisms/transactions-table";
+import { Helmet } from "react-helmet";
 
 const StatsPage = () => {
   const classes = useStyles();
@@ -190,6 +191,9 @@ const StatsPage = () => {
 
   return (
     <Box className={classes.main} p={10}>
+      <Helmet>
+        <title>Stats | Expenses Tracker</title>
+      </Helmet>
       <Grid container direction="row" spacing={5}>
         <Grid item xs={12} md={2} lg={2} xl={2}>
           <Grid container direction={"column"} spacing={5}>

@@ -5,12 +5,16 @@ import useStyles from "./styles";
 import Heading from "../../../molecules/heading";
 import RegisterForm from "components/molecules/forms/register";
 import AuthForm from "components/organisms/auth-form";
+import { Helmet } from "react-helmet";
 
 const RegisterPage = () => {
   const classes = useStyles();
 
   return (
     <Grid container className={classes.hero} direction="column">
+      <Helmet>
+        <title>Register | Expenses Tracker</title>
+      </Helmet>
       <Grid item>
         <Box className={classes.heading} mx="auto">
           <Heading
