@@ -10,10 +10,10 @@ import {
   WalletsDocument,
   WalletsQuery,
   Wallet,
-  useUpdateWalletMutation
+  useUpdateWalletMutation,
 } from "api";
-// import ColorPicker from "material-ui-color-picker";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import ColorPicker from "components/molecules/color-picker";
 
 interface Props {
   wallet?: Wallet;
@@ -31,14 +31,14 @@ const schema = () => {
   return Yup.object().shape({
     name: Yup.string().required("Enter wallet name"),
     color: Yup.string().required("Enter wallet color"),
-    amount: Yup.number()
+    amount: Yup.number(),
   });
 };
 
 const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
 
   const { setWalletUpdate } = useUpdateDetectionContext();
@@ -60,7 +60,7 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
       }
 
       const query = {
-        query: WalletsDocument
+        query: WalletsDocument,
       };
 
       const cached = store.readQuery<WalletsQuery>(query);
@@ -71,9 +71,9 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
       cached.wallets.push(wallet);
       store.writeQuery({
         ...query,
-        data: cached
+        data: cached,
       });
-    }
+    },
   });
 
   const [updateWallet] = useUpdateWalletMutation({
@@ -85,7 +85,7 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
     onError() {
       showErrorNotification("An error occured while updating the wallet data!");
       onError();
-    }
+    },
   });
 
   const onSubmit = (values: FormFields) => {
@@ -94,16 +94,16 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
         variables: {
           id: wallet.id,
           name: values.name,
-          color: values.color
-        }
+          color: values.color,
+        },
       });
     } else {
       createWallet({
         variables: {
           name: values.name,
           color: values.color,
-          amount: values.amount
-        }
+          amount: values.amount,
+        },
       });
     }
   };
@@ -114,7 +114,7 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
       initialValues={{
         name: wallet?.name ?? "",
         color: wallet?.color ?? "#DE60D4",
-        amount: wallet?.amount ?? null
+        amount: wallet?.amount ?? null,
       }}
       validationSchema={schema}
       onSubmit={onSubmit}
@@ -148,20 +148,16 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
               </Grid>
             )}
             <Grid item>
-              <Box style={{ backgroundColor: values.color }}>
-                {/* <ColorPicker
-                  name="color"
-                  defaultValue="#000"
-                  value={values.color}
-                  onChange={color => setFieldValue("color", color)}
-                  fullWidth
-                /> */}
-              </Box>
+              <ColorPicker
+                name="color"
+                selected={values.color}
+                onChange={handleChange}
+              />
             </Grid>
             <Grid>
               <Box mt={1}>
                 <Button type="submit" style={{}}>
-                  Add
+                  {wallet ? 'Edit': 'Add'}
                 </Button>
               </Box>
             </Grid>

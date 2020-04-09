@@ -44,7 +44,7 @@ const SettingsPage = () => {
     <Box className={classes.main} p={10}>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={4}>
-          <SummaryBox header="Profile Settings">
+          <SummaryBox header="Profile Settings" responsiveHeight={true}>
             <ProfileForm
               user={currentUser}
               onComplete={() => {}}
@@ -85,7 +85,7 @@ const SettingsPage = () => {
         title={"+ New Wallet"}
         isOpen={newWalletModalIsOpen}
         handleClose={() => {
-          setNewCategoryModalIsOpen(false);
+          setNewWalletModalIsOpen(false);
         }}
       >
         <WalletForm

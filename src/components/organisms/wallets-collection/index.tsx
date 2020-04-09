@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
-// import ColorPicker from "material-ui-color-picker";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import useStyles from "./styles";
@@ -13,10 +12,11 @@ import {
   useCreateWalletMutation,
   Wallet,
   WalletsDocument,
-  WalletsQuery
+  WalletsQuery,
 } from "../../../api";
 import { useNotificationContext } from "../../../services/notification-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import ColorPicker from "components/molecules/color-picker";
 
 interface Props {
   wallets: Wallet[];
@@ -36,12 +36,10 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
 
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
 
-  const {
-    setWalletUpdate
-  } = useUpdateDetectionContext();
+  const { setWalletUpdate } = useUpdateDetectionContext();
 
   const [createWallet] = useCreateWalletMutation({
     onCompleted() {
@@ -59,7 +57,7 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
       }
 
       const query = {
-        query: WalletsDocument
+        query: WalletsDocument,
       };
 
       const cached = store.readQuery<WalletsQuery>(query);
@@ -70,9 +68,9 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
       cached.wallets.push(wallet);
       store.writeQuery({
         ...query,
-        data: cached
+        data: cached,
       });
-    }
+    },
   });
 
   const onSubmit = (values: FormFields) => {
@@ -80,8 +78,8 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
       variables: {
         name: values.name,
         amount: values.amount,
-        color: values.color
-      }
+        color: values.color,
+      },
     });
   };
 
@@ -89,7 +87,7 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
     Yup.object().shape({
       name: Yup.string().required("Enter wallet name"),
       amount: Yup.number().nullable(),
-      color: Yup.string().required("Choose wallet color")
+      color: Yup.string().required("Choose wallet color"),
     });
 
   return (
@@ -127,8 +125,8 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
         <Formik
           initialValues={{
             name: "",
-            amount: null,
-            color: "#DE60D4"
+            amount: '',
+            color: "#DE60D4",
           }}
           validationSchema={CreateWalletSchema}
           onSubmit={onSubmit}
@@ -160,15 +158,11 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
                   />
                 </Grid>
                 <Grid item>
-                  <Box style={{ backgroundColor: values.color }}>
-                    {/* <ColorPicker
-                      name="color"
-                      defaultValue="#000"
-                      value={values.color}
-                      onChange={color => setFieldValue("color", color)}
-                      fullWidth
-                    /> */}
-                  </Box>
+                  <ColorPicker
+                    name="color"
+                    selected={values.color}
+                    onChange={handleChange}
+                  />
                 </Grid>
                 <Grid>
                   <Box mt={1}>

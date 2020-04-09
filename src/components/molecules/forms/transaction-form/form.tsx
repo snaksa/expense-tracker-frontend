@@ -15,7 +15,7 @@ import {
   useCreateTransactionMutation,
   Transaction,
   useUpdateTransactionMutation,
-  TransactionsDocument
+  TransactionsDocument,
 } from "api";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
@@ -47,7 +47,7 @@ const schema = () => {
     description: Yup.string().required("Enter record description"),
     value: Yup.string().required("Set record amount"),
     type: Yup.string().required("Choose record type"),
-    walletId: Yup.number().required("Choose record wallet")
+    walletId: Yup.number().required("Choose record wallet"),
   });
 };
 
@@ -56,7 +56,7 @@ const TransactionForm = ({
   wallets,
   categories,
   onComplete,
-  onError
+  onError,
 }: Props): JSX.Element => {
   const { setTransactionUpdate } = useUpdateDetectionContext();
 
@@ -70,7 +70,7 @@ const TransactionForm = ({
           </Grid>
           <Grid item>{wallet.name}</Grid>
         </Grid>
-      )
+      ),
     };
   });
 
@@ -85,14 +85,14 @@ const TransactionForm = ({
             </Grid>
             <Grid item>{category.name}</Grid>
           </Grid>
-        )
+        ),
       };
     }
   );
 
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
 
   const { usedTranasctionParams } = useSharedDataContext();
@@ -102,7 +102,7 @@ const TransactionForm = ({
     for (let params of usedTranasctionParams) {
       result.push({
         query: TransactionsDocument,
-        variables: params
+        variables: params,
       });
     }
 
@@ -119,7 +119,7 @@ const TransactionForm = ({
       onError();
       showErrorNotification("An error occured while saving the record data!");
     },
-    refetchQueries: getRefetchQueries()
+    refetchQueries: getRefetchQueries(),
   });
 
   const [updateTransaction] = useUpdateTransactionMutation({
@@ -132,7 +132,7 @@ const TransactionForm = ({
       showErrorNotification("An error occured while updating the record data!");
       onError();
     },
-    refetchQueries: getRefetchQueries()
+    refetchQueries: getRefetchQueries(),
   });
 
   const onSubmit = (values: FormFields) => {
@@ -140,32 +140,28 @@ const TransactionForm = ({
       updateTransaction({
         variables: {
           id: transaction.id,
-          date: moment(values.date)
-            .utc()
-            .format("YYYY-MM-D HH:mm:ss"),
+          date: moment(values.date).utc().format("YYYY-MM-D HH:mm:ss"),
           description: values.description,
           value: parseFloat(values.value ?? 0),
           type: values.type,
           categoryId:
             values.type === TransactionType.Transfer ? null : values.categoryId,
           walletId: values.walletId,
-          walletReceiverId: values.walletReceiverId ?? null
-        }
+          walletReceiverId: values.walletReceiverId ?? null,
+        },
       });
     } else {
       createTransaction({
         variables: {
-          date: moment(values.date)
-            .utc()
-            .format("YYYY-MM-D HH:mm:ss"),
+          date: moment(values.date).utc().format("YYYY-MM-D HH:mm:ss"),
           description: values.description,
           value: parseFloat(values.value ?? 0),
           type: values.type,
           categoryId:
             values.type === TransactionType.Transfer ? null : values.categoryId,
           walletId: values.walletId,
-          walletReceiverId: values.walletReceiverId ?? null
-        }
+          walletReceiverId: values.walletReceiverId ?? null,
+        },
       });
     }
   };
@@ -174,10 +170,7 @@ const TransactionForm = ({
     <Formik
       initialValues={{
         date: transaction?.date
-          ? moment
-              .utc(transaction.date)
-              .local()
-              .format("YYYY-MM-D HH:mm:ss")
+          ? moment.utc(transaction.date).local().format("YYYY-MM-D HH:mm:ss")
           : moment().format("YYYY-MM-D HH:mm:ss"),
         description: transaction?.description ?? "",
         value: transaction?.value.toString() ?? "",
@@ -192,7 +185,7 @@ const TransactionForm = ({
           : walletOptions.length
           ? walletOptions[0].id
           : 0,
-        walletReceiverId: null
+        walletReceiverId: null,
       }}
       validationSchema={schema}
       onSubmit={onSubmit}
@@ -235,16 +228,16 @@ const TransactionForm = ({
                 options={[
                   {
                     id: TransactionType.Expense,
-                    value: "Expense"
+                    value: "Expense",
                   },
                   {
                     id: TransactionType.Income,
-                    value: "Income"
+                    value: "Income",
                   },
                   {
                     id: TransactionType.Transfer,
-                    value: "Transfer"
-                  }
+                    value: "Transfer",
+                  },
                 ]}
                 onChange={handleChange}
               />
@@ -296,7 +289,7 @@ const TransactionForm = ({
             )}
             <Grid>
               <Box mt={1}>
-                <Button type="submit">Add</Button>
+                <Button type="submit">{transaction ? "Edit" : "Add"}</Button>
               </Box>
             </Grid>
           </Grid>

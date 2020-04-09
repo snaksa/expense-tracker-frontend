@@ -3,7 +3,6 @@ import { Grid, Box, Tooltip, Checkbox } from "@material-ui/core";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@material-ui/icons";
 import * as Yup from "yup";
 import { gql } from "apollo-boost";
-// import ColorPicker from "material-ui-color-picker";
 import { Form, Formik } from "formik";
 import useStyles from "./styles";
 import Title from "../../atoms/title";
@@ -16,10 +15,11 @@ import {
   useDeleteWalletMutation,
   useUpdateWalletMutation,
   WalletsQuery,
-  WalletsDocument
+  WalletsDocument,
 } from "../../../api";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
+import ColorPicker from "../color-picker";
 
 interface Props {
   id: number;
@@ -36,11 +36,9 @@ export interface FormFields {
 
 const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
   const classes = useStyles();
-  const {formatCurrency} = useCurrencyFormatter();
+  const { formatCurrency } = useCurrencyFormatter();
 
-  const {
-    setWalletUpdate
-  } = useUpdateDetectionContext();
+  const { setWalletUpdate } = useUpdateDetectionContext();
 
   const [checked, setChecked] = useState(true);
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
@@ -50,7 +48,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
 
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
 
   const [deleteWallet] = useDeleteWalletMutation({
@@ -69,7 +67,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
       }
 
       const query = {
-        query: WalletsDocument
+        query: WalletsDocument,
       };
 
       const cached = store.readQuery<WalletsQuery>(query);
@@ -77,14 +75,14 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
         return;
       }
 
-      const result = cached.wallets.filter(w => w && w.id !== wallet.id);
+      const result = cached.wallets.filter((w) => w && w.id !== wallet.id);
       store.writeQuery({
         ...query,
         data: {
-          wallets: result
-        }
+          wallets: result,
+        },
       });
-    }
+    },
   });
 
   const [updateWallet] = useUpdateWalletMutation({
@@ -104,7 +102,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
       }
 
       const query = {
-        query: WalletsDocument
+        query: WalletsDocument,
       };
 
       const cached = store.readQuery<WalletsQuery>(query);
@@ -113,7 +111,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
         return;
       }
 
-      const result = cached.wallets.map(w => {
+      const result = cached.wallets.map((w) => {
         if (w && w.id === id) {
           return wallet;
         }
@@ -123,16 +121,16 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
       store.writeQuery({
         ...query,
         data: {
-          wallets: result
-        }
+          wallets: result,
+        },
       });
-    }
+    },
   });
 
   const UpdateWalletSchema = () =>
     Yup.object().shape({
       name: Yup.string().required("Enter wallet name"),
-      color: Yup.string().required("Choose wallet color")
+      color: Yup.string().required("Choose wallet color"),
     });
 
   const onUpdateWalletSubmit = (values: FormFields) => {
@@ -140,8 +138,8 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
       variables: {
         id: id,
         name: values.name,
-        color: values.color
-      }
+        color: values.color,
+      },
     });
   };
 
@@ -149,8 +147,8 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
     setConfirmDeleteModalIsOpen(false);
     deleteWallet({
       variables: {
-        id: id
-      }
+        id: id,
+      },
     });
   };
 
@@ -225,7 +223,7 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
         <Formik
           initialValues={{
             name: name,
-            color: color
+            color: color,
           }}
           validationSchema={UpdateWalletSchema}
           onSubmit={onUpdateWalletSubmit}
@@ -245,15 +243,11 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
                   />
                 </Grid>
                 <Grid item>
-                  <Box style={{ backgroundColor: values.color }}>
-                    {/* <ColorPicker
-                      name="color"
-                      defaultValue="#000"
-                      value={values.color}
-                      onChange={color => setFieldValue("color", color)}
-                      fullWidth
-                    /> */}
-                  </Box>
+                  <ColorPicker
+                    name="color"
+                    selected={values.color}
+                    onChange={handleChange}
+                  />
                 </Grid>
                 <Grid>
                   <Box mt={1}>

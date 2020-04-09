@@ -11,10 +11,10 @@ import {
   CategoriesDocument,
   CategoriesQuery,
   Category,
-  useUpdateCategoryMutation
+  useUpdateCategoryMutation,
 } from "api";
-// import ColorPicker from "material-ui-color-picker";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import ColorPicker from "components/molecules/color-picker";
 
 interface Props {
   category?: Category;
@@ -30,23 +30,21 @@ export interface FormFields {
 const schema = () => {
   return Yup.object().shape({
     name: Yup.string().required("Enter category name"),
-    color: Yup.string().required("Enter category color")
+    color: Yup.string().required("Enter category color"),
   });
 };
 
 const CategoryForm = ({
   category,
   onComplete,
-  onError
+  onError,
 }: Props): JSX.Element => {
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
 
-  const {
-    setCategoryUpdate
-  } = useUpdateDetectionContext();
+  const { setCategoryUpdate } = useUpdateDetectionContext();
 
   const [createCategory] = useCreateCategoryMutation({
     onCompleted() {
@@ -65,7 +63,7 @@ const CategoryForm = ({
       }
 
       const query = {
-        query: CategoriesDocument
+        query: CategoriesDocument,
       };
 
       const cached = store.readQuery<CategoriesQuery>(query);
@@ -76,9 +74,9 @@ const CategoryForm = ({
       cached.categories.push(category);
       store.writeQuery({
         ...query,
-        data: cached
+        data: cached,
       });
-    }
+    },
   });
 
   const [updateCategory] = useUpdateCategoryMutation({
@@ -92,7 +90,7 @@ const CategoryForm = ({
         "An error occured while updating the category data!"
       );
       onError();
-    }
+    },
   });
 
   const onSubmit = (values: FormFields) => {
@@ -101,15 +99,15 @@ const CategoryForm = ({
         variables: {
           id: category.id,
           name: values.name,
-          color: values.color
-        }
+          color: values.color,
+        },
       });
     } else {
       createCategory({
         variables: {
           name: values.name,
-          color: values.color
-        }
+          color: values.color,
+        },
       });
     }
   };
@@ -119,7 +117,7 @@ const CategoryForm = ({
       enableReinitialize
       initialValues={{
         name: category?.name ?? "",
-        color: category?.color ?? "#DE60D4"
+        color: category?.color ?? "#DE60D4",
       }}
       validationSchema={schema}
       onSubmit={onSubmit}
@@ -139,19 +137,15 @@ const CategoryForm = ({
               />
             </Grid>
             <Grid item>
-              <Box style={{ backgroundColor: values.color }}>
-                {/* <ColorPicker
-                  name="color"
-                  defaultValue="#000"
-                  value={values.color}
-                  onChange={color => setFieldValue("color", color)}
-                  fullWidth
-                /> */}
-              </Box>
+              <ColorPicker
+                name="color"
+                selected={values.color}
+                onChange={handleChange}
+              />
             </Grid>
             <Grid>
               <Box mt={1}>
-                <Button type="submit">Add</Button>
+                <Button type="submit">{category ? 'Edit' : 'Add'}</Button>
               </Box>
             </Grid>
           </Grid>
