@@ -8,6 +8,7 @@ interface Props {
   type?: any;
   color?: any;
   variant?: any;
+  className?: any;
 }
 
 const Button: React.FunctionComponent<Props> = ({
@@ -16,10 +17,12 @@ const Button: React.FunctionComponent<Props> = ({
   style,
   type,
   color,
-  variant
+  variant,
+  className
 }): JSX.Element => {
   return (
     <MaterialButton
+      className={className}
       type={type}
       style={style}
       variant={variant ?? "contained"}

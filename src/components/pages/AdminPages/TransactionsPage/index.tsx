@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Box, Grid } from "@material-ui/core";
 import useStyles from "./styles";
 import { useWalletsQuery, useTransactionSpendingFlowQuery, Wallet } from "api";
@@ -13,7 +13,6 @@ import DateRangePicker, {
   calculateBackDate,
 } from "components/molecules/date-range-picker";
 import Loader from "components/atoms/loader";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import TransactionFormWrapper from "components/molecules/forms/transaction-form";
 import { Helmet } from "react-helmet";
@@ -22,13 +21,6 @@ const TransactionsPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
 
-  const {
-    lastTransactionAction,
-    lastCategoryAction,
-    lastWalletAction,
-  } = useUpdateDetectionContext();
-
-  const oldChartData: any = useRef([]);
   const [backDate, setBackDate] = useState(calculateBackDate(Range.Last7Days));
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
 
@@ -48,11 +40,6 @@ const TransactionsPage = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  useEffect(() => {
-    refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [backDate, lastTransactionAction, lastCategoryAction, lastWalletAction]);
-
   const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
   let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
   flowChart = flowChart.map((row: any) => [
@@ -61,9 +48,6 @@ const TransactionsPage = () => {
   ]);
 
   const chartData = [flowColumns, ...flowChart];
-  if (flowColumns.length > 0) {
-    oldChartData.current = chartData;
-  }
 
   return (
     <Box className={classes.main} p={10}>
@@ -79,8 +63,8 @@ const TransactionsPage = () => {
             selectedDate={backDate}
             walletIds={wallets.map((wallet: Wallet) => wallet.id)}
             onNewClick={() => setNewModalIsOpen(true)}
-            onDelete={() => {}}
-            onEdit={() => {}}
+            onDelete={refetch}
+            onEdit={refetch}
           />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
@@ -130,6 +114,7 @@ const TransactionsPage = () => {
       >
         <TransactionFormWrapper
           onComplete={() => {
+            refetch();
             setNewModalIsOpen(false);
           }}
           onError={() => setNewModalIsOpen(false)}

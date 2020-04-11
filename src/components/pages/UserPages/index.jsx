@@ -4,9 +4,10 @@ import {
     Route,
     Switch
 } from "react-router-dom";
-import RegisterPage from './RegisterPage';
 import HeroTemplate from '../../templates/hero-template';
-import HomePage from './HomePage';
+import RegisterPage from './RegisterPage';
+import LoginPage from './LoginPage';
+import LandingPage from './LandingPage';
 
 const AnonPages = () => {
     return (
@@ -17,10 +18,13 @@ const AnonPages = () => {
                         hero={<RegisterPage />}
                     />
                 </Route>
-                <Route path="/">
+                <Route path="/login">
                     <HeroTemplate
-                        hero={<HomePage />}
+                        hero={<LoginPage />}
                     />
+                </Route>
+                <Route path="/">
+                    <LandingPage />
                 </Route>
             </Switch>
         </Box>

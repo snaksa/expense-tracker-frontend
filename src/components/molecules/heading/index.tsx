@@ -6,14 +6,15 @@ import Title from '../../atoms/title';
 interface Props {
   title: string;
   subtitle: string;
+  color?: string;
 }
 
 const Heading: React.FunctionComponent<any> = (
-  {title, subtitle}: Props
+  {title, subtitle, color}: Props
 ): JSX.Element => {
   const classes = useStyles();
   return (
-    <Grid container className={classes.main} direction="column">
+    <Grid container className={classes.main} direction="column" style={{color: color}}>
       <Grid item>
         <Title variant="h3">{title}</Title>
       </Grid>

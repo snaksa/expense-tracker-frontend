@@ -15,12 +15,10 @@ import {
   WalletsQuery,
 } from "../../../api";
 import { useNotificationContext } from "../../../services/notification-provider";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import ColorPicker from "components/molecules/color-picker";
 
 interface Props {
   wallets: Wallet[];
-  onItemClick: Function;
 }
 
 export interface FormFields {
@@ -29,7 +27,7 @@ export interface FormFields {
   color: string;
 }
 
-const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
+const WalletsCollection = ({ wallets }: Props): JSX.Element => {
   const classes = useStyles({});
 
   const [newWalletModalIsOpen, setNewWalletModalIsOpen] = useState(false);
@@ -39,12 +37,9 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
     showErrorNotification,
   } = useNotificationContext();
 
-  const { setWalletUpdate } = useUpdateDetectionContext();
-
   const [createWallet] = useCreateWalletMutation({
     onCompleted() {
       setNewWalletModalIsOpen(false);
-      setWalletUpdate();
       showSuccessNotification("Wallet created succesfully!");
     },
     onError() {
@@ -101,7 +96,6 @@ const WalletsCollection = ({ wallets, onItemClick }: Props): JSX.Element => {
                 name={wallet.name}
                 color={wallet.color}
                 amount={wallet.amount}
-                onClick={onItemClick}
               />
             </Grid>
           ))}

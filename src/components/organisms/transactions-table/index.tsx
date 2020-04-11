@@ -4,7 +4,10 @@ import {
   TransactionType,
   useDeleteTransactionMutation,
   useTransactionsLazyQuery,
-  TransactionsDocument
+  TransactionsDocument,
+  CategoriesSpendingPieDocument,
+  TransactionSpendingFlowDocument,
+  CategoriesSpendingFlowDocument
 } from "api";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import Table from "../table";
@@ -14,7 +17,6 @@ import { Box } from "@material-ui/core";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
 import Modal from "components/molecules/modal";
 import { useSharedDataContext } from "services/shared-data-provider";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import TransactionFormWrapper from "components/molecules/forms/transaction-form";
 
@@ -52,8 +54,6 @@ const TransactionsTable = ({
   }
 
   const responseData: any = !loading ? data : oldData.current;
-
-  const { setTransactionUpdate } = useUpdateDetectionContext();
 
   const {
     showSuccessNotification,
@@ -110,13 +110,53 @@ const TransactionsTable = ({
       });
     }
 
+    const mainPageCharts = [
+      {
+        query: CategoriesSpendingPieDocument,
+        variables: {
+          date: null,
+          walletIds: walletIds,
+          categoryIds: [],
+          type: TransactionType.Expense,
+        },
+      },
+      {
+        query: CategoriesSpendingPieDocument,
+        variables: {
+          date: null,
+          walletIds: walletIds,
+          categoryIds: [],
+          type: TransactionType.Income,
+        },
+      },
+      {
+        query: TransactionSpendingFlowDocument,
+        variables: {
+          date: null,
+          walletIds: walletIds,
+          categoryIds: []
+        }
+      },
+      {
+        query: CategoriesSpendingFlowDocument,
+        variables: {
+          date: null,
+          walletIds: walletIds,
+          categoryIds: []
+        }
+      }
+    ];
+
+    mainPageCharts.forEach((chart: any) => {
+      result.push(chart);
+    });
+
     return result;
   };
 
   const [deleteTransaction] = useDeleteTransactionMutation({
     onCompleted() {
       showSuccessNotification("Record deleted successfully!");
-      setTransactionUpdate();
       if (onDelete) {
         onDelete(); 
       }

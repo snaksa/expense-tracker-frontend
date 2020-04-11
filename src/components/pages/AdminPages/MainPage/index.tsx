@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
 import useStyles from "./styles";
@@ -19,7 +19,6 @@ import moment from "moment";
 import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
 import Loader from "components/atoms/loader";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import { Helmet } from "react-helmet";
 
@@ -27,33 +26,11 @@ const MainPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
 
-  const {
-    lastTransactionAction,
-    lastCategoryAction,
-    lastWalletAction
-  } = useUpdateDetectionContext();
-
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
-  const [chosenWallets, setChosenWallets] = useState<number[]>([]);
-
   const { data } = useWalletsQuery();
   const wallets: any = data ? (data.wallets ? data.wallets : []) : [];
-
-  useEffect(() => {
-    setChosenWallets(wallets.map((wallet: Wallet) => wallet.id));
-  }, [wallets]);
-
-  const onChosenWalletsClick = (walletId: number, isChecked: boolean) => {
-    const a = [...chosenWallets];
-    if (isChecked) {
-      a.push(walletId);
-      setChosenWallets(a);
-    } else {
-      setChosenWallets(a.filter(wallet => wallet !== walletId));
-    }
-  };
 
   const {
     data: spendingFlowData,
@@ -62,10 +39,9 @@ const MainPage = () => {
   } = useTransactionSpendingFlowQuery({
     variables: {
       date: null,
-      walletIds: chosenWallets,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: []
-    },
-    fetchPolicy: "cache-and-network"
+    }
   });
 
   const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
@@ -82,11 +58,10 @@ const MainPage = () => {
   } = useCategoriesSpendingPieQuery({
     variables: {
       date: null,
-      walletIds: chosenWallets,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
       type: TransactionType.Expense
-    },
-    fetchPolicy: "cache-and-network"
+    }
   });
 
   const spendingData: any = {
@@ -103,11 +78,10 @@ const MainPage = () => {
   } = useCategoriesSpendingPieQuery({
     variables: {
       date: null,
-      walletIds: chosenWallets,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
       type: TransactionType.Income
-    },
-    fetchPolicy: "cache-and-network"
+    }
   });
 
   const incomeData: any = {
@@ -124,10 +98,9 @@ const MainPage = () => {
   } = useCategoriesSpendingFlowQuery({
     variables: {
       date: null,
-      walletIds: chosenWallets,
+      walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: []
-    },
-    fetchPolicy: "cache-and-network"
+    }
   });
 
   const spendingCategoryFlowData: any = {
@@ -144,13 +117,12 @@ const MainPage = () => {
     )
   };
 
-  useEffect(() => {
+  const updateCharts = () => {
     refetchReport();
     refetchSpendingPie();
     refetchIncomePie();
     refetchSpendingFlow();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastTransactionAction, lastCategoryAction, lastWalletAction]);
+  }
 
   return (
     <Box className={classes.main} p={10}>
@@ -162,7 +134,6 @@ const MainPage = () => {
           <Box mb={5} p={5} className={classes.collection}>
             <WalletsCollection
               wallets={wallets}
-              onItemClick={onChosenWalletsClick}
             />
           </Box>
         </Grid>
@@ -173,9 +144,8 @@ const MainPage = () => {
                 <Grid item xs={12} md={6} lg={3}>
                   <Box className={classes.transactions}>
                     <LastTransactions
-                      wallets={chosenWallets}
                       categories={categories}
-                      onChange={() => {}}
+                      onChange={updateCharts}
                     />
                   </Box>
                 </Grid>

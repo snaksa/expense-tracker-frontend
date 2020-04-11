@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { gql } from "apollo-boost";
 import SummaryBox from "components/molecules/summary-box";
 import TransactionSummary from "components/molecules/transaction-summary";
@@ -6,27 +6,18 @@ import Modal from "components/molecules/modal";
 import TransactionForm from "components/molecules/forms/transaction-form/form";
 import { useTransactionsQuery, Transaction, useWalletsQuery, Category, Wallet } from "api";
 import Loader from "components/atoms/loader";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useStyles from "./styles";
 
 let backupData: any[] = [];
 
 const LastTransactions = ({
-  wallets,
   categories,
   onChange
 }: {
-  wallets: number[];
   categories: Category[];
   onChange: Function;
 }) => {
   const classes = useStyles();
-  const {
-    setTransactionUpdate,
-    lastTransactionAction,
-    lastCategoryAction,
-    lastWalletAction
-  } = useUpdateDetectionContext();
 
   const [newTransactionModalIsOpen, setNewTransactionModalIsOpen] = useState(
     false
@@ -46,10 +37,6 @@ const LastTransactions = ({
     },
     fetchPolicy: "cache-and-network"
   });
-
-  useEffect(() => {
-    refetch();
-  }, [wallets, lastTransactionAction, lastCategoryAction, lastWalletAction]);
 
   const transactionsData: any = data?.transactions?.data ?? null;
   if (transactionsData) {
@@ -81,7 +68,6 @@ const LastTransactions = ({
           wallets={userWallets}
           categories={categories}
           onComplete={() => {
-            setTransactionUpdate();
             refetch();
             onChange();
             setNewTransactionModalIsOpen(false);

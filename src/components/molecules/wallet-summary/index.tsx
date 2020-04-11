@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Box, Tooltip, Checkbox } from "@material-ui/core";
+import { Grid, Box, Tooltip } from "@material-ui/core";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@material-ui/icons";
 import * as Yup from "yup";
 import { gql } from "apollo-boost";
@@ -17,7 +17,6 @@ import {
   WalletsQuery,
   WalletsDocument,
 } from "../../../api";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import ColorPicker from "../color-picker";
 
@@ -26,7 +25,6 @@ interface Props {
   name: string;
   amount: number;
   color: string;
-  onClick: Function;
 }
 
 export interface FormFields {
@@ -34,13 +32,10 @@ export interface FormFields {
   color: string;
 }
 
-const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
+const WalletSummary = ({ id, name, amount, color }: Props) => {
   const classes = useStyles();
   const { formatCurrency } = useCurrencyFormatter();
 
-  const { setWalletUpdate } = useUpdateDetectionContext();
-
-  const [checked, setChecked] = useState(true);
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
@@ -54,7 +49,6 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
       showSuccessNotification("Wallet deleted successfully!");
-      setWalletUpdate();
     },
     onError() {
       showErrorNotification("An error occured while deleting the wallet!");
@@ -158,7 +152,6 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
         container
         className={classes.main}
         direction="column"
-        style={{ opacity: checked ? 1 : 0.3 }}
       >
         <Grid item>
           <Box
@@ -179,20 +172,6 @@ const WalletSummary = ({ id, name, amount, color, onClick }: Props) => {
                     onClick={() => setEditModalIsOpen(true)}
                   />
                 </Tooltip>
-              </Grid>
-              <Grid item>
-                <Checkbox
-                  checked={checked}
-                  onChange={() => {
-                    onClick(id, !checked);
-                    setChecked(!checked);
-                  }}
-                  value="primary"
-                  color="primary"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                  className={classes.checkbox}
-                  disableRipple
-                />
               </Grid>
               <Grid item>
                 <Tooltip title="Delete" aria-label="delete">

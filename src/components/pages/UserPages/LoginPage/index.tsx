@@ -7,7 +7,7 @@ import Login from "components/molecules/forms/login";
 import AuthForm from "components/organisms/auth-form";
 import { Helmet } from "react-helmet";
 
-const HomePage = () => {
+const LoginPage = () => {
   const classes = useStyles();
 
   return (
@@ -32,4 +32,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default LoginPage;

@@ -8,7 +8,6 @@ const useStyles = makeStyles(theme => ({
         borderRadius: 5,
         border: '1px solid #CCC',
         overflow: 'hidden',
-        cursor: 'pointer',
         '&:hover': {
             '& $icon': {
                 visibility: 'visible'
@@ -24,6 +23,7 @@ const useStyles = makeStyles(theme => ({
     icon: {
         marginLeft: 5,
         visibility: 'hidden',
+        cursor: 'pointer',
         [theme.breakpoints.down('sm')]: {
             visibility: 'visible'
         }

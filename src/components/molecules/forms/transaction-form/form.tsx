@@ -16,9 +16,11 @@ import {
   Transaction,
   useUpdateTransactionMutation,
   TransactionsDocument,
+  CategoriesSpendingPieDocument,
+  TransactionSpendingFlowDocument,
+  CategoriesSpendingFlowDocument,
 } from "api";
 import { useSharedDataContext } from "services/shared-data-provider";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import DatePicker from "components/atoms/form/datepicker";
 import TimePicker from "components/atoms/form/timepicker";
 import moment from "moment";
@@ -58,8 +60,6 @@ const TransactionForm = ({
   onComplete,
   onError,
 }: Props): JSX.Element => {
-  const { setTransactionUpdate } = useUpdateDetectionContext();
-
   const walletOptions = wallets.map((wallet: Wallet) => {
     return {
       id: wallet.id,
@@ -106,6 +106,47 @@ const TransactionForm = ({
       });
     }
 
+    const mainPageCharts = [
+      {
+        query: CategoriesSpendingPieDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+          type: TransactionType.Expense,
+        },
+      },
+      {
+        query: CategoriesSpendingPieDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+          type: TransactionType.Income,
+        },
+      },
+      {
+        query: TransactionSpendingFlowDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: []
+        }
+      },
+      {
+        query: CategoriesSpendingFlowDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: []
+        }
+      }
+    ];
+
+    mainPageCharts.forEach((chart: any) => {
+      result.push(chart);
+    });
+
     return result;
   };
 
@@ -113,7 +154,6 @@ const TransactionForm = ({
     onCompleted() {
       onComplete();
       showSuccessNotification("Record created succesfully!");
-      setTransactionUpdate();
     },
     onError() {
       onError();
@@ -125,7 +165,6 @@ const TransactionForm = ({
   const [updateTransaction] = useUpdateTransactionMutation({
     onCompleted() {
       showSuccessNotification("Record updated succesfully!");
-      setTransactionUpdate();
       onComplete();
     },
     onError() {

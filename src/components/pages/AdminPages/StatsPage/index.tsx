@@ -17,7 +17,6 @@ import moment from "moment";
 import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
 import Loader from "components/atoms/loader";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import CheckboxList from "components/molecules/checkbox-list";
 import DateRangePicker, {
@@ -30,12 +29,6 @@ import { Helmet } from "react-helmet";
 const StatsPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
-
-  const {
-    lastTransactionAction,
-    lastCategoryAction,
-    lastWalletAction,
-  } = useUpdateDetectionContext();
 
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
@@ -165,13 +158,12 @@ const StatsPage = () => {
     ),
   };
 
-  useEffect(() => {
+  const refetchCharts = () => {
     refetchReport();
     refetchSpendingPie();
     refetchIncomePie();
     refetchSpendingFlow();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastTransactionAction, lastCategoryAction, lastWalletAction]);
+  }
 
   const walletOptions = wallets.map((wallet: Wallet) => {
     return {
@@ -196,7 +188,7 @@ const StatsPage = () => {
       </Helmet>
       <Grid container direction="row" spacing={5}>
         <Grid item xs={12} md={2} lg={2} xl={2}>
-          <Grid container direction={"column"} spacing={5}>
+          <Grid container direction={"column"} spacing={5} style={{position: 'sticky', top: 0}}>
             <Grid item>
               <DateRangePicker
                 responsive={true}
@@ -308,9 +300,8 @@ const StatsPage = () => {
                   selectedDate={backDate}
                   walletIds={chosenWallets}
                   cateogryIds={chosenCategories}
-                  onNewClick={() => {}}
-                  onDelete={() => {}}
-                  onEdit={() => {}}
+                  onDelete={refetchCharts}
+                  onEdit={refetchCharts}
                 />
               </Grid>
           </Grid>
