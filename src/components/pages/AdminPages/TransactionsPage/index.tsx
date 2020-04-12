@@ -16,10 +16,12 @@ import Loader from "components/atoms/loader";
 import useCurrencyFormatter from "services/currency-formatter";
 import TransactionFormWrapper from "components/molecules/forms/transaction-form";
 import { Helmet } from "react-helmet";
+import useTranslations from "translations";
 
 const TransactionsPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
+  const { t } = useTranslations();
 
   const [backDate, setBackDate] = useState(calculateBackDate(Range.Last7Days));
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
@@ -52,7 +54,7 @@ const TransactionsPage = () => {
   return (
     <Box className={classes.main} p={10}>
       <Helmet>
-        <title>Records | Expenses Tracker</title>
+        <title>{t("Records | Expenses Tracker")}</title>
       </Helmet>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={12}>
@@ -68,7 +70,7 @@ const TransactionsPage = () => {
           />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <SummaryBox header="Spending flow">
+          <SummaryBox header={t("Spending flow")}>
             <Loader loading={loading} />
             <Chart
               width={"100%"}
@@ -93,12 +95,12 @@ const TransactionsPage = () => {
               ]}
               options={{
                 hAxis: {
-                  title: "Time",
+                  title: t("Time"),
                   type: "date",
                   format: "Y-MM-dd",
                 },
                 vAxis: {
-                  title: "Money",
+                  title: t("Money"),
                 },
               }}
             />
@@ -106,7 +108,7 @@ const TransactionsPage = () => {
         </Grid>
       </Grid>
       <Modal
-        title={"+ New Record"}
+        title={t("+ New Record")}
         isOpen={newModalIsOpen}
         handleClose={() => {
           setNewModalIsOpen(false);

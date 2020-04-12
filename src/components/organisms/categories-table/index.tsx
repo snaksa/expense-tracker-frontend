@@ -6,7 +6,7 @@ import {
   CategoriesQuery,
   useDeleteCategoryMutation,
   WalletsDocument,
-  TransactionsDocument
+  TransactionsDocument,
 } from "api";
 import Table from "../table";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
@@ -18,6 +18,7 @@ import CategoryForm from "../../molecules/forms/category-form";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
+import useTranslations from "translations";
 
 interface Props {
   categories: Category[];
@@ -28,6 +29,7 @@ interface Props {
 
 const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
   const { formatCurrency } = useCurrencyFormatter();
+  const { t } = useTranslations();
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
@@ -40,7 +42,7 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
 
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
 
   const getRefetchQueries = () => {
@@ -48,7 +50,7 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     for (let params of usedTranasctionParams) {
       result.push({
         query: TransactionsDocument,
-        variables: params
+        variables: params,
       });
     }
 
@@ -59,10 +61,10 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     onCompleted() {
       onDelete();
       setCategoryUpdate();
-      showSuccessNotification("Category deleted successfully!");
+      showSuccessNotification(t("Category deleted successfully!"));
     },
     onError() {
-      showErrorNotification("An error occured while deleting the category!");
+      showErrorNotification(t("An error occured while deleting the category!"));
     },
     update: (store, { data }) => {
       const category = data?.deleteCategory;
@@ -72,7 +74,7 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
       }
 
       const query = {
-        query: CategoriesDocument
+        query: CategoriesDocument,
       };
 
       const cached = store.readQuery<CategoriesQuery>(query);
@@ -80,28 +82,28 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
         return;
       }
 
-      const result = cached.categories.filter(c => c && c.id !== category.id);
+      const result = cached.categories.filter((c) => c && c.id !== category.id);
       store.writeQuery({
         ...query,
         data: {
-          categories: result
-        }
+          categories: result,
+        },
       });
     },
     refetchQueries: [
       {
-        query: WalletsDocument
+        query: WalletsDocument,
       },
-      ...getRefetchQueries()
-    ]
+      ...getRefetchQueries(),
+    ],
   });
 
   const handleDelete = () => {
     setConfirmDeleteModalIsOpen(false);
     deleteCategory({
       variables: {
-        id: selectedRow
-      }
+        id: selectedRow,
+      },
     });
   };
 
@@ -120,33 +122,33 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     {
       type: "color",
       id: "color",
-      label: "Color",
+      label: t("Color"),
       minWidth: 100,
-      align: "center"
+      align: "center",
     },
     {
       type: "text",
       id: "name",
-      label: "Name",
+      label: t("Name"),
       minWidth: 100,
-      align: "left"
+      align: "left",
     },
     {
       type: "number",
       id: "transactionsCount",
-      label: "Records",
+      label: t("Records"),
       minWidth: 100,
-      align: "center"
+      align: "center",
     },
     {
       type: "number",
       id: "balance",
-      label: "Balance",
+      label: t("Balance"),
       minWidth: 100,
       align: "center",
       prefix: "BGN",
       format: (value: number) => formatCurrency(value),
-      color: (row: any) => (row.balance < 0 ? "red" : "green")
+      color: (row: any) => (row.balance < 0 ? "red" : "green"),
     },
     {
       type: "actions",
@@ -154,20 +156,20 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
       actions: [
         {
           id: "edit",
-          icon: <EditIcon />
+          icon: <EditIcon />,
         },
         {
           id: "delete",
-          icon: <DeleteIcon />
-        }
-      ]
-    }
+          icon: <DeleteIcon />,
+        },
+      ],
+    },
   ];
 
   return (
     <Box>
       <Table
-        title="Categories"
+        title={t("Categories")}
         rows={categories}
         columns={columns}
         onClick={onClick}
@@ -175,13 +177,15 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
       />
       <ConfirmationDialog
         isOpen={confirmDeleteModalIsOpen}
-        title={"Are you sure?"}
-        content={"All transactions related to this category will be removed!"}
+        title={t("Are you sure?")}
+        content={t(
+          "All transactions related to this category will be removed!"
+        )}
         onConfirm={handleDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />
       <Modal
-        title={"+ Edit Category"}
+        title={t("+ Edit Category")}
         isOpen={editModalIsOpen}
         handleClose={() => {
           setEditModalIsOpen(false);

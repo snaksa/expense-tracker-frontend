@@ -12,14 +12,16 @@ import { useUpdateDetectionContext } from "services/update-detection-provider";
 import SummaryBox from "components/molecules/summary-box";
 import ProfileForm from "components/organisms/profile-form";
 import { Helmet } from "react-helmet";
+import useTranslations from "translations";
 
 const SettingsPage = () => {
   const classes = useStyles();
+  const { t } = useTranslations();
 
   const {
     lastTransactionAction,
     lastCategoryAction,
-    lastWalletAction  
+    lastWalletAction,
   } = useUpdateDetectionContext();
 
   const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);
@@ -27,7 +29,7 @@ const SettingsPage = () => {
 
   const {
     data: categoriesData,
-    refetch: refetchCategories
+    refetch: refetchCategories,
   } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
@@ -44,11 +46,11 @@ const SettingsPage = () => {
   return (
     <Box className={classes.main} p={10}>
       <Helmet>
-        <title>Settings | Expenses Tracker</title>
+        <title>{t("Settings | Expenses Tracker")}</title>
       </Helmet>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={4}>
-          <SummaryBox header="Profile Settings" responsiveHeight={true}>
+          <SummaryBox header={t("Profile Settings")} responsiveHeight={true}>
             <ProfileForm
               user={currentUser}
               onComplete={() => {}}
@@ -74,7 +76,7 @@ const SettingsPage = () => {
         </Grid>
       </Grid>
       <Modal
-        title={"+ New Category"}
+        title={t("+ New Category")}
         isOpen={newCategoryModalIsOpen}
         handleClose={() => {
           setNewCategoryModalIsOpen(false);
@@ -86,7 +88,7 @@ const SettingsPage = () => {
         />
       </Modal>
       <Modal
-        title={"+ New Wallet"}
+        title={t("+ New Wallet")}
         isOpen={newWalletModalIsOpen}
         handleClose={() => {
           setNewWalletModalIsOpen(false);

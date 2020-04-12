@@ -19,6 +19,7 @@ import {
 } from "../../../api";
 import useCurrencyFormatter from "services/currency-formatter";
 import ColorPicker from "../color-picker";
+import useTranslations from "translations";
 
 interface Props {
   id: number;
@@ -35,6 +36,7 @@ export interface FormFields {
 const WalletSummary = ({ id, name, amount, color }: Props) => {
   const classes = useStyles();
   const { formatCurrency } = useCurrencyFormatter();
+  const { t } = useTranslations();
 
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
@@ -48,10 +50,10 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
 
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
-      showSuccessNotification("Wallet deleted successfully!");
+      showSuccessNotification(t("Wallet deleted successfully!"));
     },
     onError() {
-      showErrorNotification("An error occured while deleting the wallet!");
+      showErrorNotification(t("An error occured while deleting the wallet!"));
     },
     update: (store, { data }) => {
       const wallet = data?.deleteWallet;
@@ -82,11 +84,11 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
   const [updateWallet] = useUpdateWalletMutation({
     onCompleted() {
       setEditModalIsOpen(false);
-      showSuccessNotification("Successfully updated wallet!");
+      showSuccessNotification(t("Successfully updated wallet!"));
     },
     onError() {
       setEditModalIsOpen(false);
-      showErrorNotification("An error occured while updating the wallet!");
+      showErrorNotification(t("An error occured while updating the wallet!"));
     },
     update: (store, { data }) => {
       const wallet = data?.updateWallet;
@@ -123,8 +125,8 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
 
   const UpdateWalletSchema = () =>
     Yup.object().shape({
-      name: Yup.string().required("Enter wallet name"),
-      color: Yup.string().required("Choose wallet color"),
+      name: Yup.string().required(t("Enter wallet name")),
+      color: Yup.string().required(t("Choose wallet color")),
     });
 
   const onUpdateWalletSubmit = (values: FormFields) => {
@@ -148,11 +150,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
 
   return (
     <Box>
-      <Grid
-        container
-        className={classes.main}
-        direction="column"
-      >
+      <Grid container className={classes.main} direction="column">
         <Grid item>
           <Box
             p={0.5}
@@ -165,7 +163,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
               className={classes.headerGrid}
             >
               <Grid item>
-                <Tooltip title="Edit" aria-label="edit">
+                <Tooltip title={t("Edit")} aria-label="edit">
                   <EditIcon
                     fontSize={"small"}
                     className={classes.icon}
@@ -174,7 +172,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
                 </Tooltip>
               </Grid>
               <Grid item>
-                <Tooltip title="Delete" aria-label="delete">
+                <Tooltip title={t("Delete")} aria-label="delete">
                   <DeleteIcon
                     fontSize={"small"}
                     className={classes.icon}
@@ -193,7 +191,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
         </Grid>
       </Grid>
       <Modal
-        title={"# Edit Wallet"}
+        title={t("# Edit Wallet")}
         isOpen={editModalIsOpen}
         handleClose={() => {
           setEditModalIsOpen(false);
@@ -212,7 +210,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
               <Grid container direction="column">
                 <Grid item>
                   <TextField
-                    label="Name"
+                    label={t("Name")}
                     name="name"
                     variant="outlined"
                     value={values.name}
@@ -242,8 +240,8 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
       </Modal>
       <ConfirmationDialog
         isOpen={confirmDeleteModalIsOpen}
-        title={"Are you sure?"}
-        content={"All transactions related to this wallet will be removed!"}
+        title={t("Are you sure?")}
+        content={t("All transactions related to this wallet will be removed!")}
         onConfirm={handleWalletDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />

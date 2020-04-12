@@ -7,6 +7,7 @@ import TransactionForm from "components/molecules/forms/transaction-form/form";
 import { useTransactionsQuery, Transaction, useWalletsQuery, Category, Wallet } from "api";
 import Loader from "components/atoms/loader";
 import useStyles from "./styles";
+import useTranslations from "translations";
 
 let backupData: any[] = [];
 
@@ -18,6 +19,7 @@ const LastTransactions = ({
   onChange: Function;
 }) => {
   const classes = useStyles();
+  const {t} = useTranslations();
 
   const [newTransactionModalIsOpen, setNewTransactionModalIsOpen] = useState(
     false
@@ -47,7 +49,7 @@ const LastTransactions = ({
 
   return (
     <SummaryBox
-      header={"Last 5 records"}
+      header={t("Last 5 records")}
       onClick={() => setNewTransactionModalIsOpen(true)}
     >
       <Loader loading={loading && !transactions.length} />
@@ -58,7 +60,7 @@ const LastTransactions = ({
         <TransactionSummary key={index} transaction={transaction} />
       ))}
       <Modal
-        title={"+ New Record"}
+        title={t("+ New Record")}
         isOpen={newTransactionModalIsOpen}
         handleClose={() => {
           setNewTransactionModalIsOpen(false);

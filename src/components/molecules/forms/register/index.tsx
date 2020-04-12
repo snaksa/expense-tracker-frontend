@@ -7,6 +7,7 @@ import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { useHistory } from "react-router";
+import useTranslations from "translations";
 
 export interface FormFields {
   email: string;
@@ -16,6 +17,7 @@ export interface FormFields {
 
 const RegisterForm = () => {
   const history = useHistory();
+  const {t} = useTranslations();
 
   const [register] = useRegisterMutation({
     onCompleted(data) {
@@ -41,10 +43,10 @@ const RegisterForm = () => {
   const Schema = () =>
     Yup.object().shape({
       email: Yup.string()
-        .email("Enter a valid email address")
-        .required("Enter your email address"),
-      password: Yup.string().required("Enter your password"),
-      confirmPassword: Yup.string().required("Enter password confirmation")
+        .email(t("Enter a valid email address"))
+        .required(t("Enter your email address")),
+      password: Yup.string().required(t("Enter your password")),
+      confirmPassword: Yup.string().required(t("Enter password confirmation"))
     });
 
   return (
@@ -62,7 +64,7 @@ const RegisterForm = () => {
           <Grid container direction="column">
             <Grid item>
               <TextField
-                label="Email"
+                label={t("Email")}
                 name="email"
                 variant="outlined"
                 value={values.email}
@@ -73,7 +75,7 @@ const RegisterForm = () => {
             </Grid>
             <Grid item>
               <TextField
-                label="Password"
+                label={(t("Password")}
                 type="password"
                 variant="outlined"
                 name="password"
@@ -87,7 +89,7 @@ const RegisterForm = () => {
             </Grid>
             <Grid item>
               <TextField
-                label="Confirm Password"
+                label={t("Confirm Password")}
                 type="password"
                 variant="outlined"
                 name="confirmPassword"
@@ -106,7 +108,7 @@ const RegisterForm = () => {
             <Grid>
               <Box mt={1}>
                 <Button type="submit" style={{}} onClick={() => {}}>
-                  {isSubmitting ? "Registering" : "Register"}
+                  {isSubmitting ? t("Please Wait") : t("Register")}
                 </Button>
               </Box>
             </Grid>

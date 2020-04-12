@@ -7,7 +7,7 @@ import {
   TransactionsDocument,
   CategoriesSpendingPieDocument,
   TransactionSpendingFlowDocument,
-  CategoriesSpendingFlowDocument
+  CategoriesSpendingFlowDocument,
 } from "api";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import Table from "../table";
@@ -19,6 +19,7 @@ import Modal from "components/molecules/modal";
 import { useSharedDataContext } from "services/shared-data-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import TransactionFormWrapper from "components/molecules/forms/transaction-form";
+import useTranslations from "translations";
 
 interface Props {
   selectedDate: string;
@@ -35,9 +36,11 @@ const TransactionsTable = ({
   cateogryIds,
   onNewClick,
   onDelete,
-  onEdit
+  onEdit,
 }: Props) => {
   const { formatCurrency } = useCurrencyFormatter();
+  const { t } = useTranslations();
+
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
@@ -57,12 +60,12 @@ const TransactionsTable = ({
 
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
 
   const {
     usedTranasctionParams,
-    setTransactionUsedParams
+    setTransactionUsedParams,
   } = useSharedDataContext();
 
   useEffect(() => {
@@ -76,11 +79,11 @@ const TransactionsTable = ({
       categoryIds: cateogryIds ?? [],
       page: currentPage + 1,
       limit: currentLimit,
-      unlimited: false
+      unlimited: false,
     };
 
     getTransactions({
-      variables: params
+      variables: params,
     });
     const used: any = usedTranasctionParams;
     if (!used.has(params)) {
@@ -95,7 +98,7 @@ const TransactionsTable = ({
     currentLimit,
     currentPage,
     usedTranasctionParams,
-    setTransactionUsedParams
+    setTransactionUsedParams,
   ]);
 
   const transactionsData: any = responseData?.transactions ?? [];
@@ -106,7 +109,7 @@ const TransactionsTable = ({
     for (let params of usedTranasctionParams) {
       result.push({
         query: TransactionsDocument,
-        variables: params
+        variables: params,
       });
     }
 
@@ -134,17 +137,17 @@ const TransactionsTable = ({
         variables: {
           date: null,
           walletIds: walletIds,
-          categoryIds: []
-        }
+          categoryIds: [],
+        },
       },
       {
         query: CategoriesSpendingFlowDocument,
         variables: {
           date: null,
           walletIds: walletIds,
-          categoryIds: []
-        }
-      }
+          categoryIds: [],
+        },
+      },
     ];
 
     mainPageCharts.forEach((chart: any) => {
@@ -156,23 +159,23 @@ const TransactionsTable = ({
 
   const [deleteTransaction] = useDeleteTransactionMutation({
     onCompleted() {
-      showSuccessNotification("Record deleted successfully!");
+      showSuccessNotification(t("Record deleted successfully!"));
       if (onDelete) {
-        onDelete(); 
+        onDelete();
       }
     },
     onError() {
-      showErrorNotification("An error occured while deleting the record!");
+      showErrorNotification(t("An error occured while deleting the record!"));
     },
-    refetchQueries: getRefetchQueries()
+    refetchQueries: getRefetchQueries(),
   });
 
   const handleDelete = () => {
     setConfirmDeleteModalIsOpen(false);
     deleteTransaction({
       variables: {
-        id: selectedRow
-      }
+        id: selectedRow,
+      },
     });
   };
 
@@ -191,14 +194,14 @@ const TransactionsTable = ({
     {
       type: "text",
       id: "description",
-      label: "Description",
+      label: t("Description"),
       minWidth: 70,
-      align: "left"
+      align: "left",
     },
     {
       type: "number",
       id: "value",
-      label: "Amount",
+      label: t("Amount"),
       minWidth: 50,
       align: "right",
       format: (value: number) => formatCurrency(value),
@@ -209,28 +212,28 @@ const TransactionsTable = ({
       sign: (row: any) =>
         [TransactionType.Expense, TransactionType.Transfer].includes(row.type)
           ? "-"
-          : ""
+          : "",
     },
     {
       type: "colorName",
       id: "category",
-      label: "Category",
+      label: t("Category"),
       minWidth: 100,
-      align: "left"
+      align: "left",
     },
     {
       type: "colorName",
       id: "wallet",
-      label: "Wallet",
+      label: t("Wallet"),
       minWidth: 100,
-      align: "left"
+      align: "left",
     },
     {
       type: "date",
       id: "date",
-      label: "Date",
+      label: t("Date"),
       minWidth: 100,
-      align: "left"
+      align: "left",
     },
     {
       type: "actions",
@@ -238,20 +241,20 @@ const TransactionsTable = ({
       actions: [
         {
           id: "edit",
-          icon: <EditIcon />
+          icon: <EditIcon />,
         },
         {
           id: "delete",
-          icon: <DeleteIcon />
-        }
-      ]
-    }
+          icon: <DeleteIcon />,
+        },
+      ],
+    },
   ];
 
   return (
     <Box>
       <Table
-        title="Records"
+        title={t("Records")}
         rows={transactions}
         columns={columns}
         onClick={onNewClick}
@@ -266,12 +269,12 @@ const TransactionsTable = ({
       <ConfirmationDialog
         isOpen={confirmDeleteModalIsOpen}
         title={"Are you sure?"}
-        content={"Are you sure you want to remove this transaction?"}
+        content={t("Are you sure you want to remove this transaction?")}
         onConfirm={handleDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />
       <Modal
-        title={"+ Edit Category"}
+        title={t("+ Edit Category")}
         isOpen={editModalIsOpen}
         handleClose={() => {
           setEditModalIsOpen(false);

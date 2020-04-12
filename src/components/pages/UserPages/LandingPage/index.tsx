@@ -7,14 +7,16 @@ import Image from "components/atoms/image";
 import Button from "components/atoms/button";
 import Title from "components/atoms/title";
 import NavigationBar from "components/organisms/navigation-bar";
+import useTranslations from "translations";
 
 const LandingPage = () => {
   const classes = useStyles();
+  const { t } = useTranslations();
 
   return (
     <Box>
       <Helmet>
-        <title>Expenses Tracker - Your Finances in One Place</title>
+        <title>{t("Expenses Tracker - Your Finances in One Place")}</title>
       </Helmet>
 
       <NavigationBar />

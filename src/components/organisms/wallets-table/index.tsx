@@ -5,7 +5,7 @@ import {
   TransactionsDocument,
   WalletsQuery,
   useDeleteWalletMutation,
-  Wallet
+  Wallet,
 } from "api";
 import Table from "../table";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
@@ -15,6 +15,7 @@ import Modal from "components/molecules/modal";
 import { useSharedDataContext } from "services/shared-data-provider";
 import WalletForm from "../wallet-form";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
+import useTranslations from "translations";
 
 interface Props {
   wallets: Wallet[];
@@ -24,21 +25,20 @@ interface Props {
 }
 
 const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
+  const { t } = useTranslations();
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
   );
   const [selectedRow, setSelectedRow] = useState(0);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
-  const {setWalletUpdate} = useUpdateDetectionContext();
+  const { setWalletUpdate } = useUpdateDetectionContext();
 
-  const {
-    usedTranasctionParams
-  } = useSharedDataContext();
+  const { usedTranasctionParams } = useSharedDataContext();
 
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
 
   const getRefetchQueries = () => {
@@ -46,7 +46,7 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
     for (let params of usedTranasctionParams) {
       result.push({
         query: TransactionsDocument,
-        variables: params
+        variables: params,
       });
     }
 
@@ -57,10 +57,10 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
     onCompleted() {
       onDelete();
       setWalletUpdate();
-      showSuccessNotification("Wallet deleted successfully!");
+      showSuccessNotification(t("Wallet deleted successfully!"));
     },
     onError() {
-      showErrorNotification("An error occured while deleting the wallet!");
+      showErrorNotification(t("An error occured while deleting the wallet!"));
     },
     update: (store, { data }) => {
       const wallet = data?.deleteWallet;
@@ -70,7 +70,7 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
       }
 
       const query = {
-        query: WalletsDocument
+        query: WalletsDocument,
       };
 
       const cached = store.readQuery<WalletsQuery>(query);
@@ -78,25 +78,23 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
         return;
       }
 
-      const result = cached.wallets.filter(c => c && c.id !== wallet.id);
+      const result = cached.wallets.filter((c) => c && c.id !== wallet.id);
       store.writeQuery({
         ...query,
         data: {
-          wallets: result
-        }
+          wallets: result,
+        },
       });
-
-      
     },
-    refetchQueries: getRefetchQueries()
+    refetchQueries: getRefetchQueries(),
   });
 
   const handleDelete = () => {
     setConfirmDeleteModalIsOpen(false);
     deleteWallet({
       variables: {
-        id: selectedRow
-      }
+        id: selectedRow,
+      },
     });
   };
 
@@ -111,10 +109,41 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
     }
   };
 
+  const columns = [
+    {
+      type: "color",
+      id: "color",
+      label: t("Color"),
+      minWidth: 100,
+      align: "center",
+    },
+    {
+      type: "text",
+      id: "name",
+      label: t("Name"),
+      minWidth: 100,
+      align: "left",
+    },
+    {
+      type: "actions",
+      id: "id",
+      actions: [
+        {
+          id: "edit",
+          icon: <EditIcon />,
+        },
+        {
+          id: "delete",
+          icon: <DeleteIcon />,
+        },
+      ],
+    },
+  ];
+
   return (
     <Box>
       <Table
-        title="Wallets"
+        title={t("Wallets")}
         rows={wallets}
         columns={columns}
         onClick={onClick}
@@ -122,13 +151,13 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
       />
       <ConfirmationDialog
         isOpen={confirmDeleteModalIsOpen}
-        title={"Are you sure?"}
-        content={"All transactions related to this wallet will be removed!"}
+        title={t("Are you sure?")}
+        content={t("All transactions related to this wallet will be removed!")}
         onConfirm={handleDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />
       <Modal
-        title={"+ Edit Wallet"}
+        title={t("+ Edit Wallet")}
         isOpen={editModalIsOpen}
         handleClose={() => {
           setEditModalIsOpen(false);
@@ -137,9 +166,7 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
         <WalletForm
           wallet={
             selectedRow
-              ? wallets.filter(
-                  (wallet: Wallet) => wallet.id === selectedRow
-                )[0]
+              ? wallets.filter((wallet: Wallet) => wallet.id === selectedRow)[0]
               : undefined
           }
           onComplete={() => {
@@ -152,36 +179,5 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
     </Box>
   );
 };
-
-const columns = [
-  {
-    type: "color",
-    id: "color",
-    label: "Color",
-    minWidth: 100,
-    align: "center"
-  },
-  {
-    type: "text",
-    id: "name",
-    label: "Name",
-    minWidth: 100,
-    align: "left"
-  },
-  {
-    type: "actions",
-    id: "id",
-    actions: [
-      {
-        id: "edit",
-        icon: <EditIcon />
-      },
-      {
-        id: "delete",
-        icon: <DeleteIcon />
-      }
-    ]
-  }
-];
 
 export default WalletsTable;

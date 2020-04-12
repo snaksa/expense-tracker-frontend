@@ -8,6 +8,7 @@ import { useCurrenciesQuery, useUpdateUserMutation } from "api";
 import { gql } from "apollo-boost";
 import Select from "components/atoms/form/select";
 import Button from "components/atoms/button";
+import useTranslations from "translations";
 
 interface Props {
   user?: any;
@@ -23,57 +24,37 @@ export interface FormFields {
   language: string;
 }
 
-const schema = () => {
-  return Yup.object().shape({
-    firstName: Yup.string().required("Enter first name"),
-    lastName: Yup.string().required("Enter last name"),
-    email: Yup.string()
-      .email()
-      .required("Enter valid email"),
-    currency: Yup.string().required("Choose currency"),
-    language: Yup.string().required("Choose language")
-  });
-};
-
 const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
   const {
     showSuccessNotification,
-    showErrorNotification
+    showErrorNotification,
   } = useNotificationContext();
+  const { t } = useTranslations();
 
   const { data: currenciesData } = useCurrenciesQuery();
   const currencies: any = currenciesData?.currencies ?? [];
 
+  const schema = () => {
+    return Yup.object().shape({
+      firstName: Yup.string().required(t("Enter first name")),
+      lastName: Yup.string().required(t("Enter last name")),
+      email: Yup.string().email().required(t("Enter valid email")),
+      currency: Yup.string().required(t("Choose currency")),
+      language: Yup.string().required(t("Choose language")),
+    });
+  };
+
   const [updateUser] = useUpdateUserMutation({
     onCompleted() {
-      showSuccessNotification("Profile info save succesfully!");
+      showSuccessNotification(t("Profile info save succesfully!"));
       onComplete();
     },
     onError() {
-      showErrorNotification("An error occured while saving the profile info!");
+      showErrorNotification(
+        t("An error occured while saving the profile info!")
+      );
       onError();
     },
-    update: (store, { data }) => {
-      const user = data?.updateUser;
-      if (!user) {
-        return;
-      }
-      console.log(store);
-      // const query = {
-      //   query: WalletsDocument
-      // };
-
-      // const cached = store.readQuery<WalletsQuery>(query);
-      // if (!cached || !cached.wallets) {
-      //   return;
-      // }
-
-      // cached.wallets.push(wallet);
-      // store.writeQuery({
-      //   ...query,
-      //   data: cached
-      // });
-    }
   });
 
   const onSubmit = (values: FormFields) => {
@@ -83,8 +64,8 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
         firstName: values.firstName,
         lastName: values.lastName,
         currency: values.currency,
-        language: values.language
-      }
+        language: values.language,
+      },
     });
   };
 
@@ -92,11 +73,11 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
     <Formik
       enableReinitialize
       initialValues={{
-        email: user?.email ?? '',
-        firstName: user?.firstName ?? '',
-        lastName: user?.lastName ?? '',
-        currency: user?.currency ?? '',
-        language: user?.language ?? ''
+        email: user?.email ?? "",
+        firstName: user?.firstName ?? "",
+        lastName: user?.lastName ?? "",
+        currency: user?.currency ?? "",
+        language: user?.language ?? "",
       }}
       validationSchema={schema}
       onSubmit={onSubmit}
@@ -106,31 +87,35 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6} lg={6}>
               <TextField
-                label="First Name"
+                label={t("First Name")}
                 name="firstName"
                 type="text"
                 variant="outlined"
                 value={values.firstName}
                 onChange={handleChange}
-                error={!!(errors.firstName && touched.firstName && errors.firstName)}
+                error={
+                  !!(errors.firstName && touched.firstName && errors.firstName)
+                }
                 helperText={errors.firstName}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={6}>
               <TextField
-                label="Last Name"
+                label={t("Last Name")}
                 name="lastName"
                 type="text"
                 variant="outlined"
                 value={values.lastName}
                 onChange={handleChange}
-                error={!!(errors.lastName && touched.lastName && errors.lastName)}
+                error={
+                  !!(errors.lastName && touched.lastName && errors.lastName)
+                }
                 helperText={errors.lastName}
               />
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
               <TextField
-                label="Email"
+                label={t("Email")}
                 name="email"
                 type="text"
                 variant="outlined"
@@ -142,7 +127,7 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
             </Grid>
             <Grid item xs={12} md={6} lg={6}>
               <Select
-                label="Currency"
+                label={t("Currency")}
                 name="currency"
                 selected={values.currency}
                 options={currencies}
@@ -151,24 +136,24 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
             </Grid>
             <Grid item xs={12} md={6} lg={6}>
               <Select
-                label="Language"
+                label={t("Language")}
                 name="language"
                 options={[
                   {
                     id: "BG",
-                    value: "Bulgarian"
+                    value: t("Bulgarian"),
                   },
                   {
                     id: "EN",
-                    value: "English"
-                  }
+                    value: t("English"),
+                  },
                 ]}
                 onChange={handleChange}
                 selected={values.language}
               />
             </Grid>
             <Grid item>
-              <Button type="submit">Save</Button>
+              <Button type="submit">{t("Save")}</Button>
             </Grid>
           </Grid>
         </Form>

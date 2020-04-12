@@ -3,6 +3,7 @@ import { Box } from "@material-ui/core";
 import useStyles from "./styles";
 import Select from "../../atoms/form/select";
 import moment from "moment";
+import useTranslations from "translations";
 
 interface Props {
   onChange: Function;
@@ -18,7 +19,7 @@ export enum Range {
   All = 0,
   Last7Days = 2,
   Last30Days = 3,
-  Last12Months = 4
+  Last12Months = 4,
 }
 
 export const calculateBackDate = (value: number) => {
@@ -41,18 +42,22 @@ export const calculateBackDate = (value: number) => {
 
 const DateRangePicker = ({ onChange, responsive }: Props): JSX.Element => {
   const classes = useStyles({});
+  const { t } = useTranslations();
 
   const options: optionProps[] = [
-    { id: Range.Last7Days, value: "Last 7 days" },
-    { id: Range.Last30Days, value: "Last 30 days" },
-    { id: Range.Last12Months, value: "Last 12 months" },
-    { id: Range.All, value: "All" }
+    { id: Range.Last7Days, value: t("Last 7 days") },
+    { id: Range.Last30Days, value: t("Last 30 days") },
+    { id: Range.Last12Months, value: t("Last 12 months") },
+    { id: Range.All, value: t("All") },
   ];
 
   const [selected, setSelected] = useState<number>(Range.Last7Days);
 
   return (
-    <Box mx="auto" className={`${classes.main} ${responsive ? classes.responsive : ''}`}>
+    <Box
+      mx="auto"
+      className={`${classes.main} ${responsive ? classes.responsive : ""}`}
+    >
       <Select
         options={options}
         onChange={(event: any) => {
@@ -61,7 +66,7 @@ const DateRangePicker = ({ onChange, responsive }: Props): JSX.Element => {
           onChange(calculateBackDate(value));
         }}
         selected={selected}
-        label={"Date Range"}
+        label={t("Date Range")}
         name={"name"}
       />
     </Box>

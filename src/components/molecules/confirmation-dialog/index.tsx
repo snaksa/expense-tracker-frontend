@@ -4,9 +4,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
 } from "@material-ui/core";
-import Button from '../../atoms/button';
+import Button from "../../atoms/button";
+import useTranslations from "translations";
 
 interface Props {
   isOpen: boolean;
@@ -16,34 +17,36 @@ interface Props {
   onCancel: Function;
 }
 
-const ConfirmationDialog: React.FunctionComponent<any> = (
-  {isOpen, title, content, onConfirm, onCancel}: Props
-): JSX.Element => {
+const ConfirmationDialog: React.FunctionComponent<any> = ({
+  isOpen,
+  title,
+  content,
+  onConfirm,
+  onCancel,
+}: Props): JSX.Element => {
+  const { t } = useTranslations();
+
   return (
-      <Dialog
-        open={isOpen}
-        onClose={() => onCancel()}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {title}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {content}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onCancel} color='secondary'>
-            Cancel
-          </Button>
-          <Button onClick={onConfirm}>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+    <Dialog
+      open={isOpen}
+      onClose={() => onCancel()}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          {content}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onCancel} color="secondary">
+          {t("Cancel")}
+        </Button>
+        <Button onClick={onConfirm}>{t("OK")}</Button>
+      </DialogActions>
+    </Dialog>
   );
-}
+};
 
 export default ConfirmationDialog;

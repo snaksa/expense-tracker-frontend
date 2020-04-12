@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { useHistory } from "react-router";
 import { useAuthDataContext } from "../../../../services/auth-provider";
+import useTranslations from "translations";
 
 export interface FormFields {
   email: string;
@@ -18,6 +19,7 @@ export interface FormFields {
 
 const Login = () => {
   const classes = useStyles();
+  const { t } = useTranslations();
 
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
@@ -34,32 +36,32 @@ const Login = () => {
       history.push("/admin");
     },
     onError() {
-      setErrorMessage("Incorrect username or password");
-    }
+      setErrorMessage(t("Incorrect username or password"));
+    },
   });
 
   const onSubmit = (values: FormFields) => {
     login({
       variables: {
         email: values.email,
-        password: values.password
-      }
+        password: values.password,
+      },
     });
   };
 
   const Schema = () =>
     Yup.object().shape({
       email: Yup.string()
-        .email("Enter a valid email address")
-        .required("Enter your email address"),
-      password: Yup.string().required("Enter your password")
+        .email(t("Enter a valid email address"))
+        .required(t("Enter your email address")),
+      password: Yup.string().required(t("Enter your password")),
     });
 
   return (
     <Formik
       initialValues={{
         email: "",
-        password: ""
+        password: "",
       }}
       validationSchema={Schema}
       onSubmit={onSubmit}
@@ -69,7 +71,7 @@ const Login = () => {
           <Grid container direction="column">
             <Grid item>
               <TextField
-                label="Email"
+                label={t("Email")}
                 variant="outlined"
                 name="email"
                 value={values.email}
@@ -80,7 +82,7 @@ const Login = () => {
             </Grid>
             <Grid item>
               <TextField
-                label="Password"
+                label={t("Password")}
                 type="password"
                 variant="outlined"
                 name="password"
@@ -96,7 +98,7 @@ const Login = () => {
             <Grid item>
               <Box mt={1}>
                 <Button type="submit" style={{}}>
-                  Login
+                  {t("Login")}
                 </Button>
               </Box>
             </Grid>

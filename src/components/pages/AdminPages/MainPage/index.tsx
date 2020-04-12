@@ -10,7 +10,7 @@ import {
   TransactionType,
   useCategoriesSpendingFlowQuery,
   useTransactionSpendingFlowQuery,
-  useCategoriesQuery
+  useCategoriesQuery,
 } from "api";
 import LastTransactions from "components/organisms/last-transactions";
 import SummaryBox from "components/molecules/summary-box";
@@ -21,10 +21,12 @@ import LineChart from "components/organisms/line-chart";
 import Loader from "components/atoms/loader";
 import useCurrencyFormatter from "services/currency-formatter";
 import { Helmet } from "react-helmet";
+import useTranslations from "translations";
 
 const MainPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
+  const { t } = useTranslations();
 
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
@@ -35,33 +37,33 @@ const MainPage = () => {
   const {
     data: spendingFlowData,
     loading,
-    refetch: refetchReport
+    refetch: refetchReport,
   } = useTransactionSpendingFlowQuery({
     variables: {
       date: null,
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
-      categoryIds: []
-    }
+      categoryIds: [],
+    },
   });
 
   const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
   let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
   flowChart = flowChart.map((row: any) => [
     moment.utc(row[0]).toDate(),
-    parseFloat(row[1])
+    parseFloat(row[1]),
   ]);
   const chartData = [flowColumns, ...flowChart];
 
   const {
     data: spendingQueryData,
-    refetch: refetchSpendingPie
+    refetch: refetchSpendingPie,
   } = useCategoriesSpendingPieQuery({
     variables: {
       date: null,
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
-      type: TransactionType.Expense
-    }
+      type: TransactionType.Expense,
+    },
   });
 
   const spendingData: any = {
@@ -69,19 +71,19 @@ const MainPage = () => {
     colors: spendingQueryData?.categoriesSpendingPieChart?.colors ?? [],
     data: (
       spendingQueryData?.categoriesSpendingPieChart?.data ?? []
-    ).map((row: any) => [row[0], parseFloat(row[1])])
+    ).map((row: any) => [row[0], parseFloat(row[1])]),
   };
 
   const {
     data: incomeQueryData,
-    refetch: refetchIncomePie
+    refetch: refetchIncomePie,
   } = useCategoriesSpendingPieQuery({
     variables: {
       date: null,
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
-      type: TransactionType.Income
-    }
+      type: TransactionType.Income,
+    },
   });
 
   const incomeData: any = {
@@ -89,18 +91,18 @@ const MainPage = () => {
     colors: incomeQueryData?.categoriesSpendingPieChart?.colors ?? [],
     data: (
       incomeQueryData?.categoriesSpendingPieChart?.data ?? []
-    ).map((row: any) => [row[0], parseFloat(row[1])])
+    ).map((row: any) => [row[0], parseFloat(row[1])]),
   };
 
   const {
     data: spendingFlowQueryData,
-    refetch: refetchSpendingFlow
+    refetch: refetchSpendingFlow,
   } = useCategoriesSpendingFlowQuery({
     variables: {
       date: null,
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
-      categoryIds: []
-    }
+      categoryIds: [],
+    },
   });
 
   const spendingCategoryFlowData: any = {
@@ -114,7 +116,7 @@ const MainPage = () => {
         }
         return result;
       }
-    )
+    ),
   };
 
   const updateCharts = () => {
@@ -122,19 +124,17 @@ const MainPage = () => {
     refetchSpendingPie();
     refetchIncomePie();
     refetchSpendingFlow();
-  }
+  };
 
   return (
     <Box className={classes.main} p={10}>
       <Helmet>
-        <title>Home | Expenses Tracker</title>
+        <title>{t("Home | Expenses Tracker")}</title>
       </Helmet>
       <Grid container direction="column">
         <Grid item xs={12} md={12} lg={12}>
           <Box mb={5} p={5} className={classes.collection}>
-            <WalletsCollection
-              wallets={wallets}
-            />
+            <WalletsCollection wallets={wallets} />
           </Box>
         </Grid>
         <Grid item>
@@ -150,7 +150,7 @@ const MainPage = () => {
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
-                  <SummaryBox header="Spending flow">
+                  <SummaryBox header={t("Spending flow")}>
                     <Loader loading={loading} />
                     <Chart
                       width={"100%"}
@@ -162,7 +162,7 @@ const MainPage = () => {
                           ? chartData
                           : [
                               ["", ""],
-                              ["", 0]
+                              ["", 0],
                             ]
                       }
                       formatters={[
@@ -170,25 +170,25 @@ const MainPage = () => {
                           type: "NumberFormat",
                           column: 1,
                           options: {
-                            suffix: ` ${getCurrency()}`
-                          }
-                        }
+                            suffix: ` ${getCurrency()}`,
+                          },
+                        },
                       ]}
                       options={{
                         hAxis: {
-                          title: "Time",
+                          title: t("Time"),
                           type: "date",
-                          format: "Y-MM-dd"
+                          format: "Y-MM-dd",
                         },
                         vAxis: {
-                          title: "Money"
-                        }
+                          title: t("Money"),
+                        },
                       }}
                     />
                   </SummaryBox>
                 </Grid>
                 <Grid item xs={12} md={12} lg={3}>
-                  <SummaryBox header="Spending">
+                  <SummaryBox header={t("Spending")}>
                     <PieChart data={spendingData} />
                   </SummaryBox>
                 </Grid>
@@ -198,21 +198,21 @@ const MainPage = () => {
               <Grid item xs={12} md={12} lg={12}>
                 <Grid container spacing={5}>
                   <Grid item xs={12} md={6} lg={3}>
-                    <SummaryBox header="Income">
+                    <SummaryBox header={t("Income")}>
                       <PieChart data={incomeData} />
                     </SummaryBox>
                   </Grid>
                   <Grid item xs={12} md={6} lg={6}>
-                    <SummaryBox header="Spending flow by categories">
+                    <SummaryBox header={t("Spending flow by categories")}>
                       <LineChart
-                        hTitle="Time"
-                        vTitle="Money"
+                        hTitle={t("Time")}
+                        vTitle={t("Money")}
                         data={spendingCategoryFlowData}
                       />
                     </SummaryBox>
                   </Grid>
                   <Grid item xs={12} md={12} lg={3}>
-                    <SummaryBox header="Income">
+                    <SummaryBox header={t("Income")}>
                       <PieChart data={incomeData} />
                     </SummaryBox>
                   </Grid>

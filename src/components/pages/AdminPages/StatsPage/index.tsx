@@ -25,10 +25,12 @@ import DateRangePicker, {
 } from "components/molecules/date-range-picker";
 import TransactionsTable from "components/organisms/transactions-table";
 import { Helmet } from "react-helmet";
+import useTranslations from "translations";
 
 const StatsPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
+  const {t} = useTranslations();
 
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
@@ -184,7 +186,7 @@ const StatsPage = () => {
   return (
     <Box className={classes.main} p={10}>
       <Helmet>
-        <title>Stats | Expenses Tracker</title>
+        <title>{t("Stats | Expenses Tracker")}</title>
       </Helmet>
       <Grid container direction="row" spacing={5}>
         <Grid item xs={12} md={2} lg={2} xl={2}>
@@ -197,7 +199,7 @@ const StatsPage = () => {
             </Grid>
             <Grid item>
               <SummaryBox
-                header={"Wallets"}
+                header={t("Wallets")}
                 responsiveHeight={true}
                 toggle={true}
               >
@@ -209,7 +211,7 @@ const StatsPage = () => {
             </Grid>
             <Grid item>
               <SummaryBox
-                header={"Categories"}
+                header={t("Categories")}
                 responsiveHeight={true}
                 toggle={true}
               >
@@ -226,7 +228,7 @@ const StatsPage = () => {
             <Grid item xs={12} md={12} lg={12}>
               <Grid container spacing={5}>
                 <Grid item xs={12} md={6} lg={9}>
-                  <SummaryBox header="Spending flow">
+                  <SummaryBox header={t("Spending flow")}>
                     <Loader loading={loading} />
                     <Chart
                       width={"100%"}
@@ -252,19 +254,19 @@ const StatsPage = () => {
                       ]}
                       options={{
                         hAxis: {
-                          title: "Time",
+                          title: t("Time"),
                           type: "date",
                           format: "Y-MM-dd",
                         },
                         vAxis: {
-                          title: "Money",
+                          title: t("Money"),
                         },
                       }}
                     />
                   </SummaryBox>
                 </Grid>
                 <Grid item xs={12} md={12} lg={3}>
-                  <SummaryBox header="Spending">
+                  <SummaryBox header={t("Spending")}>
                     <PieChart data={spendingData} />
                   </SummaryBox>
                 </Grid>
@@ -274,21 +276,21 @@ const StatsPage = () => {
               <Grid item xs={12} md={12} lg={12}>
                 <Grid container spacing={5}>
                   <Grid item xs={12} md={6} lg={3}>
-                    <SummaryBox header="Income">
+                    <SummaryBox header={t("Income")}>
                       <PieChart data={incomeData} />
                     </SummaryBox>
                   </Grid>
                   <Grid item xs={12} md={6} lg={6}>
-                    <SummaryBox header="Spending flow by categories">
+                    <SummaryBox header={t("Spending flow by categories")}>
                       <LineChart
-                        hTitle="Time"
-                        vTitle="Money"
+                        hTitle={t("Time")}
+                        vTitle={t("Money")}
                         data={spendingCategoryFlowData}
                       />
                     </SummaryBox>
                   </Grid>
                   <Grid item xs={12} md={12} lg={3}>
-                    <SummaryBox header="Income">
+                    <SummaryBox header={t("Income")}>
                       <PieChart data={incomeData} />
                     </SummaryBox>
                   </Grid>

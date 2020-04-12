@@ -3,9 +3,11 @@ import { Box, Grid } from "@material-ui/core";
 import Title from "../../atoms/title";
 import useStyles from "./styles";
 import { NavLink } from "react-router-dom";
+import useTranslations from "translations";
 
 const HeroMenu = () => {
   const classes = useStyles();
+  const { t } = useTranslations();
 
   return (
     <Box className={classes.wrapper}>
@@ -18,7 +20,7 @@ const HeroMenu = () => {
             activeClassName={classes.active}
           >
             <Title variant="subtitle2" display="inline">
-              Login
+              {t("Login")}
             </Title>
           </NavLink>
         </Grid>
@@ -30,19 +32,19 @@ const HeroMenu = () => {
             activeClassName={classes.active}
           >
             <Title variant="subtitle2" display="inline">
-              Register
+              {t("Register")}
             </Title>
           </NavLink>
         </Grid>
         <Grid item>
-        <NavLink
+          <NavLink
             to="/about"
             exact
             className={classes.link}
             activeClassName={classes.active}
           >
             <Title variant="subtitle2" display="inline">
-              About
+              {t("About")}
             </Title>
           </NavLink>
         </Grid>

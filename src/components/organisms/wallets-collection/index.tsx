@@ -16,6 +16,7 @@ import {
 } from "../../../api";
 import { useNotificationContext } from "../../../services/notification-provider";
 import ColorPicker from "components/molecules/color-picker";
+import useTranslations from "translations";
 
 interface Props {
   wallets: Wallet[];
@@ -29,6 +30,7 @@ export interface FormFields {
 
 const WalletsCollection = ({ wallets }: Props): JSX.Element => {
   const classes = useStyles({});
+  const { t } = useTranslations();
 
   const [newWalletModalIsOpen, setNewWalletModalIsOpen] = useState(false);
 
@@ -40,10 +42,12 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
   const [createWallet] = useCreateWalletMutation({
     onCompleted() {
       setNewWalletModalIsOpen(false);
-      showSuccessNotification("Wallet created succesfully!");
+      showSuccessNotification(t("Wallet created succesfully!"));
     },
     onError() {
-      showErrorNotification("An error occured while saving the wallet data!");
+      showErrorNotification(
+        t("An error occured while saving the wallet data!")
+      );
     },
     update: (store, { data }) => {
       const wallet = data?.createWallet;
@@ -80,9 +84,9 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
 
   const CreateWalletSchema = () =>
     Yup.object().shape({
-      name: Yup.string().required("Enter wallet name"),
+      name: Yup.string().required(t("Enter wallet name")),
       amount: Yup.number().nullable(),
-      color: Yup.string().required("Choose wallet color"),
+      color: Yup.string().required(t("Choose wallet color")),
     });
 
   return (
@@ -110,7 +114,7 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
         </Grid>
       </Grid>
       <Modal
-        title={"+ New Wallet"}
+        title={t("+ New Wallet")}
         isOpen={newWalletModalIsOpen}
         handleClose={() => {
           setNewWalletModalIsOpen(false);
@@ -119,7 +123,7 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
         <Formik
           initialValues={{
             name: "",
-            amount: '',
+            amount: "",
             color: "#DE60D4",
           }}
           validationSchema={CreateWalletSchema}
@@ -130,7 +134,7 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
               <Grid container direction="column">
                 <Grid item>
                   <TextField
-                    label="Name"
+                    label={t("Name")}
                     name="name"
                     variant="outlined"
                     value={values.name}
@@ -141,7 +145,7 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
                 </Grid>
                 <Grid item>
                   <TextField
-                    label="Initial Amount"
+                    label={t("Initial Amount")}
                     name="amount"
                     type="number"
                     variant="outlined"
@@ -161,7 +165,7 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
                 <Grid>
                   <Box mt={1}>
                     <Button type="submit" style={{}}>
-                      Add
+                      {t("Add")}
                     </Button>
                   </Box>
                 </Grid>

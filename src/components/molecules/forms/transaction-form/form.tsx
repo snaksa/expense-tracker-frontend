@@ -24,6 +24,7 @@ import { useSharedDataContext } from "services/shared-data-provider";
 import DatePicker from "components/atoms/form/datepicker";
 import TimePicker from "components/atoms/form/timepicker";
 import moment from "moment";
+import useTranslations from "translations";
 
 interface Props {
   transaction?: Transaction;
@@ -94,6 +95,7 @@ const TransactionForm = ({
     showSuccessNotification,
     showErrorNotification,
   } = useNotificationContext();
+  const { t } = useTranslations();
 
   const { usedTranasctionParams } = useSharedDataContext();
 
@@ -130,17 +132,17 @@ const TransactionForm = ({
         variables: {
           date: null,
           walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: []
-        }
+          categoryIds: [],
+        },
       },
       {
         query: CategoriesSpendingFlowDocument,
         variables: {
           date: null,
           walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: []
-        }
-      }
+          categoryIds: [],
+        },
+      },
     ];
 
     mainPageCharts.forEach((chart: any) => {
@@ -153,22 +155,26 @@ const TransactionForm = ({
   const [createTransaction] = useCreateTransactionMutation({
     onCompleted() {
       onComplete();
-      showSuccessNotification("Record created succesfully!");
+      showSuccessNotification(t("Record created succesfully!"));
     },
     onError() {
       onError();
-      showErrorNotification("An error occured while saving the record data!");
+      showErrorNotification(
+        t("An error occured while saving the record data!")
+      );
     },
     refetchQueries: getRefetchQueries(),
   });
 
   const [updateTransaction] = useUpdateTransactionMutation({
     onCompleted() {
-      showSuccessNotification("Record updated succesfully!");
+      showSuccessNotification(t("Record updated succesfully!"));
       onComplete();
     },
     onError() {
-      showErrorNotification("An error occured while updating the record data!");
+      showErrorNotification(
+        t("An error occured while updating the record data!")
+      );
       onError();
     },
     refetchQueries: getRefetchQueries(),
@@ -252,7 +258,7 @@ const TransactionForm = ({
             </Grid>
             <Grid item>
               <Select
-                label="Wallet"
+                label={t("Wallet")}
                 name="walletId"
                 selected={values.walletId}
                 options={walletOptions}
@@ -261,21 +267,21 @@ const TransactionForm = ({
             </Grid>
             <Grid item>
               <Select
-                label="Type"
+                label={t("Type")}
                 name="type"
                 selected={values.type}
                 options={[
                   {
                     id: TransactionType.Expense,
-                    value: "Expense",
+                    value: t("Expense"),
                   },
                   {
                     id: TransactionType.Income,
-                    value: "Income",
+                    value: t("Income"),
                   },
                   {
                     id: TransactionType.Transfer,
-                    value: "Transfer",
+                    value: t("Transfer"),
                   },
                 ]}
                 onChange={handleChange}
@@ -284,7 +290,7 @@ const TransactionForm = ({
             {values.type === TransactionType.Transfer && (
               <Grid item>
                 <Select
-                  label="Transfer to"
+                  label={t("Transfer to")}
                   name="walletReceiverId"
                   selected={values.walletReceiverId}
                   options={walletOptions}
@@ -294,7 +300,7 @@ const TransactionForm = ({
             )}
             <Grid item>
               <TextField
-                label="Description"
+                label={t("Description")}
                 name="description"
                 variant="outlined"
                 value={values.description}
@@ -305,7 +311,7 @@ const TransactionForm = ({
             </Grid>
             <Grid item>
               <TextField
-                label="Amount"
+                label={t("Amount")}
                 name="value"
                 type="number"
                 variant="outlined"
@@ -318,7 +324,7 @@ const TransactionForm = ({
             {values.type !== TransactionType.Transfer && (
               <Grid item>
                 <Select
-                  label="Category"
+                  label={t("Category")}
                   name="categoryId"
                   selected={values.categoryId}
                   options={categoryOptions}
@@ -328,7 +334,9 @@ const TransactionForm = ({
             )}
             <Grid>
               <Box mt={1}>
-                <Button type="submit">{transaction ? "Edit" : "Add"}</Button>
+                <Button type="submit">
+                  {transaction ? t("Edit") : t("Add")}
+                </Button>
               </Box>
             </Grid>
           </Grid>

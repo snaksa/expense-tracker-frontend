@@ -14,6 +14,7 @@ import {
 } from "api";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import ColorPicker from "components/molecules/color-picker";
+import useTranslations from "translations";
 
 interface Props {
   wallet?: Wallet;
@@ -27,15 +28,8 @@ export interface FormFields {
   amount: any;
 }
 
-const schema = () => {
-  return Yup.object().shape({
-    name: Yup.string().required("Enter wallet name"),
-    color: Yup.string().required("Enter wallet color"),
-    amount: Yup.number(),
-  });
-};
-
 const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
+  const { t } = useTranslations();
   const {
     showSuccessNotification,
     showErrorNotification,
@@ -43,14 +37,24 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
 
   const { setWalletUpdate } = useUpdateDetectionContext();
 
+  const schema = () => {
+    return Yup.object().shape({
+      name: Yup.string().required(t("Enter wallet name")),
+      color: Yup.string().required(t("Enter wallet color")),
+      amount: Yup.number(),
+    });
+  };
+
   const [createWallet] = useCreateWalletMutation({
     onCompleted() {
-      showSuccessNotification("Wallet created succesfully!");
+      showSuccessNotification(t("Wallet created succesfully!"));
       setWalletUpdate();
       onComplete();
     },
     onError() {
-      showErrorNotification("An error occured while saving the wallet data!");
+      showErrorNotification(
+        t("An error occured while saving the wallet data!")
+      );
       onError();
     },
     update: (store, { data }) => {
@@ -78,12 +82,14 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
 
   const [updateWallet] = useUpdateWalletMutation({
     onCompleted() {
-      showSuccessNotification("Wallet updated succesfully!");
+      showSuccessNotification(t("Wallet updated succesfully!"));
       setWalletUpdate();
       onComplete();
     },
     onError() {
-      showErrorNotification("An error occured while updating the wallet data!");
+      showErrorNotification(
+        t("An error occured while updating the wallet data!")
+      );
       onError();
     },
   });
@@ -124,7 +130,7 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
           <Grid container direction="column">
             <Grid item>
               <TextField
-                label="Name"
+                label={t("Name")}
                 name="name"
                 variant="outlined"
                 value={values.name}
@@ -136,7 +142,7 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
             {!wallet && (
               <Grid item>
                 <TextField
-                  label="Initial Amount"
+                  label={t("Initial Amount")}
                   name="amount"
                   type="number"
                   variant="outlined"
@@ -157,7 +163,7 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
             <Grid>
               <Box mt={1}>
                 <Button type="submit" style={{}}>
-                  {wallet ? 'Edit': 'Add'}
+                  {wallet ? t("Edit") : t("Add")}
                 </Button>
               </Box>
             </Grid>

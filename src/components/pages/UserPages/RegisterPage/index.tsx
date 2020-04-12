@@ -6,20 +6,24 @@ import Heading from "../../../molecules/heading";
 import RegisterForm from "components/molecules/forms/register";
 import AuthForm from "components/organisms/auth-form";
 import { Helmet } from "react-helmet";
+import useTranslations from "translations";
 
 const RegisterPage = () => {
   const classes = useStyles();
+  const { t } = useTranslations();
 
   return (
     <Grid container className={classes.hero} direction="column">
       <Helmet>
-        <title>Register | Expenses Tracker</title>
+        <title>{t("Register | Expenses Tracker")}</title>
       </Helmet>
       <Grid item>
         <Box className={classes.heading} mx="auto">
           <Heading
-            title="Your Finances in One Place"
-            subtitle="Assign emotions to your expenses, learn about your real priorities and spend money on things that make you happy"
+            title={t("Your Finances in One Place")}
+            subtitle={t(
+              "Assign emotions to your expenses, learn about your real priorities and spend money on things that make you happy"
+            )}
           />
         </Box>
       </Grid>

@@ -5,6 +5,7 @@ import { Transaction, TransactionType } from "api";
 import RoundBox from "components/atoms/round-box";
 import useCurrencyFormatter from "services/currency-formatter";
 import formatDate from "services/date-formatter";
+import useTranslations from "translations";
 
 interface Props {
   transaction: Transaction;
@@ -13,6 +14,7 @@ interface Props {
 const TransactionSummary = ({ transaction }: Props) => {
   const classes = useStyles();
   const { formatCurrency } = useCurrencyFormatter();
+  const { t } = useTranslations();
 
   return (
     <Box p={2} className={classes.wrapper}>
@@ -28,9 +30,9 @@ const TransactionSummary = ({ transaction }: Props) => {
             color={transaction?.category?.color}
             background={
               transaction?.type === TransactionType.Transfer
-                ? `linear-gradient(90deg, ${transaction.wallet?.color ??
-                    "#ccc"} 50%, ${transaction.walletReceiver?.color ??
-                    "#ccc"} 50%)`
+                ? `linear-gradient(90deg, ${
+                    transaction.wallet?.color ?? "#ccc"
+                  } 50%, ${transaction.walletReceiver?.color ?? "#ccc"} 50%)`
                 : transaction?.category?.color
             }
             width={32}
@@ -47,9 +49,9 @@ const TransactionSummary = ({ transaction }: Props) => {
             <Grid item className={classes.top}>
               {transaction?.category?.name}
               {transaction?.type === TransactionType.Transfer &&
-                (transaction.wallet?.name ?? "Unknown") +
+                (transaction.wallet?.name ?? t("Unknown")) +
                   " => " +
-                  (transaction.walletReceiver?.name ?? "Unknown")}
+                  (transaction.walletReceiver?.name ?? t("Unknown"))}
             </Grid>
             <Grid item className={classes.bottom}>
               <Grid
@@ -61,7 +63,7 @@ const TransactionSummary = ({ transaction }: Props) => {
               >
                 <Grid item>
                   <RoundBox
-                    color={transaction?.wallet?.color ?? '#ccc'}
+                    color={transaction?.wallet?.color ?? "#ccc"}
                     width={10}
                     height={10}
                   />
@@ -80,7 +82,7 @@ const TransactionSummary = ({ transaction }: Props) => {
                 color:
                   transaction?.type === TransactionType.Expense
                     ? "red"
-                    : "green"
+                    : "green",
               }}
             >
               {transaction?.type === TransactionType.Expense ? "-" : ""}

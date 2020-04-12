@@ -15,6 +15,7 @@ import {
 } from "api";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import ColorPicker from "components/molecules/color-picker";
+import useTranslations from "translations";
 
 interface Props {
   category?: Category;
@@ -29,8 +30,8 @@ export interface FormFields {
 
 const schema = () => {
   return Yup.object().shape({
-    name: Yup.string().required("Enter category name"),
-    color: Yup.string().required("Enter category color"),
+    name: Yup.string().required(t("Enter category name")),
+    color: Yup.string().required(t("Enter category color")),
   });
 };
 
@@ -39,6 +40,8 @@ const CategoryForm = ({
   onComplete,
   onError,
 }: Props): JSX.Element => {
+  const { t } = useTranslations();
+
   const {
     showSuccessNotification,
     showErrorNotification,
@@ -48,12 +51,14 @@ const CategoryForm = ({
 
   const [createCategory] = useCreateCategoryMutation({
     onCompleted() {
-      showSuccessNotification("Category created succesfully!");
+      showSuccessNotification(t("Category created succesfully!"));
       setCategoryUpdate();
       onComplete();
     },
     onError() {
-      showErrorNotification("An error occured while saving the category data!");
+      showErrorNotification(
+        t("An error occured while saving the category data!")
+      );
       onError();
     },
     update: (store, { data }) => {
@@ -81,13 +86,13 @@ const CategoryForm = ({
 
   const [updateCategory] = useUpdateCategoryMutation({
     onCompleted() {
-      showSuccessNotification("Category updated succesfully!");
+      showSuccessNotification(t("Category updated succesfully!"));
       setCategoryUpdate();
       onComplete();
     },
     onError() {
       showErrorNotification(
-        "An error occured while updating the category data!"
+        t("An error occured while updating the category data!")
       );
       onError();
     },
@@ -127,7 +132,7 @@ const CategoryForm = ({
           <Grid container direction="column">
             <Grid item>
               <TextField
-                label="Name"
+                label={t("Name")}
                 name="name"
                 variant="outlined"
                 value={values.name}
@@ -145,7 +150,7 @@ const CategoryForm = ({
             </Grid>
             <Grid>
               <Box mt={1}>
-                <Button type="submit">{category ? 'Edit' : 'Add'}</Button>
+                <Button type="submit">{category ? t("Edit") : t("Add")}</Button>
               </Box>
             </Grid>
           </Grid>
