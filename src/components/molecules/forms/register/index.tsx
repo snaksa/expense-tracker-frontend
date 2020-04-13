@@ -21,7 +21,7 @@ const RegisterForm = () => {
 
   const [register] = useRegisterMutation({
     onCompleted(data) {
-      history.push("/");
+      history.push("/login");
       console.log(data);
     },
     onError(error) {

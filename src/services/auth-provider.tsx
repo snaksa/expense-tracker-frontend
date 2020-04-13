@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext } from "react";
-import { useHistory } from "react-router";
 
 export interface AuthDataContextProps {
   authData: string | null;
@@ -12,7 +11,7 @@ const initialProps: AuthDataContextProps = {
   authData: "",
   onLogin: () => {},
   onLogout: () => {},
-  isAuthenticated: () => {}
+  isAuthenticated: () => {},
 };
 
 export const AuthDataContext = createContext<AuthDataContextProps>(
@@ -22,8 +21,6 @@ export const AuthDataContext = createContext<AuthDataContextProps>(
 const initialAuthData = null;
 
 const AuthDataProvider = (props: any) => {
-  const history = useHistory();
-
   const [authData, setAuthData] = useState<string | null>(initialAuthData);
 
   if (authData === null) {
@@ -33,7 +30,7 @@ const AuthDataProvider = (props: any) => {
   const onLogout = () => {
     setAuthData("");
     localStorage.setItem("token", "");
-    history.push("/");
+    window.location.href = "/";
   };
 
   const onLogin = (newAuthData: string) => {
@@ -43,7 +40,7 @@ const AuthDataProvider = (props: any) => {
 
   const isAuthenticated = () => {
     if (!authData) {
-      history.push("/");
+      window.location.href = "/";
     }
   };
 

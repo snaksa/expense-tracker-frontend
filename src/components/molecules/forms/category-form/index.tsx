@@ -12,6 +12,12 @@ import {
   CategoriesQuery,
   Category,
   useUpdateCategoryMutation,
+  CategoriesSpendingPieDocument,
+  TransactionType,
+  TransactionSpendingFlowDocument,
+  CategoriesSpendingFlowDocument,
+  Wallet,
+  useWalletsQuery,
 } from "api";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import ColorPicker from "components/molecules/color-picker";
@@ -42,13 +48,16 @@ const CategoryForm = ({
 
   const { setCategoryUpdate } = useUpdateDetectionContext();
 
+  const { data: walletsData } = useWalletsQuery();
+  const wallets: any = walletsData?.wallets ?? [];
+
   const schema = () => {
     return Yup.object().shape({
       name: Yup.string().required(t("Enter category name")),
       color: Yup.string().required(t("Enter category color")),
     });
   };
-  
+
   const [createCategory] = useCreateCategoryMutation({
     onCompleted() {
       showSuccessNotification(t("Category created succesfully!"));
@@ -96,6 +105,42 @@ const CategoryForm = ({
       );
       onError();
     },
+    refetchQueries: [
+      {
+        query: CategoriesSpendingPieDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+          type: TransactionType.Expense,
+        },
+      },
+      {
+        query: CategoriesSpendingPieDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+          type: TransactionType.Income,
+        },
+      },
+      {
+        query: TransactionSpendingFlowDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+        },
+      },
+      {
+        query: CategoriesSpendingFlowDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+        },
+      },
+    ],
   });
 
   const onSubmit = (values: FormFields) => {

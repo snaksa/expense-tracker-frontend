@@ -7,6 +7,12 @@ import {
   useDeleteCategoryMutation,
   WalletsDocument,
   TransactionsDocument,
+  CategoriesSpendingPieDocument,
+  TransactionType,
+  Wallet,
+  TransactionSpendingFlowDocument,
+  CategoriesSpendingFlowDocument,
+  useWalletsQuery,
 } from "api";
 import Table from "../table";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
@@ -40,6 +46,9 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
 
   const { usedTranasctionParams } = useSharedDataContext();
 
+  const { data: walletsData } = useWalletsQuery();
+  const wallets: any = walletsData?.wallets ?? [];
+
   const {
     showSuccessNotification,
     showErrorNotification,
@@ -53,6 +62,47 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
         variables: params,
       });
     }
+
+    const mainPageCharts = [
+      {
+        query: CategoriesSpendingPieDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+          type: TransactionType.Expense,
+        },
+      },
+      {
+        query: CategoriesSpendingPieDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+          type: TransactionType.Income,
+        },
+      },
+      {
+        query: TransactionSpendingFlowDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+        },
+      },
+      {
+        query: CategoriesSpendingFlowDocument,
+        variables: {
+          date: null,
+          walletIds: wallets.map((wallet: Wallet) => wallet.id),
+          categoryIds: [],
+        },
+      },
+    ];
+
+    mainPageCharts.forEach((chart: any) => {
+      result.push(chart);
+    });
 
     return result;
   };

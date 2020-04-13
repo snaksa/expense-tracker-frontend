@@ -8,6 +8,7 @@ import Button from "components/atoms/button";
 import Title from "components/atoms/title";
 import NavigationBar from "components/organisms/navigation-bar";
 import useTranslations from "translations";
+import { NavLink } from "react-router-dom";
 
 const LandingPage = () => {
   const classes = useStyles();
@@ -39,7 +40,11 @@ const LandingPage = () => {
               </Grid>
               <Grid item>
                 <Box margin={5}>
-                  <Button className={classes.tryNow}>Try Now For Free</Button>
+                  <Button className={classes.tryNow}>
+                    <NavLink to={"/register"} className={classes.link} exact>
+                      {t("Try Now For Free")}
+                    </NavLink>
+                  </Button>
                 </Box>
               </Grid>
             </Box>
@@ -284,7 +289,11 @@ const LandingPage = () => {
             </Grid>
             <Grid item>
               <Box margin={5}>
-                <Button className={classes.tryNow}>Register</Button>
+                <Button className={classes.tryNow}>
+                  <NavLink to={"/register"} className={classes.link} exact>
+                    {t("Try Now For Free")}
+                  </NavLink>
+                </Button>
               </Box>
             </Grid>
           </Box>

@@ -67,7 +67,11 @@ const useStyles = makeStyles(theme => ({
         "&:hover": {
             background: '#FFF'
         },
-    }
+    },
+    link: {
+        textDecoration: 'none',
+        color: 'inherit'
+    },
 }));
 
 export default useStyles;
