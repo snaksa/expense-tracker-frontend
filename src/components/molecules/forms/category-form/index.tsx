@@ -28,13 +28,6 @@ export interface FormFields {
   color: string;
 }
 
-const schema = () => {
-  return Yup.object().shape({
-    name: Yup.string().required(t("Enter category name")),
-    color: Yup.string().required(t("Enter category color")),
-  });
-};
-
 const CategoryForm = ({
   category,
   onComplete,
@@ -49,6 +42,13 @@ const CategoryForm = ({
 
   const { setCategoryUpdate } = useUpdateDetectionContext();
 
+  const schema = () => {
+    return Yup.object().shape({
+      name: Yup.string().required(t("Enter category name")),
+      color: Yup.string().required(t("Enter category color")),
+    });
+  };
+  
   const [createCategory] = useCreateCategoryMutation({
     onCompleted() {
       showSuccessNotification(t("Category created succesfully!"));

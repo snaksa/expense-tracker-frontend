@@ -12,7 +12,7 @@ const useTranslations = () => {
   const lang: string = (user.language ?? '').toLowerCase();
 
   const t = (text: string) => {
-    if(lang in translations && text in translations[lang]) {
+    if(lang in translations && text in translations[lang] && translations[lang][text]) {
       return translations[lang][text];
     }
     

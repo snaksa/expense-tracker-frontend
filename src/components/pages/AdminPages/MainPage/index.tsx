@@ -129,7 +129,7 @@ const MainPage = () => {
   return (
     <Box className={classes.main} p={10}>
       <Helmet>
-        <title>{t("Home | Expenses Tracker")}</title>
+        <title>{t("Dashboard | Expenses Tracker")}</title>
       </Helmet>
       <Grid container direction="column">
         <Grid item xs={12} md={12} lg={12}>

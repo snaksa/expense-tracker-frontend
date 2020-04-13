@@ -157,7 +157,7 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />
       <Modal
-        title={t("+ Edit Wallet")}
+        title={t("# Edit Wallet")}
         isOpen={editModalIsOpen}
         handleClose={() => {
           setEditModalIsOpen(false);

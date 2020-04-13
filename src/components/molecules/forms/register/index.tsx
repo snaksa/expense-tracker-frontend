@@ -75,7 +75,7 @@ const RegisterForm = () => {
             </Grid>
             <Grid item>
               <TextField
-                label={(t("Password")}
+                label={t("Password")}
                 type="password"
                 variant="outlined"
                 name="password"

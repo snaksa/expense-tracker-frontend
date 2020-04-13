@@ -185,7 +185,7 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />
       <Modal
-        title={t("+ Edit Category")}
+        title={t("# Edit Category")}
         isOpen={editModalIsOpen}
         handleClose={() => {
           setEditModalIsOpen(false);

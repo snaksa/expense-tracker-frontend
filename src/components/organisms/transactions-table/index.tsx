@@ -268,13 +268,13 @@ const TransactionsTable = ({
       />
       <ConfirmationDialog
         isOpen={confirmDeleteModalIsOpen}
-        title={"Are you sure?"}
+        title={t("Are you sure?")}
         content={t("Are you sure you want to remove this transaction?")}
         onConfirm={handleDelete}
         onCancel={() => setConfirmDeleteModalIsOpen(false)}
       />
       <Modal
-        title={t("+ Edit Category")}
+        title={t("# Edit Category")}
         isOpen={editModalIsOpen}
         handleClose={() => {
           setEditModalIsOpen(false);

@@ -38,7 +38,7 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
     return Yup.object().shape({
       firstName: Yup.string().required(t("Enter first name")),
       lastName: Yup.string().required(t("Enter last name")),
-      email: Yup.string().email().required(t("Enter valid email")),
+      email: Yup.string().email().required(t("Enter а valid email")),
       currency: Yup.string().required(t("Choose currency")),
       language: Yup.string().required(t("Choose language")),
     });
