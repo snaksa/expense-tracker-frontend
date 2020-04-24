@@ -50,10 +50,10 @@ const LandingPage = () => {
             </Box>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={4} lg={3}>
-          <Image
+        <Grid item xs={12} md={6} lg={6} xl={4}>
+          <Image  
             src={
-              "https://budgetbakers.azureedge.net/wp-content/uploads/2018/09/Phones_desktop.png"
+              "../hero.png"
             }
             alt={"Hero image"}
           />
@@ -76,9 +76,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="See the whole picture"
-                src={
-                  "https://budgetbakers.azureedge.net/wp-content/uploads/2018/05/finance-150x150.png"
-                }
+                src={"./bank.png"}
               />
             </Grid>
             <Grid item>
@@ -97,9 +95,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Manage your cash"
-                src={
-                  "https://budgetbakers.azureedge.net/wp-content/uploads/2018/08/mmmmm-150x150.png"
-                }
+                src={'./charts.png'}
               />
             </Grid>
             <Grid item>
@@ -118,9 +114,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Use your date your way"
-                src={
-                  "https://budgetbakers.azureedge.net/wp-content/uploads/2018/05/budgets-150x150.png"
-                }
+                src={'./money.png'}
               />
             </Grid>
             <Grid item>
@@ -162,7 +156,7 @@ const LandingPage = () => {
                     affects us the most is our money.
                   </Grid>
                   <Grid item>
-                    BudgetBakers was built on the idea that knowing is better
+                    ExpensesTracker was built on the idea that knowing is better
                     than hoping. We make apps for people who ask tough questions
                     and want real answers.
                   </Grid>
@@ -175,11 +169,9 @@ const LandingPage = () => {
             </Box>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={5} lg={4}>
+        <Grid item xs={12} md={5} lg={3}>
           <Image
-            src={
-              "https://budgetbakers.azureedge.net/wp-content/uploads/2020/04/BeingReady-img3-800x705.png"
-            }
+            src={"../smartGuy.png"}
             alt={"Smart Guy"}
           />
         </Grid>
@@ -195,9 +187,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Ask the questions"
-                src={
-                  "https://budgetbakers.azureedge.net/wp-content/uploads/2018/05/shopping-list.png"
-                }
+                src={"./askQuestions.png"}
               />
             </Grid>
             <Grid item>
@@ -216,9 +206,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="See the data"
-                src={
-                  "https://budgetbakers.azureedge.net/wp-content/uploads/2018/05/budgets-ic.png"
-                }
+                src={'./pinkBags.png'}
               />
             </Grid>
             <Grid item>
@@ -237,9 +225,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Be eficient"
-                src={
-                  "https://budgetbakers.azureedge.net/wp-content/uploads/2018/05/dluhy-ic.png"
-                }
+                src={'./orangeClock.png'}
               />
             </Grid>
             <Grid item>
@@ -258,9 +244,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Have the answers"
-                src={
-                  "https://budgetbakers.azureedge.net/wp-content/uploads/2018/05/goals-ic.png"
-                }
+                src={'./greenTarget.png'}
               />
             </Grid>
             <Grid item>
@@ -301,7 +285,7 @@ const LandingPage = () => {
         <Grid item xs={12} md={6} lg={6} style={{ marginBottom: "-3px" }}>
           <Image
             src={
-              "https://budgetbakers.azureedge.net/wp-content/uploads/2019/05/Phones_footer_img-1-1200x707.png"
+              "./hero.png"
             }
             alt={"Try Free"}
           />
