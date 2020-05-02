@@ -9,6 +9,7 @@ interface Props {
   color?: any;
   variant?: any;
   className?: any;
+  disabled?: boolean;
 }
 
 const Button: React.FunctionComponent<Props> = ({
@@ -18,7 +19,8 @@ const Button: React.FunctionComponent<Props> = ({
   type,
   color,
   variant,
-  className
+  className,
+  disabled
 }): JSX.Element => {
   return (
     <MaterialButton
@@ -28,6 +30,7 @@ const Button: React.FunctionComponent<Props> = ({
       variant={variant ?? "contained"}
       color={color ?? 'primary'}
       onClick={onClick}
+      disabled={disabled}
       fullWidth
     >
       {children}

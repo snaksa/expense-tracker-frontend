@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Box } from "@material-ui/core";
 import TextField from "../../../atoms/form/text-field";
 import Button from "../../../atoms/button";
@@ -19,18 +19,22 @@ const RegisterForm = () => {
   const history = useHistory();
   const {t} = useTranslations();
 
+  const [error, setError] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
   const [register] = useRegisterMutation({
-    onCompleted(data) {
+    onCompleted() {
+      setIsSubmitting(false);
       history.push("/login");
-      console.log(data);
-    },
-    onError(error) {
-      // TODO: show error notification
-      console.log(error);
+    },  
+    onError() {
+      setIsSubmitting(false);
+      setError('User with this email already exists!');
     }
   });
 
   const onSubmit = (values: FormFields) => {
+    setIsSubmitting(true);
     register({
       variables: {
         email: values.email,
@@ -59,7 +63,7 @@ const RegisterForm = () => {
       validationSchema={Schema}
       onSubmit={onSubmit}
     >
-      {({ isSubmitting, errors, touched, values, handleChange }) => (
+      {({ errors, touched, values, handleChange }) => (
         <Form>
           <Grid container direction="column">
             <Grid item>
@@ -69,8 +73,8 @@ const RegisterForm = () => {
                 variant="outlined"
                 value={values.email}
                 onChange={handleChange}
-                error={!!(errors.email && touched.email && errors.email)}
-                helperText={errors.email}
+                error={!!((errors.email && touched.email && errors.email) || (error && !isSubmitting))}
+                helperText={errors.email || error}
               />
             </Grid>
             <Grid item>
@@ -107,8 +111,8 @@ const RegisterForm = () => {
             </Grid>
             <Grid>
               <Box mt={1}>
-                <Button type="submit" style={{}} onClick={() => {}}>
-                  {isSubmitting ? t("Please Wait") : t("Register")}
+                <Button type="submit" disabled={isSubmitting}>
+                  {t("Register")}
                 </Button>
               </Box>
             </Grid>
