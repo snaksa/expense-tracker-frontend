@@ -2,13 +2,13 @@
 > Manage your finances and stop wondering where you spent your money.
 
 #### Homepage
-![](images/homepage.png)
-####Dashboard
+![Homepage](images/homepage.png)
+#### Dashboard
 ![](images/dashboard.png)
 #### Stats
 ![](images/stats.png)
 
-##Prerequisites
+## Prerequisites
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [Yarn](https://classic.yarnpkg.com/en/docs/install/#debian-stable)
