@@ -1,11 +1,11 @@
-#Expenses Tracker
+# Expenses Tracker
 > Manage your finances and stop wondering where you spent your money.
 
-####Homepage
+#### Homepage
 ![](images/homepage.png)
 ####Dashboard
 ![](images/dashboard.png)
-####Stats
+#### Stats
 ![](images/stats.png)
 
 ##Prerequisites
@@ -13,7 +13,7 @@
 - [Docker Compose](https://docs.docker.com/compose/install/)
 - [Yarn](https://classic.yarnpkg.com/en/docs/install/#debian-stable)
 
-##Run 
+## Run 
 - Clone the project
     ```
     git clone git@github.com:snaksa/expense-tracker-frontend.git
