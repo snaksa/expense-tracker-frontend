@@ -1,14 +1,14 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { Grid, Box } from "@material-ui/core";
-import useStyles from "./styles";
 import { Helmet } from "react-helmet";
+import useTranslations from "translations";
+import NavigationBar from "components/organisms/navigation-bar";
 import Heading from "components/molecules/heading";
 import Image from "components/atoms/image";
 import Button from "components/atoms/button";
 import Title from "components/atoms/title";
-import NavigationBar from "components/organisms/navigation-bar";
-import useTranslations from "translations";
-import { NavLink } from "react-router-dom";
+import useStyles from "./styles";
 
 const LandingPage = () => {
   const classes = useStyles();
@@ -51,12 +51,7 @@ const LandingPage = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6} lg={6} xl={4}>
-          <Image  
-            src={
-              "../hero.png"
-            }
-            alt={"Hero image"}
-          />
+          <Image src={"../hero.png"} alt={"Hero image"} />
         </Grid>
       </Grid>
 
@@ -95,7 +90,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Manage your cash"
-                src={'./charts.png'}
+                src={"./charts.png"}
               />
             </Grid>
             <Grid item>
@@ -114,7 +109,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Use your date your way"
-                src={'./money.png'}
+                src={"./money.png"}
               />
             </Grid>
             <Grid item>
@@ -170,10 +165,7 @@ const LandingPage = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={5} lg={3}>
-          <Image
-            src={"../smartGuy.png"}
-            alt={"Smart Guy"}
-          />
+          <Image src={"../smartGuy.png"} alt={"Smart Guy"} />
         </Grid>
       </Grid>
 
@@ -206,7 +198,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="See the data"
-                src={'./pinkBags.png'}
+                src={"./pinkBags.png"}
               />
             </Grid>
             <Grid item>
@@ -225,7 +217,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Be eficient"
-                src={'./orangeClock.png'}
+                src={"./orangeClock.png"}
               />
             </Grid>
             <Grid item>
@@ -244,7 +236,7 @@ const LandingPage = () => {
               <Image
                 maxWidth={"150px"}
                 alt="Have the answers"
-                src={'./greenTarget.png'}
+                src={"./greenTarget.png"}
               />
             </Grid>
             <Grid item>
@@ -283,12 +275,7 @@ const LandingPage = () => {
           </Box>
         </Grid>
         <Grid item xs={12} md={6} lg={6} style={{ marginBottom: "-3px" }}>
-          <Image
-            src={
-              "./hero.png"
-            }
-            alt={"Try Free"}
-          />
+          <Image src={"./hero.png"} alt={"Try Free"} />
         </Grid>
       </Grid>
       <Box

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { gql } from "apollo-boost";
 import { Box } from "@material-ui/core";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import {
   Category,
   CategoriesDocument,
@@ -14,17 +16,15 @@ import {
   CategoriesSpendingFlowDocument,
   useWalletsQuery,
 } from "api";
-import Table from "../table";
-import ConfirmationDialog from "components/molecules/confirmation-dialog";
+import useTranslations from "translations";
 import { useNotificationContext } from "services/notification-provider";
-import { gql } from "apollo-boost";
-import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
-import Modal from "components/molecules/modal";
-import CategoryForm from "../../molecules/forms/category-form";
 import { useSharedDataContext } from "services/shared-data-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useCurrencyFormatter from "services/currency-formatter";
-import useTranslations from "translations";
+import Table from "components/organisms/table";
+import ConfirmationDialog from "components/molecules/confirmation-dialog";
+import Modal from "components/molecules/modal";
+import CategoryForm from "components/molecules/forms/category-form";
 
 interface Props {
   categories: Category[];

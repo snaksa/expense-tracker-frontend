@@ -6,8 +6,8 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
-import Button from "../../atoms/button";
 import useTranslations from "translations";
+import Button from "components/atoms/button";
 
 interface Props {
   isOpen: boolean;

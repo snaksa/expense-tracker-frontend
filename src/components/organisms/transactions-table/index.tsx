@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { gql } from "apollo-boost";
+import { Box } from "@material-ui/core";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import {
   Transaction,
   TransactionType,
@@ -9,17 +12,14 @@ import {
   TransactionSpendingFlowDocument,
   CategoriesSpendingFlowDocument,
 } from "api";
-import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
-import Table from "../table";
-import { useNotificationContext } from "services/notification-provider";
-import { gql } from "apollo-boost";
-import { Box } from "@material-ui/core";
-import ConfirmationDialog from "components/molecules/confirmation-dialog";
-import Modal from "components/molecules/modal";
+import useTranslations from "translations";
 import { useSharedDataContext } from "services/shared-data-provider";
 import useCurrencyFormatter from "services/currency-formatter";
+import { useNotificationContext } from "services/notification-provider";
+import Table from "components/organisms/table";
+import ConfirmationDialog from "components/molecules/confirmation-dialog";
+import Modal from "components/molecules/modal";
 import TransactionFormWrapper from "components/molecules/forms/transaction-form";
-import useTranslations from "translations";
 
 interface Props {
   selectedDate: string;

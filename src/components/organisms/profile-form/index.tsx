@@ -1,14 +1,14 @@
 import React from "react";
+import { gql } from "apollo-boost";
 import { Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import TextField from "components/atoms/form/text-field";
-import { useNotificationContext } from "services/notification-provider";
 import { useCurrenciesQuery, useUpdateUserMutation } from "api";
-import { gql } from "apollo-boost";
+import { useNotificationContext } from "services/notification-provider";
+import useTranslations from "translations";
+import TextField from "components/atoms/form/text-field";
 import Select from "components/atoms/form/select";
 import Button from "components/atoms/button";
-import useTranslations from "translations";
 
 interface Props {
   user?: any;

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Box } from "@material-ui/core";
-import useStyles from "./styles";
-import Select from "../../atoms/form/select";
 import moment from "moment";
 import useTranslations from "translations";
+import Select from "components/atoms/form/select";
+import useStyles from "./styles";
 
 interface Props {
   onChange: Function;

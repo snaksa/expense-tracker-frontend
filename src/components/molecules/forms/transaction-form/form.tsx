@@ -3,11 +3,8 @@ import { gql } from "apollo-boost";
 import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import Button from "components/atoms/button";
-import TextField from "components/atoms/form/text-field";
-import Select from "components/atoms/form/select";
-import RoundBox from "components/atoms/round-box";
-import { useNotificationContext } from "services/notification-provider";
+import moment from "moment";
+import useTranslations from "translations";
 import {
   TransactionType,
   Category,
@@ -20,11 +17,14 @@ import {
   TransactionSpendingFlowDocument,
   CategoriesSpendingFlowDocument,
 } from "api";
+import { useNotificationContext } from "services/notification-provider";
 import { useSharedDataContext } from "services/shared-data-provider";
 import DatePicker from "components/atoms/form/datepicker";
 import TimePicker from "components/atoms/form/timepicker";
-import moment from "moment";
-import useTranslations from "translations";
+import Button from "components/atoms/button";
+import TextField from "components/atoms/form/text-field";
+import Select from "components/atoms/form/select";
+import RoundBox from "components/atoms/round-box";
 
 interface Props {
   transaction?: Transaction;

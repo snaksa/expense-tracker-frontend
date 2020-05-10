@@ -8,15 +8,18 @@ interface Props {
 
 const CheckboxList = ({ options, onChange }: Props) => {
   return (
-    <Grid container direction={'column'}>
-      {
-        options.map((option: any) => {
-          return <Grid item key={option.id}>
-          <Checkbox checked={option.checked} onChange={() => onChange(option.id, !option.checked)} />
+    <Grid container direction={"column"}>
+      {options.map((option: any) => {
+        return (
+          <Grid item key={option.id}>
+            <Checkbox
+              checked={option.checked}
+              onChange={() => onChange(option.id, !option.checked)}
+            />
             {option.label}
           </Grid>
-        })
-      }
+        );
+      })}
     </Grid>
   );
 };

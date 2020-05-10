@@ -1,12 +1,11 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import useStyles from "./styles";
-import Heading from "../../../molecules/heading";
-import RegisterForm from "components/molecules/forms/register";
-import AuthForm from "components/organisms/auth-form";
 import { Helmet } from "react-helmet";
+import { Grid, Box } from "@material-ui/core";
 import useTranslations from "translations";
+import AuthForm from "components/organisms/auth-form";
+import Heading from "components/molecules/heading";
+import RegisterForm from "components/molecules/forms/register";
+import useStyles from "./styles";
 
 const RegisterPage = () => {
   const classes = useStyles();

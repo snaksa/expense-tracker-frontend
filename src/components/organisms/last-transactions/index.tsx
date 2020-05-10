@@ -1,25 +1,31 @@
 import React, { useState } from "react";
 import { gql } from "apollo-boost";
+import {
+  useTransactionsQuery,
+  Transaction,
+  useWalletsQuery,
+  Category,
+  Wallet,
+} from "api";
+import useTranslations from "translations";
 import SummaryBox from "components/molecules/summary-box";
 import TransactionSummary from "components/molecules/transaction-summary";
 import Modal from "components/molecules/modal";
 import TransactionForm from "components/molecules/forms/transaction-form/form";
-import { useTransactionsQuery, Transaction, useWalletsQuery, Category, Wallet } from "api";
 import Loader from "components/atoms/loader";
 import useStyles from "./styles";
-import useTranslations from "translations";
 
 let backupData: any[] = [];
 
 const LastTransactions = ({
   categories,
-  onChange
+  onChange,
 }: {
   categories: Category[];
   onChange: Function;
 }) => {
   const classes = useStyles();
-  const {t} = useTranslations();
+  const { t } = useTranslations();
 
   const [newTransactionModalIsOpen, setNewTransactionModalIsOpen] = useState(
     false
@@ -35,9 +41,9 @@ const LastTransactions = ({
       categoryIds: [],
       page: 1,
       limit: 5,
-      unlimited: false
+      unlimited: false,
     },
-    fetchPolicy: "cache-and-network"
+    fetchPolicy: "cache-and-network",
   });
 
   const transactionsData: any = data?.transactions?.data ?? null;
@@ -92,8 +98,8 @@ LastTransactions.fragment = gql`
   ) {
     transactions(
       input: {
-        walletIds: $walletIds,
-        categoryIds: $categoryIds,
+        walletIds: $walletIds
+        categoryIds: $categoryIds
         page: $page
         limit: $limit
         unlimited: $unlimited

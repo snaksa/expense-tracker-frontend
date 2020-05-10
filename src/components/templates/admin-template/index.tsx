@@ -5,7 +5,11 @@ import useStyles from "./styles";
 const AdminTemplate = ({ header, sidebar, content }: any) => {
   const classes = useStyles();
   return (
-    <Grid container direction="column" style={{ height: "100%", flexWrap: 'nowrap' }}>
+    <Grid
+      container
+      direction="column"
+      style={{ height: "100%", flexWrap: "nowrap" }}
+    >
       <Grid item>{header}</Grid>
       <Grid item style={{ flexGrow: 1 }}>
         <Grid container direction="row" style={{ height: "100%" }}>

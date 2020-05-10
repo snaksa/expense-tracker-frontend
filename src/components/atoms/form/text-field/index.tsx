@@ -7,7 +7,12 @@ const TextField: React.FunctionComponent<TextFieldProps> = (
 ): JSX.Element => {
   return (
     <Box>
-      <MaterialTextField margin="dense" {...props} helperText={props.error && props.helperText} fullWidth />
+      <MaterialTextField
+        margin="dense"
+        {...props}
+        helperText={props.error && props.helperText}
+        fullWidth
+      />
     </Box>
   );
 };

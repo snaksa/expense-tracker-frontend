@@ -1,17 +1,17 @@
 import React from "react";
-import useStyles from "./styles";
 import { Box, CircularProgress } from "@material-ui/core";
+import useStyles from "./styles";
 
 export interface Props {
   loading: boolean;
 }
 
 const Loader: React.FunctionComponent<Props> = ({
-  loading
+  loading,
 }: Props): JSX.Element => {
   const classes = useStyles({});
 
-  if(!loading) {
+  if (!loading) {
     return <Box></Box>;
   }
 

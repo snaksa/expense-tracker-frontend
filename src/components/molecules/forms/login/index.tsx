@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import TextField from "../../../atoms/form/text-field";
-import Button from "../../../atoms/button";
-import useStyles from "./styles";
-import { useLoginMutation, useCurrentUserLazyQuery } from "../../../../api";
+import { useHistory } from "react-router";
+import { Grid, Box } from "@material-ui/core";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import { useHistory } from "react-router";
-import { useAuthDataContext } from "../../../../services/auth-provider";
+import { useLoginMutation, useCurrentUserLazyQuery } from "api";
+import { useAuthDataContext } from "services/auth-provider";
 import useTranslations from "translations";
+import TextField from "components/atoms/form/text-field";
+import Button from "components//atoms/button";
+import useStyles from "./styles";
 
 export interface FormFields {
   email: string;

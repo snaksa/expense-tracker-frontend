@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
+import Chart from "react-google-charts";
+import moment from "moment";
 import { Box, Grid } from "@material-ui/core";
-import useStyles from "./styles";
 import {
   useWalletsQuery,
   Wallet,
@@ -11,26 +13,24 @@ import {
   useCategoriesQuery,
   Category,
 } from "api";
-import SummaryBox from "components/molecules/summary-box";
-import Chart from "react-google-charts";
-import moment from "moment";
+import useTranslations from "translations";
+import useCurrencyFormatter from "services/currency-formatter";
+import TransactionsTable from "components/organisms/transactions-table";
 import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
-import Loader from "components/atoms/loader";
-import useCurrencyFormatter from "services/currency-formatter";
+import SummaryBox from "components/molecules/summary-box";
 import CheckboxList from "components/molecules/checkbox-list";
 import DateRangePicker, {
   Range,
   calculateBackDate,
 } from "components/molecules/date-range-picker";
-import TransactionsTable from "components/organisms/transactions-table";
-import { Helmet } from "react-helmet";
-import useTranslations from "translations";
+import Loader from "components/atoms/loader";
+import useStyles from "./styles";
 
 const StatsPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
-  const {t} = useTranslations();
+  const { t } = useTranslations();
 
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
@@ -165,7 +165,7 @@ const StatsPage = () => {
     refetchSpendingPie();
     refetchIncomePie();
     refetchSpendingFlow();
-  }
+  };
 
   const walletOptions = wallets.map((wallet: Wallet) => {
     return {
@@ -190,7 +190,12 @@ const StatsPage = () => {
       </Helmet>
       <Grid container direction="row" spacing={5}>
         <Grid item xs={12} md={2} lg={2} xl={2}>
-          <Grid container direction={"column"} spacing={5} style={{position: 'sticky', top: 0}}>
+          <Grid
+            container
+            direction={"column"}
+            spacing={5}
+            style={{ position: "sticky", top: 0 }}
+          >
             <Grid item>
               <DateRangePicker
                 responsive={true}
@@ -298,14 +303,14 @@ const StatsPage = () => {
               </Grid>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
-                <TransactionsTable
-                  selectedDate={backDate}
-                  walletIds={chosenWallets}
-                  cateogryIds={chosenCategories}
-                  onDelete={refetchCharts}
-                  onEdit={refetchCharts}
-                />
-              </Grid>
+              <TransactionsTable
+                selectedDate={backDate}
+                walletIds={chosenWallets}
+                cateogryIds={chosenCategories}
+                onDelete={refetchCharts}
+                onEdit={refetchCharts}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

@@ -4,22 +4,22 @@ import { Delete as DeleteIcon, Edit as EditIcon } from "@material-ui/icons";
 import * as Yup from "yup";
 import { gql } from "apollo-boost";
 import { Form, Formik } from "formik";
-import useStyles from "./styles";
-import Title from "../../atoms/title";
-import Modal from "../modal";
-import Button from "../../atoms/button";
-import TextField from "../../atoms/form/text-field";
-import ConfirmationDialog from "../confirmation-dialog";
-import { useNotificationContext } from "services/notification-provider";
 import {
   useDeleteWalletMutation,
   useUpdateWalletMutation,
   WalletsQuery,
   WalletsDocument,
-} from "../../../api";
-import useCurrencyFormatter from "services/currency-formatter";
-import ColorPicker from "../color-picker";
+} from "api";
 import useTranslations from "translations";
+import { useNotificationContext } from "services/notification-provider";
+import useCurrencyFormatter from "services/currency-formatter";
+import Modal from "components/molecules/modal";
+import ConfirmationDialog from "components/molecules/confirmation-dialog";
+import Title from "components/atoms/title";
+import Button from "components/atoms/button";
+import TextField from "components/atoms/form/text-field";
+import ColorPicker from "components/atoms/form/color-picker";
+import useStyles from "./styles";
 
 interface Props {
   id: number;

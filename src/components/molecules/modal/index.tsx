@@ -13,7 +13,7 @@ const Modal: React.FunctionComponent<any> = ({
   title,
   children,
   isOpen,
-  handleClose
+  handleClose,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -28,7 +28,7 @@ const Modal: React.FunctionComponent<any> = ({
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
-          timeout: 500
+          timeout: 500,
         }}
       >
         <Fade in={isOpen}>

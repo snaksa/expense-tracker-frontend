@@ -4,10 +4,10 @@ import {
   Menu as MenuIcon,
   ExitToApp as ExitToAppIcon,
 } from "@material-ui/icons";
-import useStyles from "./styles";
-import { useAuthDataContext } from "../../../services/auth-provider";
-import Button from "../../atoms/button";
+import { useAuthDataContext } from "services/auth-provider";
 import useTranslations from "translations";
+import Button from "components/atoms/button";
+import useStyles from "./styles";
 
 interface Props {
   setSidebarVisibility: Function;

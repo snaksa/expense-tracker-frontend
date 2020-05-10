@@ -1,15 +1,9 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 
-const Title: React.FunctionComponent<any> = (
-  props
-): JSX.Element => {
+const Title: React.FunctionComponent<any> = (props): JSX.Element => {
   const children = props.children;
-  return (
-    <Typography {...props}>
-      {children}
-    </Typography>
-  );
+  return <Typography {...props}>{children}</Typography>;
 };
 
 export default Title;

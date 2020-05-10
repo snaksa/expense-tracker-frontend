@@ -1,9 +1,9 @@
 import React from "react";
-import useStyles from "./styles";
-import { Grid } from "@material-ui/core";
-import Button from "components/atoms/button";
 import { NavLink } from "react-router-dom";
+import { Grid } from "@material-ui/core";
 import useTranslations from "translations";
+import Button from "components/atoms/button";
+import useStyles from "./styles";
 
 const NavigationBar = () => {
   const classes = useStyles();

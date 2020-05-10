@@ -1,8 +1,7 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
+import { Grid, Box } from "@material-ui/core";
+import SidebarOption from "components/atoms/sidebar-option";
 import useStyles from "./styles";
-import SidebarOption from "../../atoms/sidebar-option";
-import { Box } from "@material-ui/core";
 
 export interface Props {
   isVisible: boolean;
@@ -13,7 +12,7 @@ export interface Props {
 const Sidebar: React.FunctionComponent<Props> = ({
   isVisible,
   options,
-  onOptionClick
+  onOptionClick,
 }: Props): JSX.Element => {
   const classes = useStyles();
 

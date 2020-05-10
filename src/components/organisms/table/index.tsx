@@ -5,14 +5,14 @@ import {
   Paper,
   Table as MaterialTable,
   TableContainer,
-  TablePagination
+  TablePagination,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import useStyles from "./styles";
-import TableHead from "../../molecules/table-head";
-import TableBody from "../../molecules/table-body";
+import TableHead from "components/molecules/table-head";
+import TableBody from "components/molecules/table-body";
 import Title from "components/atoms/title";
 import Button from "components/atoms/button";
+import useStyles from "./styles";
 
 interface Props {
   title?: string;
@@ -39,7 +39,7 @@ const Table: React.FunctionComponent<Props> = ({
   onPageChange,
   onLimitChange,
   onClick,
-  onAction
+  onAction,
 }: Props) => {
   const classes = useStyles();
 

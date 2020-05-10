@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@material-ui/core/Box";
+import Image from "components/atoms/image";
 import useStyles from "./styles";
-import Image from "../../atoms/image";
 
 export interface Props {
   src: string;
@@ -14,7 +14,7 @@ const RoundImage: React.FunctionComponent<Props> = ({
   src,
   borderColor,
   borderWidth,
-  borderStyle
+  borderStyle,
 }: Props): JSX.Element => {
   const classes = useStyles({});
 

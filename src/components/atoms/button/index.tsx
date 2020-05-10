@@ -20,7 +20,7 @@ const Button: React.FunctionComponent<Props> = ({
   color,
   variant,
   className,
-  disabled
+  disabled,
 }): JSX.Element => {
   return (
     <MaterialButton
@@ -28,7 +28,7 @@ const Button: React.FunctionComponent<Props> = ({
       type={type}
       style={style}
       variant={variant ?? "contained"}
-      color={color ?? 'primary'}
+      color={color ?? "primary"}
       onClick={onClick}
       disabled={disabled}
       fullWidth

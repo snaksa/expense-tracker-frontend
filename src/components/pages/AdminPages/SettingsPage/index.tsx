@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { gql } from "apollo-boost";
 import { Box, Grid } from "@material-ui/core";
-import useStyles from "./styles";
 import { useCategoriesQuery, useWalletsQuery, useCurrentUserQuery } from "api";
+import useTranslations from "translations";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
+import WalletsTable from "components/organisms/wallets-table";
 import CategoriesTable from "components/organisms/categories-table";
+import ProfileForm from "components/organisms/profile-form";
 import Modal from "components/molecules/modal";
 import CategoryForm from "components/molecules/forms/category-form";
-import WalletsTable from "components/organisms/wallets-table";
-import WalletForm from "components/organisms/wallet-form";
-import { gql } from "apollo-boost";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
+import WalletForm from "components/molecules/forms/wallet-form";
 import SummaryBox from "components/molecules/summary-box";
-import ProfileForm from "components/organisms/profile-form";
-import { Helmet } from "react-helmet";
-import useTranslations from "translations";
+import useStyles from "./styles";
 
 const SettingsPage = () => {
   const classes = useStyles();

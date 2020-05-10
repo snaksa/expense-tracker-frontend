@@ -25,14 +25,14 @@ const PieChart = ({ data }: Props): JSX.Element => {
             type: "NumberFormat",
             column: 1,
             options: {
-              suffix: ` ${getCurrency()}`
-            }
-          }
+              suffix: ` ${getCurrency()}`,
+            },
+          },
         ]}
         options={{
           chartArea: { width: "100%", height: "80%" },
           legend: { position: "bottom" },
-          colors: data.colors ?? []
+          colors: data.colors ?? [],
         }}
       />
     </React.Fragment>

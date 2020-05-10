@@ -1,6 +1,6 @@
 import React from "react";
 import { TableHead as TableBodyMaterial, TableRow } from "@material-ui/core";
-import TableCell from "../../atoms/table-cell";
+import TableCell from "components/atoms/table-cell";
 
 interface Props {
   rows: any;

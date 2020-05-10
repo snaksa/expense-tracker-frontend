@@ -1,7 +1,7 @@
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import useStyles from './styles';
-import Title from '../../atoms/title';
+import React from "react";
+import Grid from "@material-ui/core/Grid";
+import Title from "components/atoms/title";
+import useStyles from "./styles";
 
 interface Props {
   title: string;
@@ -9,12 +9,19 @@ interface Props {
   color?: string;
 }
 
-const Heading: React.FunctionComponent<any> = (
-  {title, subtitle, color}: Props
-): JSX.Element => {
+const Heading: React.FunctionComponent<any> = ({
+  title,
+  subtitle,
+  color,
+}: Props): JSX.Element => {
   const classes = useStyles();
   return (
-    <Grid container className={classes.main} direction="column" style={{color: color}}>
+    <Grid
+      container
+      className={classes.main}
+      direction="column"
+      style={{ color: color }}
+    >
       <Grid item>
         <Title variant="h3">{title}</Title>
       </Grid>
@@ -23,6 +30,6 @@ const Heading: React.FunctionComponent<any> = (
       </Grid>
     </Grid>
   );
-}
+};
 
 export default Heading;

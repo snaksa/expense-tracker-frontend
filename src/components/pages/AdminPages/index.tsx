@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Route, Switch } from "react-router-dom";
 import Box from "@material-ui/core/Box";
 import {
   Home as HomeIcon,
@@ -6,17 +7,16 @@ import {
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
 } from "@material-ui/icons";
-import AdminTemplate from "../../templates/admin-template";
+import useTranslations from "translations";
+import { useAuthDataContext } from "services/auth-provider";
+import { useNotificationContext } from "services/notification-provider";
+import Notification from "components/molecules/notification";
+import Sidebar from "components/molecules/sidebar";
+import HeaderMenu from "components/organisms/admin-header-menu";
+import AdminTemplate from "components/templates/admin-template";
 import MainPage from "./MainPage";
 import SettingsPage from "./SettingsPage";
-import Sidebar from "../../molecules/sidebar";
-import HeaderMenu from "../../organisms/admin-header-menu";
-import { Route, Switch } from "react-router-dom";
-import { useAuthDataContext } from "../../../services/auth-provider";
-import { useNotificationContext } from "services/notification-provider";
-import Notification from "../../molecules/notification";
 import TransactionsPage from "./TransactionsPage";
-import useTranslations from "translations";
 import StatsPage from "./StatsPage";
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {

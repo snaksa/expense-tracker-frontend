@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Box } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import {
+  Add as AddIcon,
+  ExpandLess as ExpandLessIcon,
+  ExpandMore as ExpandMoreIcon,
+} from "@material-ui/icons";
+import Button from "components/atoms/button";
 import useStyles from "./styles";
-import Button from "../../atoms/button";
-import { useState } from "react";
 
 interface Props {
   header: string;
@@ -15,7 +16,13 @@ interface Props {
   toggle?: boolean;
 }
 
-const SummaryBox = ({ header, children, responsiveHeight, onClick, toggle }: Props) => {
+const SummaryBox = ({
+  header,
+  children,
+  responsiveHeight,
+  onClick,
+  toggle,
+}: Props) => {
   const classes = useStyles();
   const [visible, setVisible] = useState<boolean>(true);
 
@@ -37,19 +44,29 @@ const SummaryBox = ({ header, children, responsiveHeight, onClick, toggle }: Pro
                       <AddIcon fontSize={"small"} />
                     </Button>
                   )}
-                  {
-                    toggle && visible && <ExpandLessIcon fontSize={"small"} onClick={() => setVisible(!visible)} style={{cursor: 'pointer'}} />
-                  }
-                  {
-                    toggle && !visible && <ExpandMoreIcon fontSize={"small"} onClick={() => setVisible(!visible)} style={{cursor: 'pointer'}} />
-                  }
+                  {toggle && visible && (
+                    <ExpandLessIcon
+                      fontSize={"small"}
+                      onClick={() => setVisible(!visible)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  )}
+                  {toggle && !visible && (
+                    <ExpandMoreIcon
+                      fontSize={"small"}
+                      onClick={() => setVisible(!visible)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  )}
                 </Box>
               </Grid>
             </Grid>
           </Grid>
           <Grid
             item
-            className={`${classes.content} ${responsiveHeight ? classes.noMinHeight : ''} ${toggle && !visible ? classes.hiddenContent : ''}`}
+            className={`${classes.content} ${
+              responsiveHeight ? classes.noMinHeight : ""
+            } ${toggle && !visible ? classes.hiddenContent : ""}`}
           >
             {children}
           </Grid>

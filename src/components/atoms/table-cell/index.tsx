@@ -1,15 +1,16 @@
 import React from "react";
-import TableCellMaterial from "@material-ui/core/TableCell";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import TrendingDown from "@material-ui/icons/TrendingDown";
-import TrendingUp from "@material-ui/icons/TrendingUp";
+import {
+  Grid,
+  Box,
+  PropTypes,
+  Icon,
+  TableCell as TableCellMaterial,
+} from "@material-ui/core";
+import { TrendingDown, TrendingUp } from "@material-ui/icons";
 import { TransactionType } from "api";
-import { PropTypes, Icon } from "@material-ui/core";
-import useStyles from "./styles";
-import RoundBox from "../round-box";
-import { StringValueNode } from "graphql";
 import formatDate from "services/date-formatter";
+import RoundBox from "components/atoms/round-box";
+import useStyles from "./styles";
 
 export interface Props {
   row?: any;
@@ -23,7 +24,7 @@ export interface Props {
     sign?: Function;
     includeSign?: boolean;
     actions?: {
-      id: StringValueNode;
+      id: string;
       icon: any;
     }[];
   };
@@ -34,7 +35,7 @@ const TableCell: React.FunctionComponent<Props> = ({
   row,
   value,
   column,
-  onAction
+  onAction,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -128,21 +129,29 @@ const TableCell: React.FunctionComponent<Props> = ({
         column.id === "category" ? (
           <Grid container spacing={1} alignItems="center" justify="flex-start">
             <Grid item>
-              <RoundBox width={15} height={15} color={row.wallet?.color ?? '#ccc'} />
+              <RoundBox
+                width={15}
+                height={15}
+                color={row.wallet?.color ?? "#ccc"}
+              />
             </Grid>
             <Grid item>{row.wallet?.name ?? "Unknown"}</Grid>
             <Grid item> => </Grid>
             <Grid item>
-              <RoundBox width={15} height={15} color={row.walletReceiver?.color ?? '#ccc'} />
+              <RoundBox
+                width={15}
+                height={15}
+                color={row.walletReceiver?.color ?? "#ccc"}
+              />
             </Grid>
             <Grid item>{row.walletReceiver?.name ?? "Unknown"}</Grid>
           </Grid>
         ) : (
           <Grid container spacing={1} alignItems="center" justify="flex-start">
             <Grid item>
-              <RoundBox width={15} height={15} color={value?.color ?? '#ccc'} />
+              <RoundBox width={15} height={15} color={value?.color ?? "#ccc"} />
             </Grid>
-            <Grid item>{value?.name ?? 'Unknown'}</Grid>
+            <Grid item>{value?.name ?? "Unknown"}</Grid>
           </Grid>
         )}
       </TableCellMaterial>

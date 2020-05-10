@@ -3,9 +3,6 @@ import { gql } from "apollo-boost";
 import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import Button from "components/atoms/button";
-import TextField from "components/atoms/form/text-field";
-import { useNotificationContext } from "services/notification-provider";
 import {
   useCreateCategoryMutation,
   CategoriesDocument,
@@ -19,9 +16,12 @@ import {
   Wallet,
   useWalletsQuery,
 } from "api";
+import { useNotificationContext } from "services/notification-provider";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
-import ColorPicker from "components/molecules/color-picker";
 import useTranslations from "translations";
+import Button from "components/atoms/button";
+import TextField from "components/atoms/form/text-field";
+import ColorPicker from "components/atoms/form/color-picker";
 
 interface Props {
   category?: Category;

@@ -3,20 +3,20 @@ import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
-import useStyles from "./styles";
-import Modal from "../../molecules/modal";
-import Button from "../../atoms/button";
-import TextField from "../../atoms/form/text-field";
-import WalletSummary from "../../molecules/wallet-summary";
 import {
   useCreateWalletMutation,
   Wallet,
   WalletsDocument,
   WalletsQuery,
-} from "../../../api";
-import { useNotificationContext } from "../../../services/notification-provider";
-import ColorPicker from "components/molecules/color-picker";
+} from "api";
 import useTranslations from "translations";
+import { useNotificationContext } from "services/notification-provider";
+import Modal from "components/molecules/modal";
+import WalletSummary from "components/molecules/wallet-summary";
+import Button from "components/atoms/button";
+import TextField from "components/atoms/form/text-field";
+import ColorPicker from "components/atoms/form/color-picker";
+import useStyles from "./styles";
 
 interface Props {
   wallets: Wallet[];

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box } from "@material-ui/core";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import {
   WalletsDocument,
   TransactionsDocument,
@@ -7,15 +8,14 @@ import {
   useDeleteWalletMutation,
   Wallet,
 } from "api";
-import Table from "../table";
-import ConfirmationDialog from "components/molecules/confirmation-dialog";
-import { useNotificationContext } from "services/notification-provider";
-import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
-import Modal from "components/molecules/modal";
-import { useSharedDataContext } from "services/shared-data-provider";
-import WalletForm from "../wallet-form";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useTranslations from "translations";
+import { useNotificationContext } from "services/notification-provider";
+import { useSharedDataContext } from "services/shared-data-provider";
+import { useUpdateDetectionContext } from "services/update-detection-provider";
+import Table from "components/organisms/table";
+import ConfirmationDialog from "components/molecules/confirmation-dialog";
+import Modal from "components/molecules/modal";
+import WalletForm from "components/molecules/forms/wallet-form";
 
 interface Props {
   wallets: Wallet[];

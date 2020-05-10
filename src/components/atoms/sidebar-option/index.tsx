@@ -1,7 +1,7 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { Box, Grid, Icon } from "@material-ui/core";
 import useStyles from "./styles";
-import { NavLink } from "react-router-dom";
 
 export interface Props {
   option: {
@@ -14,7 +14,7 @@ export interface Props {
 
 const SidebarOption: React.FunctionComponent<Props> = ({
   option,
-  onClick
+  onClick,
 }): JSX.Element => {
   const classes = useStyles();
   return (

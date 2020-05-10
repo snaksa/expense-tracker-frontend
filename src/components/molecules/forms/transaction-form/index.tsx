@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  useWalletsQuery,
-  useCategoriesQuery,
-  Transaction
-} from "api";
+import { useWalletsQuery, useCategoriesQuery, Transaction } from "api";
 import TransactionForm from "./form";
-
 
 interface Props {
   transaction?: Transaction;
@@ -13,7 +8,11 @@ interface Props {
   onError: Function;
 }
 
-const TransactionFormWrapper = ({transaction, onComplete, onError}: Props) => {
+const TransactionFormWrapper = ({
+  transaction,
+  onComplete,
+  onError,
+}: Props) => {
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
 
@@ -22,7 +21,7 @@ const TransactionFormWrapper = ({transaction, onComplete, onError}: Props) => {
 
   return (
     <TransactionForm
-    transaction={transaction}
+      transaction={transaction}
       wallets={wallets}
       categories={categories}
       onComplete={onComplete}

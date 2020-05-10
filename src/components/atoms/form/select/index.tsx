@@ -1,10 +1,10 @@
 import React from "react";
-import Box from "@material-ui/core/Box";
 import {
+  Box,
   Select as MaterialSelect,
   MenuItem,
   InputLabel,
-  FormControl
+  FormControl,
 } from "@material-ui/core";
 
 interface Props {
@@ -20,7 +20,7 @@ const Select: React.FunctionComponent<Props> = ({
   name,
   selected,
   options,
-  onChange
+  onChange,
 }: Props): JSX.Element => {
   const [labelWidth, setLabelWidth] = React.useState(0);
   React.useEffect(() => {
@@ -31,8 +31,7 @@ const Select: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-      <FormControl variant="outlined" margin='dense' 
-          style={{ width: "100%" }}>
+      <FormControl variant="outlined" margin="dense" style={{ width: "100%" }}>
         <InputLabel ref={inputLabel} id={`select-${name}`}>
           {label}
         </InputLabel>
@@ -45,7 +44,9 @@ const Select: React.FunctionComponent<Props> = ({
           labelId={`select-${name}`}
         >
           {options.map((option: any) => (
-            <MenuItem key={option.id} value={option.id}>{option.value}</MenuItem>
+            <MenuItem key={option.id} value={option.id}>
+              {option.value}
+            </MenuItem>
           ))}
         </MaterialSelect>
       </FormControl>

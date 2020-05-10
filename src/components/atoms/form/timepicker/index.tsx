@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Box from "@material-ui/core/Box";
 import { KeyboardTimePicker } from "@material-ui/pickers";
-import useTranslations from 'translations';
+import useTranslations from "translations";
 
 interface Props {
   name: string;
@@ -12,9 +12,9 @@ interface Props {
 const TimePicker: React.FunctionComponent<Props> = ({
   name,
   date,
-  onChange
+  onChange,
 }: Props): JSX.Element => {
-  const {t} = useTranslations();
+  const { t } = useTranslations();
 
   const handleChange = (newDate: Date) => {
     onChange(newDate);
@@ -24,20 +24,20 @@ const TimePicker: React.FunctionComponent<Props> = ({
 
   return (
     <Box>
-        <KeyboardTimePicker
-          ampm={false}
-          open={open}
-          onClick={() => setOpen(true)}
-          onAccept={() => setOpen(false)}
-          onClose={() => setOpen(false)}
-          margin="normal"
-          name={name}
-          id="time-picker-dialog"
-          label={t('Time')}
-          value={date}
-          onChange={handleChange}
-          fullWidth
-        />
+      <KeyboardTimePicker
+        ampm={false}
+        open={open}
+        onClick={() => setOpen(true)}
+        onAccept={() => setOpen(false)}
+        onClose={() => setOpen(false)}
+        margin="normal"
+        name={name}
+        id="time-picker-dialog"
+        label={t("Time")}
+        value={date}
+        onChange={handleChange}
+        fullWidth
+      />
     </Box>
   );
 };

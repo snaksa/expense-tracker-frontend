@@ -22,30 +22,37 @@ const LineChart = ({ data, hTitle, vTitle }: Props): JSX.Element => {
         width={"100%"}
         height={"300px"}
         chartType="LineChart"
-        data={data.data.length ? chartData : [['', ''], ['', 0]]}
+        data={
+          data.data.length
+            ? chartData
+            : [
+                ["", ""],
+                ["", 0],
+              ]
+        }
         formatters={[
           {
             type: "NumberFormat",
             column: 1,
             options: {
-              suffix: ` ${getCurrency()}`
-            }
-          }
+              suffix: ` ${getCurrency()}`,
+            },
+          },
         ]}
         options={{
           hAxis: {
             title: hTitle,
             type: "date",
-            format: "Y-MM-dd"
+            format: "Y-MM-dd",
           },
           vAxis: {
-            title: vTitle
+            title: vTitle,
           },
           series: {
             ...(data.colors ?? []).map((color: string) => {
               return { color: color };
-            })
-          }
+            }),
+          },
         }}
       />
     </React.Fragment>

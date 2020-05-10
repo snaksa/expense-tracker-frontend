@@ -1,10 +1,10 @@
 import React from 'react'
-import Box from '@material-ui/core/Box';
 import {
     Route,
     Switch
 } from "react-router-dom";
-import HeroTemplate from '../../templates/hero-template';
+import Box from '@material-ui/core/Box';
+import HeroTemplate from 'components/templates/hero-template';
 import RegisterPage from './RegisterPage';
 import LoginPage from './LoginPage';
 import LandingPage from './LandingPage';

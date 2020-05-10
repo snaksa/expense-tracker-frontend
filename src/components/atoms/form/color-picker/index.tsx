@@ -1,8 +1,8 @@
 import React from "react";
-import Select from "../../atoms/form/select";
 import { Grid } from "@material-ui/core";
-import RoundBox from "components/atoms/round-box";
 import useTranslations from "translations";
+import Select from "components/atoms//form/select";
+import RoundBox from "components/atoms/round-box";
 
 interface Props {
   name: string;

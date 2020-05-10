@@ -22,7 +22,7 @@ export default function Notification({ open, content, type, onClose }: Props) {
     <Snackbar
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "right"
+        horizontal: "right",
       }}
       open={open}
       autoHideDuration={5000}

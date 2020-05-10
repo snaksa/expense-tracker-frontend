@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
 import { Grid, Box } from "@material-ui/core";
-import TextField from "../../../atoms/form/text-field";
-import Button from "../../../atoms/button";
-import { useRegisterMutation } from "api";
 import { gql } from "apollo-boost";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
-import { useHistory } from "react-router";
+import { useRegisterMutation } from "api";
 import useTranslations from "translations";
+import TextField from "components/atoms/form/text-field";
+import Button from "components/atoms/button";
 
 export interface FormFields {
   email: string;
@@ -17,20 +17,20 @@ export interface FormFields {
 
 const RegisterForm = () => {
   const history = useHistory();
-  const {t} = useTranslations();
+  const { t } = useTranslations();
 
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [register] = useRegisterMutation({
     onCompleted() {
       setIsSubmitting(false);
       history.push("/login");
-    },  
+    },
     onError() {
       setIsSubmitting(false);
-      setError('User with this email already exists!');
-    }
+      setError("User with this email already exists!");
+    },
   });
 
   const onSubmit = (values: FormFields) => {
@@ -39,8 +39,8 @@ const RegisterForm = () => {
       variables: {
         email: values.email,
         password: values.password,
-        confirmPassword: values.confirmPassword
-      }
+        confirmPassword: values.confirmPassword,
+      },
     });
   };
 
@@ -50,7 +50,7 @@ const RegisterForm = () => {
         .email(t("Enter a valid email address"))
         .required(t("Enter your email address")),
       password: Yup.string().required(t("Enter your password")),
-      confirmPassword: Yup.string().required(t("Enter password confirmation"))
+      confirmPassword: Yup.string().required(t("Enter password confirmation")),
     });
 
   return (
@@ -58,7 +58,7 @@ const RegisterForm = () => {
       initialValues={{
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
       }}
       validationSchema={Schema}
       onSubmit={onSubmit}
@@ -73,7 +73,12 @@ const RegisterForm = () => {
                 variant="outlined"
                 value={values.email}
                 onChange={handleChange}
-                error={!!((errors.email && touched.email && errors.email) || (error && !isSubmitting))}
+                error={
+                  !!(
+                    (errors.email && touched.email && errors.email) ||
+                    (error && !isSubmitting)
+                  )
+                }
                 helperText={errors.email || error}
               />
             </Grid>

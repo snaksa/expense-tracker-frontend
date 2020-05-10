@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { Box, Grid } from "@material-ui/core";
-import useStyles from "./styles";
-import { useWalletsQuery, useTransactionSpendingFlowQuery, Wallet } from "api";
-import TransactionsTable from "components/organisms/transactions-table";
-import Modal from "components/molecules/modal";
+import { Helmet } from "react-helmet";
 import { gql } from "apollo-boost";
-import SummaryBox from "components/molecules/summary-box";
 import Chart from "react-google-charts";
 import moment from "moment";
+import { Box, Grid } from "@material-ui/core";
+import { useWalletsQuery, useTransactionSpendingFlowQuery, Wallet } from "api";
+import useTranslations from "translations";
+import useCurrencyFormatter from "services/currency-formatter";
+import TransactionsTable from "components/organisms/transactions-table";
+import SummaryBox from "components/molecules/summary-box";
 import DateRangePicker, {
   Range,
   calculateBackDate,
 } from "components/molecules/date-range-picker";
-import Loader from "components/atoms/loader";
-import useCurrencyFormatter from "services/currency-formatter";
 import TransactionFormWrapper from "components/molecules/forms/transaction-form";
-import { Helmet } from "react-helmet";
-import useTranslations from "translations";
+import Modal from "components/molecules/modal";
+import Loader from "components/atoms/loader";
+import useStyles from "./styles";
 
 const TransactionsPage = () => {
   const classes = useStyles();

@@ -1,8 +1,10 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
-import useStyles from "./styles";
-import WalletsCollection from "../../../organisms/wallets-collection";
+import Chart from "react-google-charts";
+import moment from "moment";
+import WalletsCollection from "components/organisms/wallets-collection";
 import {
   useWalletsQuery,
   Wallet,
@@ -12,16 +14,14 @@ import {
   useTransactionSpendingFlowQuery,
   useCategoriesQuery,
 } from "api";
+import useTranslations from "translations";
+import useCurrencyFormatter from "services/currency-formatter";
 import LastTransactions from "components/organisms/last-transactions";
-import SummaryBox from "components/molecules/summary-box";
-import Chart from "react-google-charts";
-import moment from "moment";
 import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
+import SummaryBox from "components/molecules/summary-box";
 import Loader from "components/atoms/loader";
-import useCurrencyFormatter from "services/currency-formatter";
-import { Helmet } from "react-helmet";
-import useTranslations from "translations";
+import useStyles from "./styles";
 
 const MainPage = () => {
   const classes = useStyles();

@@ -1,11 +1,11 @@
 import React from "react";
 import { Grid, Box } from "@material-ui/core";
-import useStyles from "./styles";
 import { Transaction, TransactionType } from "api";
-import RoundBox from "components/atoms/round-box";
 import useCurrencyFormatter from "services/currency-formatter";
 import formatDate from "services/date-formatter";
 import useTranslations from "translations";
+import RoundBox from "components/atoms/round-box";
+import useStyles from "./styles";
 
 interface Props {
   transaction: Transaction;
