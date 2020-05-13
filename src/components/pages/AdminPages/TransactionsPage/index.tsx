@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Helmet } from "react-helmet";
 import { gql } from "apollo-boost";
 import Chart from "react-google-charts";
@@ -25,6 +25,8 @@ const TransactionsPage = () => {
 
   const [backDate, setBackDate] = useState(calculateBackDate(Range.Last7Days));
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
+  const showNewModal = useCallback(() => setNewModalIsOpen(true), []);
+  const hideNewModal = useCallback(() => setNewModalIsOpen(false), []);
 
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
@@ -51,6 +53,11 @@ const TransactionsPage = () => {
 
   const chartData = [flowColumns, ...flowChart];
 
+  const onComplete = useCallback(() => {
+    refetch();
+    setNewModalIsOpen(false);
+  }, [refetch]);
+
   return (
     <Box className={classes.main} p={10}>
       <Helmet>
@@ -58,13 +65,13 @@ const TransactionsPage = () => {
       </Helmet>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={12}>
-          <DateRangePicker onChange={(date: any) => setBackDate(date)} />
+          <DateRangePicker onChange={setBackDate} />
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
           <TransactionsTable
             selectedDate={backDate}
             walletIds={wallets.map((wallet: Wallet) => wallet.id)}
-            onNewClick={() => setNewModalIsOpen(true)}
+            onNewClick={showNewModal}
             onDelete={refetch}
             onEdit={refetch}
           />
@@ -110,16 +117,11 @@ const TransactionsPage = () => {
       <Modal
         title={t("+ New Record")}
         isOpen={newModalIsOpen}
-        handleClose={() => {
-          setNewModalIsOpen(false);
-        }}
+        handleClose={hideNewModal}
       >
         <TransactionFormWrapper
-          onComplete={() => {
-            refetch();
-            setNewModalIsOpen(false);
-          }}
-          onError={() => setNewModalIsOpen(false)}
+          onComplete={onComplete}
+          onError={hideNewModal}
         />
       </Modal>
     </Box>

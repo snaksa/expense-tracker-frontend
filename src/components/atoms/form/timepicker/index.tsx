@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Box from "@material-ui/core/Box";
 import { KeyboardTimePicker } from "@material-ui/pickers";
 import useTranslations from "translations";
@@ -16,20 +16,23 @@ const TimePicker: React.FunctionComponent<Props> = ({
 }: Props): JSX.Element => {
   const { t } = useTranslations();
 
-  const handleChange = (newDate: Date) => {
+  const handleChange = useCallback((newDate: Date) => {
     onChange(newDate);
-  };
+  }, [onChange]);
 
   const [open, setOpen] = useState(false);
+
+  const show = useCallback(() => setOpen(true), []);
+  const hide = useCallback(() => setOpen(false), []);
 
   return (
     <Box>
       <KeyboardTimePicker
         ampm={false}
         open={open}
-        onClick={() => setOpen(true)}
-        onAccept={() => setOpen(false)}
-        onClose={() => setOpen(false)}
+        onClick={show}
+        onAccept={hide}
+        onClose={hide}
         margin="normal"
         name={name}
         id="time-picker-dialog"

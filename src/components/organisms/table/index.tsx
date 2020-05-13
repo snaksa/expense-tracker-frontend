@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Box,
   Grid,
@@ -43,6 +43,27 @@ const Table: React.FunctionComponent<Props> = ({
 }: Props) => {
   const classes = useStyles();
 
+  const pageChange = useCallback(
+    (event: unknown, newPage: number) => {
+      if (onPageChange) {
+        onPageChange(newPage, event);
+      }
+    },
+    [onPageChange]
+  );
+
+  const limitChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (onPageChange) {
+        onPageChange(0);
+      }
+      if (onLimitChange) {
+        onLimitChange(event.target.value);
+      }
+    },
+    [onPageChange, onLimitChange]
+  );
+
   return (
     <Box>
       <Paper>
@@ -75,21 +96,8 @@ const Table: React.FunctionComponent<Props> = ({
             count={totalResults ?? 0}
             rowsPerPage={currentLimit ?? 0}
             page={currentPage ?? 0}
-            onChangePage={(event: unknown, newPage: number) => {
-              if (onPageChange) {
-                onPageChange(newPage, event);
-              }
-            }}
-            onChangeRowsPerPage={(
-              event: React.ChangeEvent<HTMLInputElement>
-            ) => {
-              if (onPageChange) {
-                onPageChange(0);
-              }
-              if (onLimitChange) {
-                onLimitChange(event.target.value);
-              }
-            }}
+            onChangePage={pageChange}
+            onChangeRowsPerPage={limitChange}
           />
         )}
       </Paper>

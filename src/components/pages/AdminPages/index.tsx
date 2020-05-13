@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
 import Box from "@material-ui/core/Box";
 import {
@@ -20,11 +20,14 @@ import TransactionsPage from "./TransactionsPage";
 import StatsPage from "./StatsPage";
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const { t } = useTranslations();
 
   const { isAuthenticated } = useAuthDataContext();
   isAuthenticated();
+
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const toggleSidebar = useCallback(() => setIsSidebarVisible(!isSidebarVisible), [isSidebarVisible])
+  const hideSidebar = useCallback(() => setIsSidebarVisible(false), []);
 
   const { content, type, visible, hideNotification } = useNotificationContext();
 
@@ -33,12 +36,12 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
       <AdminTemplate
         header={
           <HeaderMenu
-            setSidebarVisibility={() => setIsSidebarVisible(!isSidebarVisible)}
+            setSidebarVisibility={toggleSidebar}
           />
         }
         sidebar={
           <Sidebar
-            onOptionClick={() => setIsSidebarVisible(false)}
+            onOptionClick={hideSidebar}
             isVisible={isSidebarVisible}
             options={[
               { label: t("Dashboard"), to: "/admin", icon: <HomeIcon /> },

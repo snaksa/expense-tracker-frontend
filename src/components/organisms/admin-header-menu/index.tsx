@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Grid, Box } from "@material-ui/core";
 import {
   Menu as MenuIcon,
@@ -21,9 +21,9 @@ const AdminHeaderMenu: React.FunctionComponent<Props> = ({
 
   const { onLogout } = useAuthDataContext();
 
-  const logout = () => {
+  const logout = useCallback(() => {
     onLogout();
-  };
+  }, [onLogout]);
 
   return (
     <Grid container>

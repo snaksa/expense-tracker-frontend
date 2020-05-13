@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { gql } from "apollo-boost";
 import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
@@ -44,16 +44,6 @@ export interface FormFields {
   walletReceiverId: any;
 }
 
-const schema = () => {
-  return Yup.object().shape({
-    date: Yup.string().required("Enter record date and time"),
-    description: Yup.string().required("Enter record description"),
-    value: Yup.string().required("Set record amount"),
-    type: Yup.string().required("Choose record type"),
-    walletId: Yup.number().required("Choose record wallet"),
-  });
-};
-
 const TransactionForm = ({
   transaction,
   wallets,
@@ -61,34 +51,40 @@ const TransactionForm = ({
   onComplete,
   onError,
 }: Props): JSX.Element => {
-  const walletOptions = wallets.map((wallet: Wallet) => {
-    return {
-      id: wallet.id,
-      value: (
-        <Grid container alignItems="center" spacing={1}>
-          <Grid item>
-            <RoundBox color={wallet.color} width={20} height={20} />
-          </Grid>
-          <Grid item>{wallet.name}</Grid>
-        </Grid>
-      ),
-    };
-  });
-
-  const categoryOptions = categories.map(
-    (category: Category, index: number) => {
-      return {
-        id: category.id,
-        value: (
-          <Grid container alignItems="center" spacing={1} key={index}>
-            <Grid item>
-              <RoundBox color={category.color} width={20} height={20} />
+  const walletOptions = useMemo(
+    () =>
+      wallets.map((wallet: Wallet) => {
+        return {
+          id: wallet.id,
+          value: (
+            <Grid container alignItems="center" spacing={1}>
+              <Grid item>
+                <RoundBox color={wallet.color} width={20} height={20} />
+              </Grid>
+              <Grid item>{wallet.name}</Grid>
             </Grid>
-            <Grid item>{category.name}</Grid>
-          </Grid>
-        ),
-      };
-    }
+          ),
+        };
+      }),
+    [wallets]
+  );
+
+  const categoryOptions = useMemo(
+    () =>
+      categories.map((category: Category, index: number) => {
+        return {
+          id: category.id,
+          value: (
+            <Grid container alignItems="center" spacing={1} key={index}>
+              <Grid item>
+                <RoundBox color={category.color} width={20} height={20} />
+              </Grid>
+              <Grid item>{category.name}</Grid>
+            </Grid>
+          ),
+        };
+      }),
+    [categories]
   );
 
   const {
@@ -98,6 +94,16 @@ const TransactionForm = ({
   const { t } = useTranslations();
 
   const { usedTranasctionParams } = useSharedDataContext();
+
+  const schema = useCallback(() => {
+    return Yup.object().shape({
+      date: Yup.string().required("Enter record date and time"),
+      description: Yup.string().required("Enter record description"),
+      value: Yup.string().required("Set record amount"),
+      type: Yup.string().required("Choose record type"),
+      walletId: Yup.number().required("Choose record wallet"),
+    });
+  }, []);
 
   const getRefetchQueries = () => {
     const result: any = [];
@@ -180,36 +186,43 @@ const TransactionForm = ({
     refetchQueries: getRefetchQueries(),
   });
 
-  const onSubmit = (values: FormFields) => {
-    if (transaction) {
-      updateTransaction({
-        variables: {
-          id: transaction.id,
-          date: moment(values.date).utc().format("YYYY-MM-D HH:mm:ss"),
-          description: values.description,
-          value: parseFloat(values.value ?? 0),
-          type: values.type,
-          categoryId:
-            values.type === TransactionType.Transfer ? null : values.categoryId,
-          walletId: values.walletId,
-          walletReceiverId: values.walletReceiverId ?? null,
-        },
-      });
-    } else {
-      createTransaction({
-        variables: {
-          date: moment(values.date).utc().format("YYYY-MM-D HH:mm:ss"),
-          description: values.description,
-          value: parseFloat(values.value ?? 0),
-          type: values.type,
-          categoryId:
-            values.type === TransactionType.Transfer ? null : values.categoryId,
-          walletId: values.walletId,
-          walletReceiverId: values.walletReceiverId ?? null,
-        },
-      });
-    }
-  };
+  const onSubmit = useCallback(
+    (values: FormFields) => {
+      if (transaction) {
+        updateTransaction({
+          variables: {
+            id: transaction.id,
+            date: moment(values.date).utc().format("YYYY-MM-D HH:mm:ss"),
+            description: values.description,
+            value: parseFloat(values.value ?? 0),
+            type: values.type,
+            categoryId:
+              values.type === TransactionType.Transfer
+                ? null
+                : values.categoryId,
+            walletId: values.walletId,
+            walletReceiverId: values.walletReceiverId ?? null,
+          },
+        });
+      } else {
+        createTransaction({
+          variables: {
+            date: moment(values.date).utc().format("YYYY-MM-D HH:mm:ss"),
+            description: values.description,
+            value: parseFloat(values.value ?? 0),
+            type: values.type,
+            categoryId:
+              values.type === TransactionType.Transfer
+                ? null
+                : values.categoryId,
+            walletId: values.walletId,
+            walletReceiverId: values.walletReceiverId ?? null,
+          },
+        });
+      }
+    },
+    [createTransaction, updateTransaction, transaction]
+  );
 
   return (
     <Formik

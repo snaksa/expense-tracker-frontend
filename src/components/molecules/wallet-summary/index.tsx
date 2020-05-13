@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Grid, Box, Tooltip } from "@material-ui/core";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@material-ui/icons";
 import * as Yup from "yup";
@@ -123,30 +123,47 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
     },
   });
 
-  const UpdateWalletSchema = () =>
-    Yup.object().shape({
-      name: Yup.string().required(t("Enter wallet name")),
-      color: Yup.string().required(t("Choose wallet color")),
-    });
+  const UpdateWalletSchema = useCallback(
+    () =>
+      Yup.object().shape({
+        name: Yup.string().required(t("Enter wallet name")),
+        color: Yup.string().required(t("Choose wallet color")),
+      }),
+    [t]
+  );
 
-  const onUpdateWalletSubmit = (values: FormFields) => {
-    updateWallet({
-      variables: {
-        id: id,
-        name: values.name,
-        color: values.color,
-      },
-    });
-  };
+  const onUpdateWalletSubmit = useCallback(
+    (values: FormFields) => {
+      updateWallet({
+        variables: {
+          id: id,
+          name: values.name,
+          color: values.color,
+        },
+      });
+    },
+    [updateWallet, id]
+  );
 
-  const handleWalletDelete = () => {
+  const handleWalletDelete = useCallback(() => {
     setConfirmDeleteModalIsOpen(false);
     deleteWallet({
       variables: {
         id: id,
       },
     });
-  };
+  }, [deleteWallet, id]);
+
+  const openEditModal = useCallback(() => setEditModalIsOpen(true), []);
+  const closeEditModal = useCallback(() => setEditModalIsOpen(false), []);
+  const openDeleteModal = useCallback(
+    () => setConfirmDeleteModalIsOpen(true),
+    []
+  );
+  const closeDeleteModal = useCallback(
+    () => setConfirmDeleteModalIsOpen(false),
+    []
+  );
 
   return (
     <Box>
@@ -167,7 +184,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
                   <EditIcon
                     fontSize={"small"}
                     className={classes.icon}
-                    onClick={() => setEditModalIsOpen(true)}
+                    onClick={openEditModal}
                   />
                 </Tooltip>
               </Grid>
@@ -176,7 +193,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
                   <DeleteIcon
                     fontSize={"small"}
                     className={classes.icon}
-                    onClick={() => setConfirmDeleteModalIsOpen(true)}
+                    onClick={openDeleteModal}
                   />
                 </Tooltip>
               </Grid>
@@ -193,9 +210,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
       <Modal
         title={t("# Edit Wallet")}
         isOpen={editModalIsOpen}
-        handleClose={() => {
-          setEditModalIsOpen(false);
-        }}
+        handleClose={closeEditModal}
       >
         <Formik
           initialValues={{
@@ -229,7 +244,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
                 <Grid>
                   <Box mt={1}>
                     <Button type="submit" style={{}}>
-                      Edit
+                      {t("Edit")}
                     </Button>
                   </Box>
                 </Grid>
@@ -243,7 +258,7 @@ const WalletSummary = ({ id, name, amount, color }: Props) => {
         title={t("Are you sure?")}
         content={t("All transactions related to this wallet will be removed!")}
         onConfirm={handleWalletDelete}
-        onCancel={() => setConfirmDeleteModalIsOpen(false)}
+        onCancel={closeDeleteModal}
       />
     </Box>
   );

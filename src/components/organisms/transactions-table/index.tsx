@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { gql } from "apollo-boost";
 import { Box } from "@material-ui/core";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
@@ -51,6 +51,18 @@ const TransactionsTable = ({
 
   const oldData: any = useRef([]);
   const [getTransactions, { data, loading }] = useTransactionsLazyQuery();
+
+  const showDeleteModal = useCallback(
+    () => setConfirmDeleteModalIsOpen(true),
+    []
+  );
+  const hideDeleteModal = useCallback(
+    () => setConfirmDeleteModalIsOpen(false),
+    []
+  );
+
+  const showEditModal = useCallback(() => setEditModalIsOpen(true), []);
+  const hideEditModal = useCallback(() => setEditModalIsOpen(false), []);
 
   if (data?.transactions?.data) {
     oldData.current = data;
@@ -170,25 +182,48 @@ const TransactionsTable = ({
     refetchQueries: getRefetchQueries(),
   });
 
-  const handleDelete = () => {
-    setConfirmDeleteModalIsOpen(false);
+  const handleDelete = useCallback(() => {
+    hideDeleteModal();
     deleteTransaction({
       variables: {
         id: selectedRow,
       },
     });
-  };
+  }, [deleteTransaction, hideDeleteModal, selectedRow]);
 
-  const handleAction = (action: string, id: number) => {
-    if (action === "delete") {
-      setSelectedRow(id);
-      setConfirmDeleteModalIsOpen(true);
-    }
-    if (action === "edit") {
-      setSelectedRow(id);
-      setEditModalIsOpen(true);
-    }
-  };
+  const handleAction = useCallback(
+    (action: string, id: number) => {
+      if (action === "delete") {
+        setSelectedRow(id);
+        showDeleteModal();
+      }
+      if (action === "edit") {
+        setSelectedRow(id);
+        showEditModal();
+      }
+    },
+    [setSelectedRow, showEditModal, showDeleteModal]
+  );
+
+  const currencyFormat = useCallback((value: number) => formatCurrency(value), [
+    formatCurrency,
+  ]);
+
+  const transactionColor = useCallback(
+    (row: any) =>
+      [TransactionType.Expense, TransactionType.Transfer].includes(row.type)
+        ? "red"
+        : "green",
+    []
+  );
+
+  const transactionSign = useCallback(
+    (row: any) =>
+      [TransactionType.Expense, TransactionType.Transfer].includes(row.type)
+        ? "-"
+        : "",
+    []
+  );
 
   const columns = [
     {
@@ -204,15 +239,9 @@ const TransactionsTable = ({
       label: t("Amount"),
       minWidth: 50,
       align: "right",
-      format: (value: number) => formatCurrency(value),
-      color: (row: any) =>
-        [TransactionType.Expense, TransactionType.Transfer].includes(row.type)
-          ? "red"
-          : "green",
-      sign: (row: any) =>
-        [TransactionType.Expense, TransactionType.Transfer].includes(row.type)
-          ? "-"
-          : "",
+      format: currencyFormat,
+      color: transactionColor,
+      sign: transactionSign,
     },
     {
       type: "colorName",
@@ -251,6 +280,19 @@ const TransactionsTable = ({
     },
   ];
 
+  const onPageChange = useCallback((page: number) => setCurrentPage(page), []);
+  const onLimitChange = useCallback(
+    (limit: number) => setCurrentLimit(limit),
+    []
+  );
+
+  const onComplete = useCallback(() => {
+    hideEditModal();
+    if (onEdit) {
+      onEdit();
+    }
+  }, [onEdit, hideEditModal]);
+
   return (
     <Box>
       <Table
@@ -263,22 +305,20 @@ const TransactionsTable = ({
         totalResults={transactionsData?.totalResults ?? 0}
         currentPage={currentPage}
         currentLimit={currentLimit}
-        onPageChange={(page: number) => setCurrentPage(page)}
-        onLimitChange={(limit: number) => setCurrentLimit(limit)}
+        onPageChange={onPageChange}
+        onLimitChange={onLimitChange}
       />
       <ConfirmationDialog
         isOpen={confirmDeleteModalIsOpen}
         title={t("Are you sure?")}
         content={t("Are you sure you want to remove this transaction?")}
         onConfirm={handleDelete}
-        onCancel={() => setConfirmDeleteModalIsOpen(false)}
+        onCancel={hideDeleteModal}
       />
       <Modal
         title={t("# Edit Category")}
         isOpen={editModalIsOpen}
-        handleClose={() => {
-          setEditModalIsOpen(false);
-        }}
+        handleClose={hideEditModal}
       >
         <TransactionFormWrapper
           transaction={
@@ -288,13 +328,8 @@ const TransactionsTable = ({
                 )[0]
               : undefined
           }
-          onComplete={() => {
-            setEditModalIsOpen(false);
-            if (onEdit) {
-              onEdit();
-            }
-          }}
-          onError={() => setEditModalIsOpen(false)}
+          onComplete={onComplete}
+          onError={hideEditModal}
         />
       </Modal>
     </Box>

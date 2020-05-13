@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Box } from "@material-ui/core";
 import moment from "moment";
 import useTranslations from "translations";
@@ -53,6 +53,15 @@ const DateRangePicker = ({ onChange, responsive }: Props): JSX.Element => {
 
   const [selected, setSelected] = useState<number>(Range.Last7Days);
 
+  const selectionChange = useCallback(
+    (event: any) => {
+      const value = event.target.value;
+      setSelected(value);
+      onChange(calculateBackDate(value));
+    },
+    [onChange]
+  );
+
   return (
     <Box
       mx="auto"
@@ -60,11 +69,7 @@ const DateRangePicker = ({ onChange, responsive }: Props): JSX.Element => {
     >
       <Select
         options={options}
-        onChange={(event: any) => {
-          const value = event.target.value;
-          setSelected(value);
-          onChange(calculateBackDate(value));
-        }}
+        onChange={selectionChange}
         selected={selected}
         label={t("Date Range")}
         name={"name"}

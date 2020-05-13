@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Helmet } from "react-helmet";
 import { gql } from "apollo-boost";
 import { Box, Grid } from "@material-ui/core";
@@ -25,7 +25,12 @@ const SettingsPage = () => {
   } = useUpdateDetectionContext();
 
   const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);
+  const showNewCategoryModal = useCallback(() => setNewCategoryModalIsOpen(true), []);
+  const hideNewCategoryModal = useCallback(() => setNewCategoryModalIsOpen(false), []);
+
   const [newWalletModalIsOpen, setNewWalletModalIsOpen] = useState(false);
+  const showNewWalletModal = useCallback(() => setNewWalletModalIsOpen(true), []);
+  const hideNewWalletModal = useCallback(() => setNewWalletModalIsOpen(false), []);
 
   const {
     data: categoriesData,
@@ -41,7 +46,7 @@ const SettingsPage = () => {
 
   useEffect(() => {
     refetchCategories();
-  }, [lastTransactionAction, lastCategoryAction, lastWalletAction]);
+  }, [lastTransactionAction, lastCategoryAction, lastWalletAction, refetchCategories]);
 
   return (
     <Box className={classes.main} p={10}>
@@ -61,42 +66,34 @@ const SettingsPage = () => {
         <Grid item xs={12} md={12} lg={4}>
           <CategoriesTable
             categories={categories}
-            onClick={() => setNewCategoryModalIsOpen(true)}
-            onEdit={() => {}}
-            onDelete={() => {}}
+            onClick={showNewCategoryModal}
           />
         </Grid>
         <Grid item xs={12} md={12} lg={4}>
           <WalletsTable
             wallets={wallets}
-            onClick={() => setNewWalletModalIsOpen(true)}
-            onEdit={() => {}}
-            onDelete={() => {}}
+            onClick={showNewWalletModal}
           />
         </Grid>
       </Grid>
       <Modal
         title={t("+ New Category")}
         isOpen={newCategoryModalIsOpen}
-        handleClose={() => {
-          setNewCategoryModalIsOpen(false);
-        }}
+        handleClose={hideNewCategoryModal}
       >
         <CategoryForm
-          onComplete={() => setNewCategoryModalIsOpen(false)}
-          onError={() => setNewCategoryModalIsOpen(false)}
+          onComplete={hideNewCategoryModal}
+          onError={hideNewCategoryModal}
         />
       </Modal>
       <Modal
         title={t("+ New Wallet")}
         isOpen={newWalletModalIsOpen}
-        handleClose={() => {
-          setNewWalletModalIsOpen(false);
-        }}
+        handleClose={hideNewCategoryModal}
       >
         <WalletForm
-          onComplete={() => setNewWalletModalIsOpen(false)}
-          onError={() => setNewWalletModalIsOpen(false)}
+          onComplete={hideNewWalletModal}
+          onError={hideNewWalletModal}
         />
       </Modal>
     </Box>

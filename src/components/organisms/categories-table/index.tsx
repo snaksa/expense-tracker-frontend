@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { gql } from "apollo-boost";
 import { Box } from "@material-ui/core";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
@@ -29,8 +29,8 @@ import CategoryForm from "components/molecules/forms/category-form";
 interface Props {
   categories: Category[];
   onClick: Function;
-  onEdit: Function;
-  onDelete: Function;
+  onEdit?: Function;
+  onDelete?: Function;
 }
 
 const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
@@ -41,6 +41,20 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
   );
   const [selectedRow, setSelectedRow] = useState(0);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+
+  const openEditModal = useCallback(() => {
+    setEditModalIsOpen(true);
+  }, []);
+  const hideEditModal = useCallback(() => {
+    setEditModalIsOpen(false);
+  }, []);
+
+  const showConfirm = useCallback(() => {
+    setConfirmDeleteModalIsOpen(true);
+  }, []);
+  const hideConfirm = useCallback(() => {
+    setConfirmDeleteModalIsOpen(true);
+  }, []);
 
   const { setCategoryUpdate } = useUpdateDetectionContext();
 
@@ -109,7 +123,9 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
 
   const [deleteCategory] = useDeleteCategoryMutation({
     onCompleted() {
-      onDelete();
+      if (onDelete) {
+        onDelete();
+      }
       setCategoryUpdate();
       showSuccessNotification(t("Category deleted successfully!"));
     },
@@ -148,25 +164,34 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     ],
   });
 
-  const handleDelete = () => {
-    setConfirmDeleteModalIsOpen(false);
+  const handleDelete = useCallback(() => {
+    hideConfirm();
     deleteCategory({
       variables: {
         id: selectedRow,
       },
     });
-  };
+  }, [deleteCategory, hideConfirm, selectedRow]);
 
-  const handleAction = (action: string, id: number) => {
+  const handleAction = useCallback((action: string, id: number) => {
     if (action === "delete") {
       setSelectedRow(id);
-      setConfirmDeleteModalIsOpen(true);
+      showConfirm();
     }
     if (action === "edit") {
       setSelectedRow(id);
       setEditModalIsOpen(true);
     }
-  };
+  }, [setSelectedRow, showConfirm, setEditModalIsOpen]);
+
+  const currencyFormat = useCallback(
+    (value: number) => formatCurrency(value),
+    [formatCurrency]
+  );
+  const transactionColor = useCallback(
+    (row: any) => (row.balance < 0 ? "red" : "green"),
+    []
+  );
 
   const columns = [
     {
@@ -197,8 +222,8 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
       minWidth: 100,
       align: "center",
       prefix: "BGN",
-      format: (value: number) => formatCurrency(value),
-      color: (row: any) => (row.balance < 0 ? "red" : "green"),
+      format: currencyFormat,
+      color: transactionColor,
     },
     {
       type: "actions",
@@ -216,6 +241,13 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     },
   ];
 
+  const onComplete = useCallback(() => {
+    setEditModalIsOpen(false);
+    if (onEdit) {
+      onEdit();
+    }
+  }, [onEdit]);
+
   return (
     <Box>
       <Table
@@ -232,14 +264,12 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
           "All transactions related to this category will be removed!"
         )}
         onConfirm={handleDelete}
-        onCancel={() => setConfirmDeleteModalIsOpen(false)}
+        onCancel={hideConfirm}
       />
       <Modal
         title={t("# Edit Category")}
         isOpen={editModalIsOpen}
-        handleClose={() => {
-          setEditModalIsOpen(false);
-        }}
+        handleClose={openEditModal}
       >
         <CategoryForm
           category={
@@ -249,11 +279,8 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
                 )[0]
               : undefined
           }
-          onComplete={() => {
-            setEditModalIsOpen(false);
-            onEdit();
-          }}
-          onError={() => setEditModalIsOpen(false)}
+          onComplete={onComplete}
+          onError={hideEditModal}
         />
       </Modal>
     </Box>

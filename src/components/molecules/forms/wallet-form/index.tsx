@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -37,13 +37,13 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
 
   const { setWalletUpdate } = useUpdateDetectionContext();
 
-  const schema = () => {
+  const schema = useCallback(() => {
     return Yup.object().shape({
       name: Yup.string().required(t("Enter wallet name")),
       color: Yup.string().required(t("Enter wallet color")),
       amount: Yup.number(),
     });
-  };
+  }, [t]);
 
   const [createWallet] = useCreateWalletMutation({
     onCompleted() {
@@ -94,25 +94,28 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
     },
   });
 
-  const onSubmit = (values: FormFields) => {
-    if (wallet) {
-      updateWallet({
-        variables: {
-          id: wallet.id,
-          name: values.name,
-          color: values.color,
-        },
-      });
-    } else {
-      createWallet({
-        variables: {
-          name: values.name,
-          color: values.color,
-          amount: values.amount,
-        },
-      });
-    }
-  };
+  const onSubmit = useCallback(
+    (values: FormFields) => {
+      if (wallet) {
+        updateWallet({
+          variables: {
+            id: wallet.id,
+            name: values.name,
+            color: values.color,
+          },
+        });
+      } else {
+        createWallet({
+          variables: {
+            name: values.name,
+            color: values.color,
+            amount: values.amount,
+          },
+        });
+      }
+    },
+    [createWallet, updateWallet, wallet]
+  );
 
   return (
     <Formik

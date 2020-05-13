@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Snackbar } from "@material-ui/core";
 import Alert, { Color } from "@material-ui/lab/Alert";
 
@@ -10,13 +10,16 @@ interface Props {
 }
 
 export default function Notification({ open, content, type, onClose }: Props) {
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  const handleClose = useCallback(
+    (event?: React.SyntheticEvent, reason?: string) => {
+      if (reason === "clickaway") {
+        return;
+      }
 
-    onClose(event);
-  };
+      onClose(event);
+    },
+    [onClose]
+  );
 
   return (
     <Snackbar

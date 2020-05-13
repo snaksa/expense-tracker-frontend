@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { TableHead as TableHeadMaterial, TableRow } from "@material-ui/core";
 import TableCell from "components/atoms/table-cell";
 
@@ -9,9 +9,13 @@ interface Props {
 const TableHead: React.FunctionComponent<Props> = ({
   columns,
 }: Props): JSX.Element => {
-  const headCells = columns.map((column) => {
-    return { ...column, type: "text", value: column.label };
-  });
+  const headCells = useMemo(
+    () =>
+      columns.map((column) => {
+        return { ...column, type: "text", value: column.label };
+      }),
+    [columns]
+  );
 
   return (
     <TableHeadMaterial>

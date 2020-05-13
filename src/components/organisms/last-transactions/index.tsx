@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { gql } from "apollo-boost";
 import {
   useTransactionsQuery,
@@ -53,11 +53,23 @@ const LastTransactions = ({
 
   const transactions = transactionsData ?? backupData;
 
+  const showNewModal = useCallback(
+    () => setNewTransactionModalIsOpen(true),
+    []
+  );
+  const hideNewModal = useCallback(
+    () => setNewTransactionModalIsOpen(false),
+    []
+  );
+
+  const onComplete = useCallback(() => {
+    refetch();
+    onChange();
+    hideNewModal();
+  }, [onChange, hideNewModal, refetch]);
+
   return (
-    <SummaryBox
-      header={t("Last 5 records")}
-      onClick={() => setNewTransactionModalIsOpen(true)}
-    >
+    <SummaryBox header={t("Last 5 records")} onClick={showNewModal}>
       <Loader loading={loading && !transactions.length} />
       {!transactions.length && !loading && (
         <div className={classes.noData}>No data</div>
@@ -68,19 +80,13 @@ const LastTransactions = ({
       <Modal
         title={t("+ New Record")}
         isOpen={newTransactionModalIsOpen}
-        handleClose={() => {
-          setNewTransactionModalIsOpen(false);
-        }}
+        handleClose={hideNewModal}
       >
         <TransactionForm
           wallets={userWallets}
           categories={categories}
-          onComplete={() => {
-            refetch();
-            onChange();
-            setNewTransactionModalIsOpen(false);
-          }}
-          onError={() => setNewTransactionModalIsOpen(false)}
+          onComplete={onComplete}
+          onError={hideNewModal}
         />
       </Modal>
     </SummaryBox>

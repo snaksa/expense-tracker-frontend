@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { gql } from "apollo-boost";
 import { Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
@@ -34,7 +34,7 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
   const { data: currenciesData } = useCurrenciesQuery();
   const currencies: any = currenciesData?.currencies ?? [];
 
-  const schema = () => {
+  const schema = useCallback(() => {
     return Yup.object().shape({
       firstName: Yup.string().required(t("Enter first name")),
       lastName: Yup.string().required(t("Enter last name")),
@@ -42,7 +42,7 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
       currency: Yup.string().required(t("Choose currency")),
       language: Yup.string().required(t("Choose language")),
     });
-  };
+  }, [t]);
 
   const [updateUser] = useUpdateUserMutation({
     onCompleted() {
@@ -57,17 +57,20 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
     },
   });
 
-  const onSubmit = (values: FormFields) => {
-    updateUser({
-      variables: {
-        email: values.email,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        currency: values.currency,
-        language: values.language,
-      },
-    });
-  };
+  const onSubmit = useCallback(
+    (values: FormFields) => {
+      updateUser({
+        variables: {
+          email: values.email,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          currency: values.currency,
+          language: values.language,
+        },
+      });
+    },
+    [updateUser]
+  );
 
   return (
     <Formik

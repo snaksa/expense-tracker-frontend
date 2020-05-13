@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Grid } from "@material-ui/core";
 import useTranslations from "translations";
 import Select from "components/atoms//form/select";
@@ -68,19 +68,23 @@ const ColorPicker = ({ name, selected, onChange }: Props): JSX.Element => {
     },
   ];
 
-  const renderOptions = options.map((option: any, index: number) => {
-    return {
-      id: option.id,
-      value: (
-        <Grid container alignItems="center" spacing={1} key={index}>
-          <Grid item>
-            <RoundBox color={option.id} width={20} height={20} />
-          </Grid>
-          <Grid item>{option.name}</Grid>
-        </Grid>
-      ),
-    };
-  });
+  const renderOptions = useMemo(
+    () =>
+      options.map((option: any, index: number) => {
+        return {
+          id: option.id,
+          value: (
+            <Grid container alignItems="center" spacing={1} key={index}>
+              <Grid item>
+                <RoundBox color={option.id} width={20} height={20} />
+              </Grid>
+              <Grid item>{option.name}</Grid>
+            </Grid>
+          ),
+        };
+      }),
+    [options]
+  );
 
   return (
     <Select

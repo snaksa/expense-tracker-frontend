@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Grid, Box } from "@material-ui/core";
 import SidebarOption from "components/atoms/sidebar-option";
 import useStyles from "./styles";
@@ -15,6 +15,16 @@ const Sidebar: React.FunctionComponent<Props> = ({
   onOptionClick,
 }: Props): JSX.Element => {
   const classes = useStyles();
+
+  const renderOptions = useMemo(
+    () =>
+      options.map((option, index) => (
+        <Grid item key={index}>
+          <SidebarOption option={option} onClick={onOptionClick} />
+        </Grid>
+      )),
+    [options, onOptionClick]
+  );
 
   return (
     <Box height={"100%"}>
@@ -33,11 +43,7 @@ const Sidebar: React.FunctionComponent<Props> = ({
       )}
       <Box className={classes.desktop}>
         <Grid container className={classes.main} direction="column">
-          {options.map((option, index) => (
-            <Grid item key={index}>
-              <SidebarOption option={option} onClick={onOptionClick} />
-            </Grid>
-          ))}
+          {renderOptions}
         </Grid>
       </Box>
     </Box>

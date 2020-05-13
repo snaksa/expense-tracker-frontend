@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Box from "@material-ui/core/Box";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import useTranslations from 'translations';
@@ -22,13 +22,16 @@ const DatePicker: React.FunctionComponent<Props> = ({
 
   const [open, setOpen] = useState(false);
 
+  const show = useCallback(() => setOpen(true), []);
+  const hide = useCallback(() => setOpen(false), []);
+
   return (
     <Box>
         <KeyboardDatePicker
           open={open}
-          onClick={() => setOpen(true)}
-          onAccept={() => setOpen(false)}
-          onClose={() => setOpen(false)}
+          onClick={show}
+          onAccept={hide}
+          onClose={hide}
           margin="normal"
           name={name}
           id="date-picker-dialog"

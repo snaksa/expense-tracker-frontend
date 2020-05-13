@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Grid, Box } from "@material-ui/core";
 import {
   Add as AddIcon,
@@ -26,6 +26,8 @@ const SummaryBox = ({
   const classes = useStyles();
   const [visible, setVisible] = useState<boolean>(true);
 
+  const toggleVisible = useCallback(() => setVisible(!visible), [visible]);
+
   return (
     <Box className={classes.wrapper} p={2}>
       <Box className={classes.main} p={3}>
@@ -47,14 +49,14 @@ const SummaryBox = ({
                   {toggle && visible && (
                     <ExpandLessIcon
                       fontSize={"small"}
-                      onClick={() => setVisible(!visible)}
+                      onClick={toggleVisible}
                       style={{ cursor: "pointer" }}
                     />
                   )}
                   {toggle && !visible && (
                     <ExpandMoreIcon
                       fontSize={"small"}
-                      onClick={() => setVisible(!visible)}
+                      onClick={toggleVisible}
                       style={{ cursor: "pointer" }}
                     />
                   )}

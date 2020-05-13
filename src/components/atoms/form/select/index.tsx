@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Box,
   Select as MaterialSelect,
@@ -29,6 +29,16 @@ const Select: React.FunctionComponent<Props> = ({
 
   const inputLabel = React.useRef<HTMLLabelElement>(null);
 
+  const renderOptions = useMemo(
+    () =>
+      options.map((option: any) => (
+        <MenuItem key={option.id} value={option.id}>
+          {option.value}
+        </MenuItem>
+      )),
+    [options]
+  );
+
   return (
     <Box>
       <FormControl variant="outlined" margin="dense" style={{ width: "100%" }}>
@@ -43,11 +53,7 @@ const Select: React.FunctionComponent<Props> = ({
           labelWidth={labelWidth}
           labelId={`select-${name}`}
         >
-          {options.map((option: any) => (
-            <MenuItem key={option.id} value={option.id}>
-              {option.value}
-            </MenuItem>
-          ))}
+          {renderOptions}
         </MaterialSelect>
       </FormControl>
     </Box>

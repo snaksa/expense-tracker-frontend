@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useHistory } from "react-router";
 import { Grid, Box } from "@material-ui/core";
 import { gql } from "apollo-boost";
@@ -33,25 +33,33 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (values: FormFields) => {
-    setIsSubmitting(true);
-    register({
-      variables: {
-        email: values.email,
-        password: values.password,
-        confirmPassword: values.confirmPassword,
-      },
-    });
-  };
+  const onSubmit = useCallback(
+    (values: FormFields) => {
+      setIsSubmitting(true);
+      register({
+        variables: {
+          email: values.email,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
+        },
+      });
+    },
+    [register]
+  );
 
-  const Schema = () =>
-    Yup.object().shape({
-      email: Yup.string()
-        .email(t("Enter a valid email address"))
-        .required(t("Enter your email address")),
-      password: Yup.string().required(t("Enter your password")),
-      confirmPassword: Yup.string().required(t("Enter password confirmation")),
-    });
+  const Schema = useCallback(
+    () =>
+      Yup.object().shape({
+        email: Yup.string()
+          .email(t("Enter a valid email address"))
+          .required(t("Enter your email address")),
+        password: Yup.string().required(t("Enter your password")),
+        confirmPassword: Yup.string().required(
+          t("Enter password confirmation")
+        ),
+      }),
+    [t]
+  );
 
   return (
     <Formik

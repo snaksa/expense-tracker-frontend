@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Box } from "@material-ui/core";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import {
@@ -20,8 +20,8 @@ import WalletForm from "components/molecules/forms/wallet-form";
 interface Props {
   wallets: Wallet[];
   onClick: Function;
-  onEdit: Function;
-  onDelete: Function;
+  onEdit?: Function;
+  onDelete?: Function;
 }
 
 const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
@@ -31,6 +31,8 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
   );
   const [selectedRow, setSelectedRow] = useState(0);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const showEditModal = useCallback(() => setEditModalIsOpen(true), []);
+  const hideEditModal = useCallback(() => setEditModalIsOpen(false), []);
 
   const { setWalletUpdate } = useUpdateDetectionContext();
 
@@ -55,7 +57,10 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
 
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
-      onDelete();
+      if (onDelete) {
+        onDelete();
+      }
+
       setWalletUpdate();
       showSuccessNotification(t("Wallet deleted successfully!"));
     },
@@ -89,25 +94,25 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
     refetchQueries: getRefetchQueries(),
   });
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     setConfirmDeleteModalIsOpen(false);
     deleteWallet({
       variables: {
         id: selectedRow,
       },
     });
-  };
+  }, [deleteWallet, setConfirmDeleteModalIsOpen, selectedRow]);
 
-  const handleAction = (action: string, id: number) => {
+  const handleAction = useCallback((action: string, id: number) => {
     if (action === "delete") {
       setSelectedRow(id);
       setConfirmDeleteModalIsOpen(true);
     }
     if (action === "edit") {
       setSelectedRow(id);
-      setEditModalIsOpen(true);
+      showEditModal();
     }
-  };
+  }, [setSelectedRow, showEditModal]);
 
   const columns = [
     {
@@ -140,6 +145,14 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
     },
   ];
 
+  const onComplete = useCallback(() => {
+    hideEditModal();
+
+    if (onEdit) {
+      onEdit();
+    }
+  }, [onEdit, hideEditModal]);
+
   return (
     <Box>
       <Table
@@ -154,14 +167,12 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
         title={t("Are you sure?")}
         content={t("All transactions related to this wallet will be removed!")}
         onConfirm={handleDelete}
-        onCancel={() => setConfirmDeleteModalIsOpen(false)}
+        onCancel={hideEditModal}
       />
       <Modal
         title={t("# Edit Wallet")}
         isOpen={editModalIsOpen}
-        handleClose={() => {
-          setEditModalIsOpen(false);
-        }}
+        handleClose={hideEditModal}
       >
         <WalletForm
           wallet={
@@ -169,11 +180,8 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
               ? wallets.filter((wallet: Wallet) => wallet.id === selectedRow)[0]
               : undefined
           }
-          onComplete={() => {
-            setEditModalIsOpen(false);
-            onEdit();
-          }}
-          onError={() => setEditModalIsOpen(false)}
+          onComplete={onComplete}
+          onError={hideEditModal}
         />
       </Modal>
     </Box>

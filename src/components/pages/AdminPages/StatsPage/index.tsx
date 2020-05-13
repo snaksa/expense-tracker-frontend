@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import Chart from "react-google-charts";
 import moment from "moment";
@@ -167,21 +167,29 @@ const StatsPage = () => {
     refetchSpendingFlow();
   };
 
-  const walletOptions = wallets.map((wallet: Wallet) => {
-    return {
-      id: wallet.id,
-      label: wallet.name,
-      checked: chosenWallets.includes(wallet.id),
-    };
-  });
+  const walletOptions = useMemo(
+    () =>
+      wallets.map((wallet: Wallet) => {
+        return {
+          id: wallet.id,
+          label: wallet.name,
+          checked: chosenWallets.includes(wallet.id),
+        };
+      }),
+    [wallets, chosenWallets]
+  );
 
-  const categoryOptions = categories.map((category: Category) => {
-    return {
-      id: category.id,
-      label: category.name,
-      checked: chosenCategories.includes(category.id),
-    };
-  });
+  const categoryOptions = useMemo(
+    () =>
+      categories.map((category: Category) => {
+        return {
+          id: category.id,
+          label: category.name,
+          checked: chosenCategories.includes(category.id),
+        };
+      }),
+    [categories, chosenCategories]
+  );
 
   return (
     <Box className={classes.main} p={10}>
@@ -194,13 +202,9 @@ const StatsPage = () => {
             container
             direction={"column"}
             spacing={5}
-            style={{ position: "sticky", top: 0 }}
           >
             <Grid item>
-              <DateRangePicker
-                responsive={true}
-                onChange={(date: any) => setBackDate(date)}
-              />
+              <DateRangePicker responsive={true} onChange={setBackDate} />
             </Grid>
             <Grid item>
               <SummaryBox

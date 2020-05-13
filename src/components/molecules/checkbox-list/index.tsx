@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Checkbox, Grid } from "@material-ui/core";
 
 interface Props {
@@ -7,9 +7,9 @@ interface Props {
 }
 
 const CheckboxList = ({ options, onChange }: Props) => {
-  return (
-    <Grid container direction={"column"}>
-      {options.map((option: any) => {
+  const renderOptions = useMemo(
+    () =>
+      options.map((option: any) => {
         return (
           <Grid item key={option.id}>
             <Checkbox
@@ -19,7 +19,13 @@ const CheckboxList = ({ options, onChange }: Props) => {
             {option.label}
           </Grid>
         );
-      })}
+      }),
+    [options, onChange]
+  );
+
+  return (
+    <Grid container direction={"column"}>
+      {renderOptions}
     </Grid>
   );
 };

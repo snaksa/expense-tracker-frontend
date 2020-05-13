@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useHistory } from "react-router";
 import { Grid, Box } from "@material-ui/core";
 import { gql } from "apollo-boost";
@@ -39,22 +39,28 @@ const Login = () => {
     },
   });
 
-  const onSubmit = (values: FormFields) => {
-    login({
-      variables: {
-        email: values.email,
-        password: values.password,
-      },
-    });
-  };
+  const onSubmit = useCallback(
+    (values: FormFields) => {
+      login({
+        variables: {
+          email: values.email,
+          password: values.password,
+        },
+      });
+    },
+    [login]
+  );
 
-  const Schema = () =>
-    Yup.object().shape({
-      email: Yup.string()
-        .email(t("Enter a valid email address"))
-        .required(t("Enter your email address")),
-      password: Yup.string().required(t("Enter your password")),
-    });
+  const Schema = useCallback(
+    () =>
+      Yup.object().shape({
+        email: Yup.string()
+          .email(t("Enter a valid email address"))
+          .required(t("Enter your email address")),
+        password: Yup.string().required(t("Enter your password")),
+      }),
+    [t]
+  );
 
   return (
     <Formik

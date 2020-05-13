@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import { gql } from "apollo-boost";
@@ -33,6 +33,8 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
   const { t } = useTranslations();
 
   const [newWalletModalIsOpen, setNewWalletModalIsOpen] = useState(false);
+  const showNewModal = useCallback(() => setNewWalletModalIsOpen(true), []);
+  const hideNewModal = useCallback(() => setNewWalletModalIsOpen(false), []);
 
   const {
     showSuccessNotification,
@@ -72,42 +74,47 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
     },
   });
 
-  const onSubmit = (values: FormFields) => {
-    createWallet({
-      variables: {
-        name: values.name,
-        amount: values.amount,
-        color: values.color,
-      },
-    });
-  };
+  const onSubmit = useCallback(
+    (values: FormFields) => {
+      createWallet({
+        variables: {
+          name: values.name,
+          amount: values.amount,
+          color: values.color,
+        },
+      });
+    },
+    [createWallet]
+  );
 
-  const CreateWalletSchema = () =>
-    Yup.object().shape({
-      name: Yup.string().required(t("Enter wallet name")),
-      amount: Yup.number().nullable(),
-      color: Yup.string().required(t("Choose wallet color")),
-    });
+  const createWalletSchema = useCallback(
+    () =>
+      Yup.object().shape({
+        name: Yup.string().required(t("Enter wallet name")),
+        amount: Yup.number().nullable(),
+        color: Yup.string().required(t("Choose wallet color")),
+      }),
+    [t]
+  );
+
+  const renderWallets = wallets.map((wallet: Wallet, index: number) => (
+    <Grid item key={index} className={classes.walletItem}>
+      <WalletSummary
+        id={wallet.id}
+        name={wallet.name}
+        color={wallet.color}
+        amount={wallet.amount}
+      />
+    </Grid>
+  ));
 
   return (
     <Grid container direction="column">
       <Grid item>
         <Grid container direction="row">
-          {wallets.map((wallet: Wallet, index: number) => (
-            <Grid item key={index} className={classes.walletItem}>
-              <WalletSummary
-                id={wallet.id}
-                name={wallet.name}
-                color={wallet.color}
-                amount={wallet.amount}
-              />
-            </Grid>
-          ))}
+          {renderWallets}
           <Grid item className={classes.walletItem}>
-            <Button
-              style={{ height: "100%" }}
-              onClick={() => setNewWalletModalIsOpen(true)}
-            >
+            <Button style={{ height: "100%" }} onClick={showNewModal}>
               +
             </Button>
           </Grid>
@@ -116,9 +123,7 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
       <Modal
         title={t("+ New Wallet")}
         isOpen={newWalletModalIsOpen}
-        handleClose={() => {
-          setNewWalletModalIsOpen(false);
-        }}
+        handleClose={hideNewModal}
       >
         <Formik
           initialValues={{
@@ -126,7 +131,7 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
             amount: "",
             color: "#DE60D4",
           }}
-          validationSchema={CreateWalletSchema}
+          validationSchema={createWalletSchema}
           onSubmit={onSubmit}
         >
           {({ errors, touched, values, handleChange }) => (
