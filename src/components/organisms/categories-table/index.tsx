@@ -53,7 +53,7 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     setConfirmDeleteModalIsOpen(true);
   }, []);
   const hideConfirm = useCallback(() => {
-    setConfirmDeleteModalIsOpen(true);
+    setConfirmDeleteModalIsOpen(false);
   }, []);
 
   const { setCategoryUpdate } = useUpdateDetectionContext();
