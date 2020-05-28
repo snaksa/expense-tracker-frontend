@@ -23,6 +23,7 @@ const source: any = {
   "Edit": "Редактирай",
   "Delete": "Изтрий",
   "Save": "Запази",
+  "Total": "Общо",
 
   "Date": "Дата",
   "Time": "Време",

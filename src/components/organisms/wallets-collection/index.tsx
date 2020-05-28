@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Box, Grid } from "@material-ui/core";
 import { Form, Formik } from "formik";
 import { gql } from "apollo-boost";
@@ -11,6 +11,7 @@ import {
 } from "api";
 import useTranslations from "translations";
 import { useNotificationContext } from "services/notification-provider";
+import useCurrencyFormatter from "services/currency-formatter";
 import Modal from "components/molecules/modal";
 import WalletSummary from "components/molecules/wallet-summary";
 import Button from "components/atoms/button";
@@ -31,6 +32,7 @@ export interface FormFields {
 const WalletsCollection = ({ wallets }: Props): JSX.Element => {
   const classes = useStyles({});
   const { t } = useTranslations();
+  const { formatCurrency } = useCurrencyFormatter();
 
   const [newWalletModalIsOpen, setNewWalletModalIsOpen] = useState(false);
   const showNewModal = useCallback(() => setNewWalletModalIsOpen(true), []);
@@ -108,8 +110,21 @@ const WalletsCollection = ({ wallets }: Props): JSX.Element => {
     </Grid>
   ));
 
+  let total = useMemo(() => {
+    let result = 0;
+    wallets.forEach((wallet) => {
+      result += wallet.amount;
+    });
+    return result;
+  }, [wallets]);
+
   return (
     <Grid container direction="column">
+      <Grid item>
+        <Box textAlign="center">
+          {t("Total")}: <span style={{fontWeight: 'bold'}}>{formatCurrency(total)}</span>
+        </Box>
+      </Grid>
       <Grid item>
         <Grid container direction="row">
           {renderWallets}
