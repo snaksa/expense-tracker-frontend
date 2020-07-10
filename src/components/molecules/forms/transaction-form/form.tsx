@@ -16,6 +16,7 @@ import {
   CategoriesSpendingPieDocument,
   TransactionSpendingFlowDocument,
   CategoriesSpendingFlowDocument,
+  WalletsDocument,
 } from "api";
 import { useNotificationContext } from "services/notification-provider";
 import { useSharedDataContext } from "services/shared-data-provider";
@@ -183,7 +184,12 @@ const TransactionForm = ({
       );
       onError();
     },
-    refetchQueries: getRefetchQueries(),
+    refetchQueries: [
+      {
+        query: WalletsDocument,
+      },
+      ...getRefetchQueries()
+    ],
   });
 
   const onSubmit = useCallback(

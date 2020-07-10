@@ -136,7 +136,7 @@ const TableCell: React.FunctionComponent<Props> = ({
               />
             </Grid>
             <Grid item>{row.wallet?.name ?? "Unknown"}</Grid>
-            <Grid item> => </Grid>
+            <Grid item> - </Grid>
             <Grid item>
               <RoundBox
                 width={15}

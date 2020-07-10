@@ -141,7 +141,7 @@ const MainPage = () => {
           <Grid container direction="column" spacing={5}>
             <Grid item xs={12} md={12} lg={12}>
               <Grid container spacing={5}>
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} md={6} lg={6} xl={3}>
                   <Box className={classes.transactions}>
                     <LastTransactions
                       categories={categories}
@@ -149,7 +149,13 @@ const MainPage = () => {
                     />
                   </Box>
                 </Grid>
-                <Grid item xs={12} md={6} lg={6}>
+
+                <Grid item xs={12} md={12} lg={6} xl={3}>
+                  <SummaryBox header={t("Spending")}>
+                    <PieChart data={spendingData} />
+                  </SummaryBox>
+                </Grid>
+                <Grid item xs={12} md={6} lg={12} xl={6}>
                   <SummaryBox header={t("Spending flow")}>
                     <Loader loading={loading} />
                     <Chart
@@ -187,22 +193,12 @@ const MainPage = () => {
                     />
                   </SummaryBox>
                 </Grid>
-                <Grid item xs={12} md={12} lg={3}>
-                  <SummaryBox header={t("Spending")}>
-                    <PieChart data={spendingData} />
-                  </SummaryBox>
-                </Grid>
               </Grid>
             </Grid>
             <Grid item>
               <Grid item xs={12} md={12} lg={12}>
                 <Grid container spacing={5}>
-                  <Grid item xs={12} md={6} lg={3}>
-                    <SummaryBox header={t("Income")}>
-                      <PieChart data={incomeData} />
-                    </SummaryBox>
-                  </Grid>
-                  <Grid item xs={12} md={6} lg={6}>
+                  <Grid item xs={12} md={6} lg={6} xl={9}>
                     <SummaryBox header={t("Spending flow by categories")}>
                       <LineChart
                         hTitle={t("Time")}
@@ -211,7 +207,7 @@ const MainPage = () => {
                       />
                     </SummaryBox>
                   </Grid>
-                  <Grid item xs={12} md={12} lg={3}>
+                  <Grid item xs={12} md={6} lg={6} xl={3}>
                     <SummaryBox header={t("Income")}>
                       <PieChart data={incomeData} />
                     </SummaryBox>
