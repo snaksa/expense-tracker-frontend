@@ -316,7 +316,7 @@ const TransactionsTable = ({
         onCancel={hideDeleteModal}
       />
       <Modal
-        title={t("# Edit Category")}
+        title={t("# Edit Transaction")}
         isOpen={editModalIsOpen}
         handleClose={hideEditModal}
       >

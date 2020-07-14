@@ -86,6 +86,7 @@ const source: any = {
   "Wallet": "Портфейл",
   "Wallets": "Портфейли",
   "# Edit Wallet": "# Редакция на портфейл",
+  "# Edit Transaction": "# Редакция на транзакция",
   "Wallet deleted successfully!": "Портфейлът е изтрит успешно!",
   "An error occured while deleting the wallet!": "Изникна грешка при изтриването на портфейла!",
   "Successfully updated wallet!": "Портфейлът е обновен успешно!",
