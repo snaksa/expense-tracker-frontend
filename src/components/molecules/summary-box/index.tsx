@@ -9,7 +9,7 @@ import Button from "components/atoms/button";
 import useStyles from "./styles";
 
 interface Props {
-  header: string;
+  header?: string;
   children: any;
   responsiveHeight?: boolean;
   onClick?: Function;
@@ -32,43 +32,49 @@ const SummaryBox = ({
     <Box className={classes.wrapper} p={2}>
       <Box className={classes.main} p={3}>
         <Grid container direction="column">
-          <Grid item className={classes.header}>
-            <Grid container justify={"space-between"}>
-              <Grid item>
-                <Box mb={toggle && !visible ? 0 : 3} pb={toggle ? 0 : 3}>
-                  {header}
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box>
-                  {onClick && (
-                    <Button onClick={onClick}>
-                      <AddIcon fontSize={"small"} />
-                    </Button>
-                  )}
-                  {toggle && visible && (
-                    <ExpandLessIcon
-                      fontSize={"small"}
-                      onClick={toggleVisible}
-                      style={{ cursor: "pointer" }}
-                    />
-                  )}
-                  {toggle && !visible && (
-                    <ExpandMoreIcon
-                      fontSize={"small"}
-                      onClick={toggleVisible}
-                      style={{ cursor: "pointer" }}
-                    />
-                  )}
-                </Box>
+          {
+            header && <Grid item className={classes.header}>
+              <Grid container justify={"space-between"}>
+                <Grid item>
+                  <Box mb={toggle && !visible ? 0 : 3} pb={toggle ? 0 : 3}>
+                    {header}
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Box>
+                    {onClick && (
+                      <Button onClick={onClick}>
+                        <AddIcon fontSize={"small"} />
+                      </Button>
+                    )}
+                    {toggle && visible && (
+                      <ExpandLessIcon
+                        fontSize={"small"}
+                        onClick={toggleVisible}
+                        style={{ cursor: "pointer" }}
+                      />
+                    )}
+                    {toggle && !visible && (
+                      <ExpandMoreIcon
+                        fontSize={"small"}
+                        onClick={toggleVisible}
+                        style={{ cursor: "pointer" }}
+                      />
+                    )}
+                  </Box>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          }
+
           <Grid
             item
-            className={`${classes.content} ${
-              responsiveHeight ? classes.noMinHeight : ""
-            } ${toggle && !visible ? classes.hiddenContent : ""}`}
+            className={
+              `${classes.content} 
+              ${responsiveHeight ? classes.noMinHeight : ""} 
+              ${toggle && !visible ? classes.hiddenContent : ""}
+              ${!header ? classes.hideBorder : ""}`
+            }
           >
             {children}
           </Grid>

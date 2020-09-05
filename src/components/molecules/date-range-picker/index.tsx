@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from "react";
 import { Box } from "@material-ui/core";
-import moment from "moment";
 import useTranslations from "translations";
 import Select from "components/atoms/form/select";
+import DateUtils from "utils/dateUtils";
 import useStyles from "./styles";
 
 interface Props {
@@ -23,8 +23,7 @@ export enum Range {
 }
 
 export const calculateBackDate = (value: number) => {
-  let backDate: any = moment
-    .utc()
+  let backDate: any = DateUtils.getToday()
     .set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
 
   if (value === Range.Last7Days) {
@@ -37,8 +36,9 @@ export const calculateBackDate = (value: number) => {
     backDate = null;
   }
 
-  return backDate ? backDate.format("Y-M-D") : null;
+  return backDate;
 };
+
 
 const DateRangePicker = ({ onChange, responsive }: Props): JSX.Element => {
   const classes = useStyles({});

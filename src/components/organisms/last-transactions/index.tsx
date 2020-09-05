@@ -14,6 +14,7 @@ import Modal from "components/molecules/modal";
 import TransactionForm from "components/molecules/forms/transaction-form/form";
 import Loader from "components/atoms/loader";
 import useStyles from "./styles";
+import DateUtils from "utils/dateUtils";
 
 let backupData: any[] = [];
 
@@ -36,7 +37,9 @@ const LastTransactions = ({
 
   const { data, refetch, loading } = useTransactionsQuery({
     variables: {
-      date: null,
+      startDate: null,
+      endDate: null,
+      timezone: DateUtils.getTimezone(),
       walletIds: userWallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
       page: 1,
@@ -95,12 +98,14 @@ const LastTransactions = ({
 
 LastTransactions.fragment = gql`
   query Transactions(
-    $walletIds: [Int]
+    $walletIds: [Int]!
     $categoryIds: [Int]
     $page: Int
     $limit: Int
     $unlimited: Boolean
-    $date: String
+    $startDate: String
+    $endDate: String
+    $timezone: String
   ) {
     transactions(
       input: {
@@ -109,7 +114,9 @@ LastTransactions.fragment = gql`
         page: $page
         limit: $limit
         unlimited: $unlimited
-        date: $date
+        startDate: $startDate
+        endDate: $endDate
+        timezone: $timezone
       }
     ) {
       data {

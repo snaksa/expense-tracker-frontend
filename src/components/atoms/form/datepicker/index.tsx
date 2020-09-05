@@ -6,12 +6,14 @@ import useTranslations from 'translations';
 interface Props {
   name: string;
   date: any;
+  label?: any;
   onChange: any;
 }
 
 const DatePicker: React.FunctionComponent<Props> = ({
   name,
   date,
+  label,
   onChange
 }: Props): JSX.Element => {
   const {t} = useTranslations();
@@ -35,7 +37,7 @@ const DatePicker: React.FunctionComponent<Props> = ({
           margin="normal"
           name={name}
           id="date-picker-dialog"
-          label={t("Date")}
+          label={t(label ?? 'Date')}
           animateYearScrolling={true}
           format="yyyy-MM-dd"
           value={date}

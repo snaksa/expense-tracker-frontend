@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => ({
     hiddenContent: {
         display: 'none',
         border: 0
+    },
+    hideBorder: {
+        borderTop: '0'
     }
 }));
 

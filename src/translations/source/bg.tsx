@@ -26,6 +26,8 @@ const source: any = {
   "Total": "Общо",
 
   "Date": "Дата",
+  "Start Date": "Начална дата",
+  "End Date": "Крайна дата",
   "Time": "Време",
   "Money": "Пари",
 

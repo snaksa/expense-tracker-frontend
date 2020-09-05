@@ -20,25 +20,28 @@ import PieChart from "components/organisms/pie-chart";
 import LineChart from "components/organisms/line-chart";
 import SummaryBox from "components/molecules/summary-box";
 import CheckboxList from "components/molecules/checkbox-list";
-import DateRangePicker, {
+import {
   Range,
   calculateBackDate,
 } from "components/molecules/date-range-picker";
 import Loader from "components/atoms/loader";
 import useStyles from "./styles";
+import DatePicker from "components/atoms/form/datepicker";
+import DateUtils from "utils/dateUtils";
 
 const StatsPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
   const { t } = useTranslations();
 
+  const [startDate, setStartDate] = useState(calculateBackDate(Range.Last7Days));
+  const [endDate, setEndDate] = useState(DateUtils.getToday());
+
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
   const [chosenWallets, setChosenWallets] = useState<number[]>([]);
   const [chosenCategories, setChosenCategories] = useState<number[]>([]);
-
-  const [backDate, setBackDate] = useState(calculateBackDate(Range.Last7Days));
 
   const { data } = useWalletsQuery();
   const wallets: any = data ? (data.wallets ? data.wallets : []) : [];
@@ -77,7 +80,9 @@ const StatsPage = () => {
     refetch: refetchReport,
   } = useTransactionSpendingFlowQuery({
     variables: {
-      date: backDate,
+      startDate: DateUtils.toUTCString(startDate),
+      endDate: DateUtils.toUTCString(endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 })),
+      timezone: DateUtils.getTimezone(),
       walletIds: chosenWallets,
       categoryIds: chosenCategories,
     },
@@ -97,7 +102,9 @@ const StatsPage = () => {
     refetch: refetchSpendingPie,
   } = useCategoriesSpendingPieQuery({
     variables: {
-      date: backDate,
+      startDate: DateUtils.toUTCString(startDate),
+      endDate: DateUtils.toUTCString(endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 })),
+      timezone: DateUtils.getTimezone(),
       walletIds: chosenWallets,
       categoryIds: chosenCategories,
       type: TransactionType.Expense,
@@ -118,7 +125,9 @@ const StatsPage = () => {
     refetch: refetchIncomePie,
   } = useCategoriesSpendingPieQuery({
     variables: {
-      date: backDate,
+      startDate: DateUtils.toUTCString(startDate),
+      endDate: DateUtils.toUTCString(endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 })),
+      timezone: DateUtils.getTimezone(),
       walletIds: chosenWallets,
       categoryIds: chosenCategories,
       type: TransactionType.Income,
@@ -139,7 +148,9 @@ const StatsPage = () => {
     refetch: refetchSpendingFlow,
   } = useCategoriesSpendingFlowQuery({
     variables: {
-      date: backDate,
+      startDate: DateUtils.toUTCString(startDate),
+      endDate: DateUtils.toUTCString(endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 })),
+      timezone: DateUtils.getTimezone(),
       walletIds: chosenWallets,
       categoryIds: chosenCategories,
     },
@@ -204,7 +215,26 @@ const StatsPage = () => {
             spacing={5}
           >
             <Grid item>
-              <DateRangePicker responsive={true} onChange={setBackDate} />
+            <SummaryBox responsiveHeight={true}>
+            <Grid container spacing={5}>
+              <Grid item xs={12}>
+                <DatePicker
+                  name="startDate"
+                  label="Start Date"
+                  date={startDate}
+                  onChange={(date: Date) => setStartDate(DateUtils.toMomentDate(date))}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <DatePicker
+                  name="endDate"
+                  label="End Date"
+                  date={endDate}
+                  onChange={(date: Date) => setEndDate(DateUtils.toMomentDate(date))}
+                />
+              </Grid>
+            </Grid>
+          </SummaryBox>
             </Grid>
             <Grid item>
               <SummaryBox
@@ -308,7 +338,8 @@ const StatsPage = () => {
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
               <TransactionsTable
-                selectedDate={backDate}
+                startDate={DateUtils.toUTCString(startDate)}
+                endDate={DateUtils.toUTCString(endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 }))}
                 walletIds={chosenWallets}
                 cateogryIds={chosenCategories}
                 onDelete={refetchCharts}

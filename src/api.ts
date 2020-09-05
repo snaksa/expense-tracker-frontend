@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
 export interface Scalars {
   ID: string;
@@ -9,18 +10,19 @@ export interface Scalars {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Datetime scalar */
   DateTime: any;
 }
 
 export interface AreaChart {
-   __typename?: 'AreaChart';
+  __typename?: 'AreaChart';
   header: Array<Maybe<Scalars['String']>>;
   data: Maybe<Array<Maybe<Array<Maybe<Scalars['String']>>>>>;
   colors: Maybe<Array<Maybe<Scalars['String']>>>;
 }
 
 export interface Category {
-   __typename?: 'Category';
+  __typename?: 'Category';
   id: Scalars['Int'];
   name: Scalars['String'];
   color: Scalars['String'];
@@ -41,10 +43,12 @@ export interface CategoryDeleteRequestInput {
 }
 
 export interface CategoryRecordsRequestInput {
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
   type: Maybe<TransactionType>;
-  date: Maybe<Scalars['String']>;
+  startDate: Maybe<Scalars['String']>;
+  endDate: Maybe<Scalars['String']>;
+  timezone: Maybe<Scalars['String']>;
 }
 
 export interface CategoryUpdateRequestInput {
@@ -55,14 +59,17 @@ export interface CategoryUpdateRequestInput {
 }
 
 export interface Currency {
-   __typename?: 'Currency';
+  __typename?: 'Currency';
   id: Scalars['String'];
   value: Scalars['String'];
 }
 
 
 export interface Mutation {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
+  createCategory: Maybe<Category>;
+  updateCategory: Maybe<Category>;
+  deleteCategory: Maybe<Category>;
   registerUser: Maybe<User>;
   loginUser: Maybe<Scalars['String']>;
   updateUser: Maybe<User>;
@@ -72,9 +79,21 @@ export interface Mutation {
   createWallet: Maybe<Wallet>;
   updateWallet: Maybe<Wallet>;
   deleteWallet: Maybe<Wallet>;
-  createCategory: Maybe<Category>;
-  updateCategory: Maybe<Category>;
-  deleteCategory: Maybe<Category>;
+}
+
+
+export interface MutationCreateCategoryArgs {
+  input: CategoryCreateRequestInput;
+}
+
+
+export interface MutationUpdateCategoryArgs {
+  input: CategoryUpdateRequestInput;
+}
+
+
+export interface MutationDeleteCategoryArgs {
+  input: CategoryDeleteRequestInput;
 }
 
 
@@ -122,35 +141,24 @@ export interface MutationDeleteWalletArgs {
   input: WalletDeleteRequestInput;
 }
 
-
-export interface MutationCreateCategoryArgs {
-  input: CategoryCreateRequestInput;
-}
-
-
-export interface MutationUpdateCategoryArgs {
-  input: CategoryUpdateRequestInput;
-}
-
-
-export interface MutationDeleteCategoryArgs {
-  input: CategoryDeleteRequestInput;
-}
-
 export interface Query {
-   __typename?: 'Query';
-  users: Maybe<Array<Maybe<User>>>;
-  me: Maybe<User>;
+  __typename?: 'Query';
+  categories: Maybe<Array<Maybe<Category>>>;
+  category: Maybe<Category>;
+  currencies: Maybe<Array<Maybe<Currency>>>;
   transactionSpendingFlow: Maybe<AreaChart>;
   categoriesSpendingFlow: Maybe<AreaChart>;
   categoriesSpendingPieChart: Maybe<AreaChart>;
+  me: Maybe<User>;
   transactions: Maybe<TransactionsPaginatedResult>;
   transaction: Maybe<Transaction>;
   wallets: Maybe<Array<Maybe<Wallet>>>;
   wallet: Maybe<Wallet>;
-  categories: Maybe<Array<Maybe<Category>>>;
-  category: Maybe<Category>;
-  currencies: Maybe<Array<Maybe<Currency>>>;
+}
+
+
+export interface QueryCategoryArgs {
+  id: Scalars['Int'];
 }
 
 
@@ -183,13 +191,8 @@ export interface QueryWalletArgs {
   id: Scalars['Int'];
 }
 
-
-export interface QueryCategoryArgs {
-  id: Scalars['Int'];
-}
-
 export interface Transaction {
-   __typename?: 'Transaction';
+  __typename?: 'Transaction';
   id: Scalars['Int'];
   description: Scalars['String'];
   value: Scalars['Float'];
@@ -215,16 +218,18 @@ export interface TransactionDeleteRequestInput {
 }
 
 export interface TransactionRecordsRequestInput {
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
-  date: Maybe<Scalars['String']>;
+  startDate: Maybe<Scalars['String']>;
+  endDate: Maybe<Scalars['String']>;
+  timezone: Maybe<Scalars['String']>;
   limit: Maybe<Scalars['Int']>;
   page: Maybe<Scalars['Int']>;
   unlimited: Maybe<Scalars['Boolean']>;
 }
 
 export interface TransactionsPaginatedResult {
-   __typename?: 'TransactionsPaginatedResult';
+  __typename?: 'TransactionsPaginatedResult';
   data: Array<Maybe<Transaction>>;
   currentPage: Scalars['Int'];
   totalPages: Scalars['Int'];
@@ -251,7 +256,7 @@ export interface TransactionUpdateRequestInput {
 }
 
 export interface User {
-   __typename?: 'User';
+  __typename?: 'User';
   id: Scalars['Int'];
   firstName: Maybe<Scalars['String']>;
   lastName: Maybe<Scalars['String']>;
@@ -282,7 +287,7 @@ export interface UserUpdateRequestInput {
 }
 
 export interface Wallet {
-   __typename?: 'Wallet';
+  __typename?: 'Wallet';
   id: Scalars['Int'];
   name: Scalars['String'];
   color: Scalars['String'];
@@ -309,10 +314,10 @@ export interface WalletUpdateRequestInput {
   color: Maybe<Scalars['String']>;
 }
 
-export type CreateCategoryMutationVariables = {
+export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
   color: Scalars['String'];
-};
+}>;
 
 
 export type CreateCategoryMutation = (
@@ -327,10 +332,10 @@ export type CreateCategoryMutation = (
   )> }
 );
 
-export type LoginMutationVariables = {
+export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
-};
+}>;
 
 
 export type LoginMutation = (
@@ -338,7 +343,7 @@ export type LoginMutation = (
   & Pick<Mutation, 'loginUser'>
 );
 
-export type CurrentUserQueryVariables = {};
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrentUserQuery = (
@@ -349,11 +354,11 @@ export type CurrentUserQuery = (
   )> }
 );
 
-export type RegisterMutationVariables = {
+export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
   confirmPassword: Scalars['String'];
-};
+}>;
 
 
 export type RegisterMutation = (
@@ -364,7 +369,7 @@ export type RegisterMutation = (
   )> }
 );
 
-export type CreateTransactionMutationVariables = {
+export type CreateTransactionMutationVariables = Exact<{
   date: Scalars['String'];
   description: Scalars['String'];
   value: Scalars['Float'];
@@ -372,7 +377,7 @@ export type CreateTransactionMutationVariables = {
   categoryId: Maybe<Scalars['Int']>;
   walletId: Scalars['Int'];
   walletReceiverId: Maybe<Scalars['Int']>;
-};
+}>;
 
 
 export type CreateTransactionMutation = (
@@ -397,9 +402,9 @@ export type CreateTransactionMutation = (
   )> }
 );
 
-export type DeleteWalletMutationVariables = {
+export type DeleteWalletMutationVariables = Exact<{
   id: Scalars['Int'];
-};
+}>;
 
 
 export type DeleteWalletMutation = (
@@ -410,11 +415,11 @@ export type DeleteWalletMutation = (
   )> }
 );
 
-export type UpdateWalletMutationVariables = {
+export type UpdateWalletMutationVariables = Exact<{
   id: Scalars['Int'];
   name: Maybe<Scalars['String']>;
   color: Maybe<Scalars['String']>;
-};
+}>;
 
 
 export type UpdateWalletMutation = (
@@ -425,9 +430,9 @@ export type UpdateWalletMutation = (
   )> }
 );
 
-export type DeleteCategoryMutationVariables = {
+export type DeleteCategoryMutationVariables = Exact<{
   id: Scalars['Int'];
-};
+}>;
 
 
 export type DeleteCategoryMutation = (
@@ -438,11 +443,11 @@ export type DeleteCategoryMutation = (
   )> }
 );
 
-export type UpdateCategoryMutationVariables = {
+export type UpdateCategoryMutationVariables = Exact<{
   id: Scalars['Int'];
   name: Maybe<Scalars['String']>;
   color: Maybe<Scalars['String']>;
-};
+}>;
 
 
 export type UpdateCategoryMutation = (
@@ -453,14 +458,16 @@ export type UpdateCategoryMutation = (
   )> }
 );
 
-export type TransactionsQueryVariables = {
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+export type TransactionsQueryVariables = Exact<{
+  walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
   page: Maybe<Scalars['Int']>;
   limit: Maybe<Scalars['Int']>;
   unlimited: Maybe<Scalars['Boolean']>;
-  date: Maybe<Scalars['String']>;
-};
+  startDate: Maybe<Scalars['String']>;
+  endDate: Maybe<Scalars['String']>;
+  timezone: Maybe<Scalars['String']>;
+}>;
 
 
 export type TransactionsQuery = (
@@ -485,13 +492,13 @@ export type TransactionsQuery = (
   )> }
 );
 
-export type UpdateUserMutationVariables = {
+export type UpdateUserMutationVariables = Exact<{
   email: Maybe<Scalars['String']>;
   firstName: Maybe<Scalars['String']>;
   lastName: Maybe<Scalars['String']>;
   currency: Maybe<Scalars['String']>;
   language: Maybe<Scalars['String']>;
-};
+}>;
 
 
 export type UpdateUserMutation = (
@@ -502,9 +509,9 @@ export type UpdateUserMutation = (
   )> }
 );
 
-export type DeleteTransactionMutationVariables = {
+export type DeleteTransactionMutationVariables = Exact<{
   id: Scalars['Int'];
-};
+}>;
 
 
 export type DeleteTransactionMutation = (
@@ -525,7 +532,7 @@ export type DeleteTransactionMutation = (
   )> }
 );
 
-export type UpdateTransactionMutationVariables = {
+export type UpdateTransactionMutationVariables = Exact<{
   id: Scalars['Int'];
   date: Maybe<Scalars['String']>;
   description: Maybe<Scalars['String']>;
@@ -534,7 +541,7 @@ export type UpdateTransactionMutationVariables = {
   categoryId: Maybe<Scalars['Int']>;
   walletId: Maybe<Scalars['Int']>;
   walletReceiverId: Maybe<Scalars['Int']>;
-};
+}>;
 
 
 export type UpdateTransactionMutation = (
@@ -555,11 +562,11 @@ export type UpdateTransactionMutation = (
   )> }
 );
 
-export type CreateWalletMutationVariables = {
+export type CreateWalletMutationVariables = Exact<{
   name: Scalars['String'];
   amount: Maybe<Scalars['Float']>;
   color: Scalars['String'];
-};
+}>;
 
 
 export type CreateWalletMutation = (
@@ -570,7 +577,7 @@ export type CreateWalletMutation = (
   )> }
 );
 
-export type WalletsQueryVariables = {};
+export type WalletsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type WalletsQuery = (
@@ -581,7 +588,7 @@ export type WalletsQuery = (
   )>>> }
 );
 
-export type CategoriesQueryVariables = {};
+export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CategoriesQuery = (
@@ -596,11 +603,13 @@ export type CategoriesQuery = (
   )>>> }
 );
 
-export type CategoriesSpendingFlowQueryVariables = {
-  date: Maybe<Scalars['String']>;
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+export type CategoriesSpendingFlowQueryVariables = Exact<{
+  startDate: Maybe<Scalars['String']>;
+  endDate: Maybe<Scalars['String']>;
+  timezone: Maybe<Scalars['String']>;
+  walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
-};
+}>;
 
 
 export type CategoriesSpendingFlowQuery = (
@@ -611,12 +620,14 @@ export type CategoriesSpendingFlowQuery = (
   )> }
 );
 
-export type CategoriesSpendingPieQueryVariables = {
-  date: Maybe<Scalars['String']>;
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+export type CategoriesSpendingPieQueryVariables = Exact<{
+  startDate: Maybe<Scalars['String']>;
+  endDate: Maybe<Scalars['String']>;
+  timezone: Maybe<Scalars['String']>;
+  walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
   type: Maybe<TransactionType>;
-};
+}>;
 
 
 export type CategoriesSpendingPieQuery = (
@@ -627,7 +638,7 @@ export type CategoriesSpendingPieQuery = (
   )> }
 );
 
-export type CurrenciesQueryVariables = {};
+export type CurrenciesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CurrenciesQuery = (
@@ -638,11 +649,13 @@ export type CurrenciesQuery = (
   )>>> }
 );
 
-export type TransactionSpendingFlowQueryVariables = {
-  date: Maybe<Scalars['String']>;
-  walletIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+export type TransactionSpendingFlowQueryVariables = Exact<{
+  startDate: Maybe<Scalars['String']>;
+  endDate: Maybe<Scalars['String']>;
+  timezone: Maybe<Scalars['String']>;
+  walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
-};
+}>;
 
 
 export type TransactionSpendingFlowQuery = (
@@ -746,7 +759,7 @@ export const CurrentUserDocument = gql`
  * __useCurrentUserQuery__
  *
  * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1009,8 +1022,8 @@ export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCatego
 export type UpdateCategoryMutationResult = ApolloReactCommon.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
 export const TransactionsDocument = gql`
-    query Transactions($walletIds: [Int], $categoryIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean, $date: String) {
-  transactions(input: {walletIds: $walletIds, categoryIds: $categoryIds, page: $page, limit: $limit, unlimited: $unlimited, date: $date}) {
+    query Transactions($walletIds: [Int]!, $categoryIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean, $startDate: String, $endDate: String, $timezone: String) {
+  transactions(input: {walletIds: $walletIds, categoryIds: $categoryIds, page: $page, limit: $limit, unlimited: $unlimited, startDate: $startDate, endDate: $endDate, timezone: $timezone}) {
     data {
       id
       description
@@ -1046,7 +1059,7 @@ export const TransactionsDocument = gql`
  * __useTransactionsQuery__
  *
  * To run a query within a React component, call `useTransactionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1059,7 +1072,9 @@ export const TransactionsDocument = gql`
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      unlimited: // value for 'unlimited'
- *      date: // value for 'date'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      timezone: // value for 'timezone'
  *   },
  * });
  */
@@ -1278,7 +1293,7 @@ export const WalletsDocument = gql`
  * __useWalletsQuery__
  *
  * To run a query within a React component, call `useWalletsQuery` and pass it any options that fit your needs.
- * When your component renders, `useWalletsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useWalletsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1320,7 +1335,7 @@ export const CategoriesDocument = gql`
  * __useCategoriesQuery__
  *
  * To run a query within a React component, call `useCategoriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1341,8 +1356,8 @@ export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
 export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;
 export type CategoriesQueryResult = ApolloReactCommon.QueryResult<CategoriesQuery, CategoriesQueryVariables>;
 export const CategoriesSpendingFlowDocument = gql`
-    query CategoriesSpendingFlow($date: String, $walletIds: [Int], $categoryIds: [Int]) {
-  categoriesSpendingFlow(input: {date: $date, walletIds: $walletIds, categoryIds: $categoryIds}) {
+    query CategoriesSpendingFlow($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int]) {
+  categoriesSpendingFlow(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds}) {
     header
     data
     colors
@@ -1354,7 +1369,7 @@ export const CategoriesSpendingFlowDocument = gql`
  * __useCategoriesSpendingFlowQuery__
  *
  * To run a query within a React component, call `useCategoriesSpendingFlowQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoriesSpendingFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCategoriesSpendingFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1362,7 +1377,9 @@ export const CategoriesSpendingFlowDocument = gql`
  * @example
  * const { data, loading, error } = useCategoriesSpendingFlowQuery({
  *   variables: {
- *      date: // value for 'date'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      timezone: // value for 'timezone'
  *      walletIds: // value for 'walletIds'
  *      categoryIds: // value for 'categoryIds'
  *   },
@@ -1378,8 +1395,8 @@ export type CategoriesSpendingFlowQueryHookResult = ReturnType<typeof useCategor
 export type CategoriesSpendingFlowLazyQueryHookResult = ReturnType<typeof useCategoriesSpendingFlowLazyQuery>;
 export type CategoriesSpendingFlowQueryResult = ApolloReactCommon.QueryResult<CategoriesSpendingFlowQuery, CategoriesSpendingFlowQueryVariables>;
 export const CategoriesSpendingPieDocument = gql`
-    query CategoriesSpendingPie($date: String, $walletIds: [Int], $categoryIds: [Int], $type: TransactionType) {
-  categoriesSpendingPieChart(input: {date: $date, walletIds: $walletIds, categoryIds: $categoryIds, type: $type}) {
+    query CategoriesSpendingPie($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int], $type: TransactionType) {
+  categoriesSpendingPieChart(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds, type: $type}) {
     header
     data
     colors
@@ -1391,7 +1408,7 @@ export const CategoriesSpendingPieDocument = gql`
  * __useCategoriesSpendingPieQuery__
  *
  * To run a query within a React component, call `useCategoriesSpendingPieQuery` and pass it any options that fit your needs.
- * When your component renders, `useCategoriesSpendingPieQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCategoriesSpendingPieQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1399,7 +1416,9 @@ export const CategoriesSpendingPieDocument = gql`
  * @example
  * const { data, loading, error } = useCategoriesSpendingPieQuery({
  *   variables: {
- *      date: // value for 'date'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      timezone: // value for 'timezone'
  *      walletIds: // value for 'walletIds'
  *      categoryIds: // value for 'categoryIds'
  *      type: // value for 'type'
@@ -1428,7 +1447,7 @@ export const CurrenciesDocument = gql`
  * __useCurrenciesQuery__
  *
  * To run a query within a React component, call `useCurrenciesQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1449,8 +1468,8 @@ export type CurrenciesQueryHookResult = ReturnType<typeof useCurrenciesQuery>;
 export type CurrenciesLazyQueryHookResult = ReturnType<typeof useCurrenciesLazyQuery>;
 export type CurrenciesQueryResult = ApolloReactCommon.QueryResult<CurrenciesQuery, CurrenciesQueryVariables>;
 export const TransactionSpendingFlowDocument = gql`
-    query TransactionSpendingFlow($date: String, $walletIds: [Int], $categoryIds: [Int]) {
-  transactionSpendingFlow(input: {date: $date, walletIds: $walletIds, categoryIds: $categoryIds}) {
+    query TransactionSpendingFlow($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int]) {
+  transactionSpendingFlow(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds}) {
     header
     data
   }
@@ -1461,7 +1480,7 @@ export const TransactionSpendingFlowDocument = gql`
  * __useTransactionSpendingFlowQuery__
  *
  * To run a query within a React component, call `useTransactionSpendingFlowQuery` and pass it any options that fit your needs.
- * When your component renders, `useTransactionSpendingFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * When your component renders, `useTransactionSpendingFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -1469,7 +1488,9 @@ export const TransactionSpendingFlowDocument = gql`
  * @example
  * const { data, loading, error } = useTransactionSpendingFlowQuery({
  *   variables: {
- *      date: // value for 'date'
+ *      startDate: // value for 'startDate'
+ *      endDate: // value for 'endDate'
+ *      timezone: // value for 'timezone'
  *      walletIds: // value for 'walletIds'
  *      categoryIds: // value for 'categoryIds'
  *   },

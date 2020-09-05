@@ -20,9 +20,11 @@ import Table from "components/organisms/table";
 import ConfirmationDialog from "components/molecules/confirmation-dialog";
 import Modal from "components/molecules/modal";
 import TransactionFormWrapper from "components/molecules/forms/transaction-form";
+import DateUtils from "utils/dateUtils";
 
 interface Props {
-  selectedDate: string;
+  startDate: string;
+  endDate: string;
   walletIds?: number[];
   cateogryIds?: number[];
   onNewClick?: Function;
@@ -31,7 +33,8 @@ interface Props {
 }
 
 const TransactionsTable = ({
-  selectedDate,
+  startDate,
+  endDate,
   walletIds,
   cateogryIds,
   onNewClick,
@@ -82,11 +85,13 @@ const TransactionsTable = ({
 
   useEffect(() => {
     setCurrentPage(0);
-  }, [selectedDate]);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     const params = {
-      date: selectedDate,
+      startDate: startDate,
+      endDate: endDate,
+      timezone: DateUtils.getTimezone(),
       walletIds: walletIds ?? [],
       categoryIds: cateogryIds ?? [],
       page: currentPage + 1,
@@ -106,7 +111,8 @@ const TransactionsTable = ({
     getTransactions,
     walletIds,
     cateogryIds,
-    selectedDate,
+    startDate,
+    endDate,
     currentLimit,
     currentPage,
     usedTranasctionParams,

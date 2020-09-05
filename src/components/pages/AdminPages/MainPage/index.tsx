@@ -22,6 +22,7 @@ import LineChart from "components/organisms/line-chart";
 import SummaryBox from "components/molecules/summary-box";
 import Loader from "components/atoms/loader";
 import useStyles from "./styles";
+import DateUtils from "utils/dateUtils";
 
 const MainPage = () => {
   const classes = useStyles();
@@ -40,7 +41,9 @@ const MainPage = () => {
     refetch: refetchReport,
   } = useTransactionSpendingFlowQuery({
     variables: {
-      date: null,
+      startDate: null,
+      endDate: null,
+      timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
     },
@@ -59,7 +62,9 @@ const MainPage = () => {
     refetch: refetchSpendingPie,
   } = useCategoriesSpendingPieQuery({
     variables: {
-      date: null,
+      startDate: null,
+      endDate: null,
+      timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
       type: TransactionType.Expense,
@@ -79,7 +84,9 @@ const MainPage = () => {
     refetch: refetchIncomePie,
   } = useCategoriesSpendingPieQuery({
     variables: {
-      date: null,
+      startDate: null,
+      endDate: null,
+      timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
       type: TransactionType.Income,
@@ -99,7 +106,9 @@ const MainPage = () => {
     refetch: refetchSpendingFlow,
   } = useCategoriesSpendingFlowQuery({
     variables: {
-      date: null,
+      startDate: null,
+      endDate: null,
+      timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
     },

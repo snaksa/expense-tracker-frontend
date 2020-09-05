@@ -117,12 +117,14 @@ SettingsPage.fragment = gql`
     }
   }
   query CategoriesSpendingFlow(
-    $date: String
-    $walletIds: [Int]
+    $startDate: String
+    $endDate: String
+    $timezone: String
+    $walletIds: [Int]!
     $categoryIds: [Int]
   ) {
     categoriesSpendingFlow(
-      input: { date: $date, walletIds: $walletIds, categoryIds: $categoryIds }
+      input: { startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds }
     ) {
       header
       data
@@ -130,14 +132,18 @@ SettingsPage.fragment = gql`
     }
   }
   query CategoriesSpendingPie(
-    $date: String
-    $walletIds: [Int]
+    $startDate: String
+    $endDate: String
+    $timezone: String
+    $walletIds: [Int]!
     $categoryIds: [Int]
     $type: TransactionType
   ) {
     categoriesSpendingPieChart(
       input: {
-        date: $date
+        startDate: $startDate
+        endDate: $endDate
+        timezone: $timezone
         walletIds: $walletIds
         categoryIds: $categoryIds
         type: $type
