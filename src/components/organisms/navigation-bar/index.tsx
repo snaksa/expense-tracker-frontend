@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import useTranslations from "translations";
-import Button from "components/atoms/button";
+import Button from "components/core/button";
 import useStyles from "./styles";
 
 const NavigationBar = () => {

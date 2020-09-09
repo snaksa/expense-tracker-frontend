@@ -3,8 +3,8 @@ import { Helmet } from "react-helmet";
 import { Grid, Box } from "@material-ui/core";
 import useTranslations from "translations";
 import AuthForm from "components/organisms/auth-form";
-import Heading from "components/molecules/heading";
-import RegisterForm from "components/molecules/forms/register";
+import Heading from "components/core/heading";
+import RegisterForm from "components/forms/register";
 import useStyles from "./styles";
 
 const RegisterPage = () => {

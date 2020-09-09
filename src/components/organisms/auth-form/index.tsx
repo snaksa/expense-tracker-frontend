@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Box } from "@material-ui/core";
-import RoundImage from "components/molecules/round-image";
+import RoundImage from "components/core/round-image";
 import useStyles from "./styles";
 
 interface Props {

@@ -15,26 +15,22 @@ import {
 } from "api";
 import useTranslations from "translations";
 import useCurrencyFormatter from "services/currency-formatter";
-import TransactionsTable from "components/organisms/transactions-table";
-import PieChart from "components/organisms/pie-chart";
-import LineChart from "components/organisms/line-chart";
-import SummaryBox from "components/molecules/summary-box";
-import CheckboxList from "components/molecules/checkbox-list";
-import {
-  Range,
-  calculateBackDate,
-} from "components/molecules/date-range-picker";
-import Loader from "components/atoms/loader";
+import TransactionsTable from "components/tables/transactions-table";
+import PieChart from "components/charts/pie-chart";
+import LineChart from "components/charts/line-chart";
+import SummaryBox from "components/core/summary-box";
+import CheckboxList from "components/core/checkbox-list";
+import Loader from "components/core/loader";
 import useStyles from "./styles";
-import DatePicker from "components/atoms/form/datepicker";
-import DateUtils from "utils/dateUtils";
+import DatePicker from "components/forms/fields/datepicker";
+import DateUtils, { Range } from "utils/dateUtils";
 
 const StatsPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
   const { t } = useTranslations();
 
-  const [startDate, setStartDate] = useState(calculateBackDate(Range.Last7Days));
+  const [startDate, setStartDate] = useState(DateUtils.calculateBackDate(Range.Last7Days));
   const [endDate, setEndDate] = useState(DateUtils.getToday());
 
   const { data: categoriesData } = useCategoriesQuery();
@@ -215,26 +211,26 @@ const StatsPage = () => {
             spacing={5}
           >
             <Grid item>
-            <SummaryBox responsiveHeight={true}>
-            <Grid container spacing={5}>
-              <Grid item xs={12}>
-                <DatePicker
-                  name="startDate"
-                  label="Start Date"
-                  date={startDate}
-                  onChange={(date: Date) => setStartDate(DateUtils.toMomentDate(date))}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <DatePicker
-                  name="endDate"
-                  label="End Date"
-                  date={endDate}
-                  onChange={(date: Date) => setEndDate(DateUtils.toMomentDate(date))}
-                />
-              </Grid>
-            </Grid>
-          </SummaryBox>
+              <SummaryBox responsiveHeight={true}>
+                <Grid container spacing={5}>
+                  <Grid item xs={12}>
+                    <DatePicker
+                      name="startDate"
+                      label="Start Date"
+                      date={startDate}
+                      onChange={(date: Date) => setStartDate(DateUtils.toMomentDate(date))}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <DatePicker
+                      name="endDate"
+                      label="End Date"
+                      date={endDate}
+                      onChange={(date: Date) => setEndDate(DateUtils.toMomentDate(date))}
+                    />
+                  </Grid>
+                </Grid>
+              </SummaryBox>
             </Grid>
             <Grid item>
               <SummaryBox
@@ -278,9 +274,9 @@ const StatsPage = () => {
                         chartData.length > 1
                           ? chartData
                           : [
-                              ["", ""],
-                              ["", 0],
-                            ]
+                            ["", ""],
+                            ["", 0],
+                          ]
                       }
                       formatters={[
                         {

@@ -3,8 +3,8 @@ import { Helmet } from "react-helmet";
 import { Grid, Box } from "@material-ui/core";
 import useTranslations from "translations";
 import AuthForm from "components/organisms/auth-form";
-import Heading from "components/molecules/heading";
-import Login from "components/molecules/forms/login";
+import Heading from "components/core/heading";
+import Login from "components/forms/login";
 import useStyles from "./styles";
 
 const LoginPage = () => {

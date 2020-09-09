@@ -17,10 +17,10 @@ import {
 import useTranslations from "translations";
 import useCurrencyFormatter from "services/currency-formatter";
 import LastTransactions from "components/organisms/last-transactions";
-import PieChart from "components/organisms/pie-chart";
-import LineChart from "components/organisms/line-chart";
-import SummaryBox from "components/molecules/summary-box";
-import Loader from "components/atoms/loader";
+import PieChart from "components/charts/pie-chart";
+import LineChart from "components/charts/line-chart";
+import SummaryBox from "components/core/summary-box";
+import Loader from "components/core/loader";
 import useStyles from "./styles";
 import DateUtils from "utils/dateUtils";
 

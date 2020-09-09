@@ -7,17 +7,13 @@ import { Box, Grid } from "@material-ui/core";
 import { useWalletsQuery, useTransactionSpendingFlowQuery, Wallet } from "api";
 import useTranslations from "translations";
 import useCurrencyFormatter from "services/currency-formatter";
-import TransactionsTable from "components/organisms/transactions-table";
-import SummaryBox from "components/molecules/summary-box";
-import {
-  Range,
-  calculateBackDate
-} from "components/molecules/date-range-picker";
-import DatePicker from "components/atoms/form/datepicker";
-import TransactionFormWrapper from "components/molecules/forms/transaction-form";
-import Modal from "components/molecules/modal";
-import Loader from "components/atoms/loader";
-import DateUtils from "utils/dateUtils";
+import TransactionsTable from "components/tables/transactions-table";
+import SummaryBox from "components/core/summary-box";
+import DatePicker from "components/forms/fields/datepicker";
+import TransactionFormWrapper from "components/forms/transaction-form";
+import Modal from "components/core/modal";
+import Loader from "components/core/loader";
+import DateUtils, { Range } from "utils/dateUtils";
 import useStyles from "./styles";
 
 const TransactionsPage = () => {
@@ -33,7 +29,7 @@ const TransactionsPage = () => {
   const wallets: any = walletsData?.wallets ?? [];
 
 
-  const [startDate, setStartDate] = useState(calculateBackDate(Range.Last7Days));
+  const [startDate, setStartDate] = useState(DateUtils.calculateBackDate(Range.Last7Days));
   const [endDate, setEndDate] = useState(DateUtils.getToday());
 
   const {

@@ -4,10 +4,10 @@ import { Grid, Box } from "@material-ui/core";
 import { Helmet } from "react-helmet";
 import useTranslations from "translations";
 import NavigationBar from "components/organisms/navigation-bar";
-import Heading from "components/molecules/heading";
-import Image from "components/atoms/image";
-import Button from "components/atoms/button";
-import Title from "components/atoms/title";
+import Heading from "components/core/heading";
+import Image from "components/core/image";
+import Button from "components/core/button";
+import Title from "components/core/title";
 import useStyles from "./styles";
 
 const LandingPage = () => {

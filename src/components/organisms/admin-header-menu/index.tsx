@@ -6,7 +6,7 @@ import {
 } from "@material-ui/icons";
 import { useAuthDataContext } from "services/auth-provider";
 import useTranslations from "translations";
-import Button from "components/atoms/button";
+import Button from "components/core/button";
 import useStyles from "./styles";
 
 interface Props {

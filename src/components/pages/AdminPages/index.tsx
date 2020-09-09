@@ -10,8 +10,8 @@ import {
 import useTranslations from "translations";
 import { useAuthDataContext } from "services/auth-provider";
 import { useNotificationContext } from "services/notification-provider";
-import Notification from "components/molecules/notification";
-import Sidebar from "components/molecules/sidebar";
+import Notification from "components/core/notification";
+import Sidebar from "components/core/sidebar";
 import HeaderMenu from "components/organisms/admin-header-menu";
 import AdminTemplate from "components/templates/admin-template";
 import MainPage from "./MainPage";

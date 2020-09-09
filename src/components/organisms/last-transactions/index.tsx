@@ -8,11 +8,11 @@ import {
   Wallet,
 } from "api";
 import useTranslations from "translations";
-import SummaryBox from "components/molecules/summary-box";
-import TransactionSummary from "components/molecules/transaction-summary";
-import Modal from "components/molecules/modal";
-import TransactionForm from "components/molecules/forms/transaction-form/form";
-import Loader from "components/atoms/loader";
+import SummaryBox from "components/core/summary-box";
+import TransactionSummary from "components/organisms/transaction-summary";
+import Modal from "components/core/modal";
+import TransactionForm from "components/forms/transaction-form/form";
+import Loader from "components/core/loader";
 import useStyles from "./styles";
 import DateUtils from "utils/dateUtils";
 
