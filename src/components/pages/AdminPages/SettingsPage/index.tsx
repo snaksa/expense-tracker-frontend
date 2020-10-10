@@ -2,17 +2,19 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Helmet } from "react-helmet";
 import { gql } from "apollo-boost";
 import { Box, Grid } from "@material-ui/core";
-import { useCategoriesQuery, useWalletsQuery, useCurrentUserQuery } from "api";
+import { useCategoriesQuery, useWalletsQuery, useLabelsQuery, useCurrentUserQuery } from "api";
 import useTranslations from "translations";
 import { useUpdateDetectionContext } from "services/update-detection-provider";
 import WalletsTable from "components/tables/wallets-table";
 import CategoriesTable from "components/tables/categories-table";
+import LabelsTable from "components/tables/labels-table";
 import ProfileForm from "components/forms/profile-form";
 import Modal from "components/core/modal";
 import CategoryForm from "components/forms/category-form";
 import WalletForm from "components/forms/wallet-form";
 import SummaryBox from "components/core/summary-box";
 import useStyles from "./styles";
+import LabelForm from "components/forms/label-form";
 
 const SettingsPage = () => {
   const classes = useStyles();
@@ -32,6 +34,10 @@ const SettingsPage = () => {
   const showNewWalletModal = useCallback(() => setNewWalletModalIsOpen(true), []);
   const hideNewWalletModal = useCallback(() => setNewWalletModalIsOpen(false), []);
 
+  const [newLabelModalIsOpen, setNewLabelModalIsOpen] = useState(false);
+  const showNewLabelModal = useCallback(() => setNewLabelModalIsOpen(true), []);
+  const hideNewLabelModal = useCallback(() => setNewLabelModalIsOpen(false), []);
+
   const {
     data: categoriesData,
     refetch: refetchCategories,
@@ -40,6 +46,9 @@ const SettingsPage = () => {
 
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
+
+  const { data: labelsData } = useLabelsQuery();
+  const labels: any = labelsData?.labels ?? [];
 
   const { data: currentUserData } = useCurrentUserQuery();
   const currentUser = currentUserData?.me ?? null;
@@ -75,6 +84,12 @@ const SettingsPage = () => {
             onClick={showNewWalletModal}
           />
         </Grid>
+        <Grid item xs={12} md={12} lg={4}>
+          <LabelsTable
+            labels={labels}
+            onClick={showNewLabelModal}
+          />
+        </Grid>
       </Grid>
       <Modal
         title={t("+ New Category")}
@@ -84,6 +99,16 @@ const SettingsPage = () => {
         <CategoryForm
           onComplete={hideNewCategoryModal}
           onError={hideNewCategoryModal}
+        />
+      </Modal>
+      <Modal
+        title={t("+ New Label")}
+        isOpen={newLabelModalIsOpen}
+        handleClose={hideNewLabelModal}
+      >
+        <LabelForm
+          onComplete={hideNewLabelModal}
+          onError={hideNewLabelModal}
         />
       </Modal>
       <Modal
@@ -152,6 +177,13 @@ SettingsPage.fragment = gql`
       header
       data
       colors
+    }
+  }
+  query Labels {
+    labels {
+      id
+      name
+      color
     }
   }
   query Currencies {

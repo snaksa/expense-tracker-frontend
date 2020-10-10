@@ -17,6 +17,7 @@ import {
   TransactionSpendingFlowDocument,
   CategoriesSpendingFlowDocument,
   WalletsDocument,
+  Label
 } from "api";
 import { useNotificationContext } from "services/notification-provider";
 import { useSharedDataContext } from "services/shared-data-provider";
@@ -26,11 +27,13 @@ import Button from "components/core/button";
 import TextField from "components/forms/fields/text-field";
 import Select from "components/forms/fields/select";
 import RoundBox from "components/core/round-box";
+import LabelSelect from "../fields/label-select";
 
 interface Props {
   transaction?: Transaction;
   wallets: Wallet[];
   categories: Category[];
+  labels: Label[];
   onComplete: Function;
   onError: Function;
 }
@@ -43,12 +46,14 @@ export interface FormFields {
   categoryId: any;
   walletId: number;
   walletReceiverId: any;
+  selectedLabels: any;
 }
 
 const TransactionForm = ({
   transaction,
   wallets,
   categories,
+  labels,
   onComplete,
   onError,
 }: Props): JSX.Element => {
@@ -208,6 +213,7 @@ const TransactionForm = ({
                 : values.categoryId,
             walletId: values.walletId,
             walletReceiverId: values.walletReceiverId ?? null,
+            labelIds: values.selectedLabels?.map((label: any) => label.key) ?? [],
           },
         });
       } else {
@@ -223,6 +229,7 @@ const TransactionForm = ({
                 : values.categoryId,
             walletId: values.walletId,
             walletReceiverId: values.walletReceiverId ?? null,
+            labelIds: values.selectedLabels?.map((label: any) => label.key) ?? [],
           },
         });
       }
@@ -242,13 +249,14 @@ const TransactionForm = ({
         categoryId: transaction?.category
           ? transaction.category.id
           : categoryOptions.length
-          ? categoryOptions[0].id
-          : 0,
+            ? categoryOptions[0].id
+            : 0,
         walletId: transaction?.wallet
           ? transaction.wallet.id
           : walletOptions.length
-          ? walletOptions[0].id
-          : 0,
+            ? walletOptions[0].id
+            : 0,
+        selectedLabels: transaction?.labels?.map((label: any) => ({key: label.id, label: label.name})) ?? [],
         walletReceiverId: null,
       }}
       validationSchema={schema}
@@ -351,6 +359,11 @@ const TransactionForm = ({
                 />
               </Grid>
             )}
+            <Grid item>
+              <LabelSelect placeholder={t('Labels')} selected={values.selectedLabels} options={labels} onChange={(e: any) => { 
+                setFieldValue('selectedLabels', e);
+               }} />
+            </Grid>
             <Grid>
               <Box mt={1}>
                 <Button type="submit">
@@ -374,6 +387,7 @@ TransactionForm.fragment = gql`
     $categoryId: Int
     $walletId: Int!
     $walletReceiverId: Int
+    $labelIds: [Int]
   ) {
     createTransaction(
       input: {
@@ -384,6 +398,7 @@ TransactionForm.fragment = gql`
         categoryId: $categoryId
         walletId: $walletId
         walletReceiverId: $walletReceiverId
+        labelIds: $labelIds
       }
     ) {
       id
@@ -415,6 +430,11 @@ TransactionForm.fragment = gql`
           type
           date
         }
+      }
+      labels {
+        id
+        name
+        color
       }
     }
   }

@@ -376,6 +376,7 @@ TransactionsTable.fragment = gql`
     $categoryId: Int
     $walletId: Int
     $walletReceiverId: Int
+    $labelIds: [Int]
   ) {
     updateTransaction(
       input: {
@@ -387,6 +388,7 @@ TransactionsTable.fragment = gql`
         categoryId: $categoryId
         walletId: $walletId
         walletReceiverId: $walletReceiverId
+        labelIds: $labelIds
       }
     ) {
       id
@@ -412,6 +414,11 @@ TransactionsTable.fragment = gql`
         color
         balance
         transactionsCount
+      }
+      labels {
+        id
+        name
+        color
       }
     }
   }
