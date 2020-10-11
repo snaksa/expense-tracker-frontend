@@ -64,13 +64,23 @@ const SettingsPage = () => {
       </Helmet>
       <Grid container spacing={5}>
         <Grid item xs={12} md={12} lg={4}>
-          <SummaryBox header={t("Profile Settings")} responsiveHeight={true}>
-            <ProfileForm
-              user={currentUser}
-              onComplete={() => {}}
-              onError={() => {}}
-            />
-          </SummaryBox>
+          <Grid container direction="column" spacing={5}>
+            <Grid item>
+              <SummaryBox header={t("Profile Settings")} responsiveHeight={true}>
+                <ProfileForm
+                  user={currentUser}
+                  onComplete={() => { }}
+                  onError={() => { }}
+                />
+              </SummaryBox>
+            </Grid>
+            <Grid item>
+              <LabelsTable
+                labels={labels}
+                onClick={showNewLabelModal}
+              />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={12} lg={4}>
           <CategoriesTable
@@ -82,12 +92,6 @@ const SettingsPage = () => {
           <WalletsTable
             wallets={wallets}
             onClick={showNewWalletModal}
-          />
-        </Grid>
-        <Grid item xs={12} md={12} lg={4}>
-          <LabelsTable
-            labels={labels}
-            onClick={showNewLabelModal}
           />
         </Grid>
       </Grid>
