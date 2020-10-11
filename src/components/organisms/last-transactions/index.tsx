@@ -5,7 +5,8 @@ import {
   Transaction,
   useWalletsQuery,
   Category,
-  Wallet,
+  Wallet, 
+  useLabelsQuery
 } from "api";
 import useTranslations from "translations";
 import SummaryBox from "components/core/summary-box";
@@ -34,6 +35,9 @@ const LastTransactions = ({
 
   const { data: walletsData } = useWalletsQuery();
   const userWallets: any = walletsData?.wallets ?? [];
+
+  const { data: labelsData } = useLabelsQuery();
+  const userLabels: any = labelsData?.labels ?? [];
 
   const { data, refetch, loading } = useTransactionsQuery({
     variables: {
@@ -88,6 +92,7 @@ const LastTransactions = ({
         <TransactionForm
           wallets={userWallets}
           categories={categories}
+          labels={userLabels}
           onComplete={onComplete}
           onError={hideNewModal}
         />
@@ -136,6 +141,11 @@ LastTransactions.fragment = gql`
           color
         }
         category {
+          id
+          name
+          color
+        }
+        labels {
           id
           name
           color

@@ -1,5 +1,5 @@
 import React from "react";
-import { useWalletsQuery, useCategoriesQuery, Transaction } from "api";
+import { useWalletsQuery, useCategoriesQuery, Transaction, useLabelsQuery } from "api";
 import TransactionForm from "./form";
 
 interface Props {
@@ -19,11 +19,15 @@ const TransactionFormWrapper = ({
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
+  const { data: labelsData } = useLabelsQuery();
+  const labels: any = labelsData?.labels ?? [];
+
   return (
     <TransactionForm
       transaction={transaction}
       wallets={wallets}
       categories={categories}
+      labels={labels}
       onComplete={onComplete}
       onError={onError}
     />

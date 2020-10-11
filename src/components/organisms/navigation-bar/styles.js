@@ -5,7 +5,6 @@ const useStyles = makeStyles(theme => ({
         zIndex: 1,
         backgroundColor: '#FFF',
         padding: 15,
-        position: '-webkit - sticky', /* Safari */
         position: 'sticky',
         top: 0
     },
