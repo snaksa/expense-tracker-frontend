@@ -25,7 +25,8 @@ const LabelSelect: React.FunctionComponent<Props> = ({
       options.map((option: Label) => (
         {
           key: option.id,
-          label: option.name
+          label: option.name,
+          value: option.id
         }
       )),
     [options]

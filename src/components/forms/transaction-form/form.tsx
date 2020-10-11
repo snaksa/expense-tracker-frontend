@@ -256,7 +256,7 @@ const TransactionForm = ({
           : walletOptions.length
             ? walletOptions[0].id
             : 0,
-        selectedLabels: transaction?.labels?.map((label: any) => ({key: label.id, label: label.name})) ?? [],
+        selectedLabels: transaction?.labels?.map((label: any) => ({key: label.id, label: label.name, value: label.id})) ?? [],
         walletReceiverId: null,
       }}
       validationSchema={schema}
