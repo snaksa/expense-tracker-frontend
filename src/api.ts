@@ -45,6 +45,7 @@ export interface CategoryDeleteRequestInput {
 export interface CategoryRecordsRequestInput {
   walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  labelIds: Maybe<Array<Maybe<Scalars['Int']>>>;
   type: Maybe<TransactionType>;
   startDate: Maybe<Scalars['String']>;
   endDate: Maybe<Scalars['String']>;
@@ -271,6 +272,7 @@ export interface TransactionDeleteRequestInput {
 export interface TransactionRecordsRequestInput {
   walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  labelIds: Maybe<Array<Maybe<Scalars['Int']>>>;
   startDate: Maybe<Scalars['String']>;
   endDate: Maybe<Scalars['String']>;
   timezone: Maybe<Scalars['String']>;
@@ -520,6 +522,7 @@ export type CreateTransactionMutation = (
 export type TransactionsQueryVariables = Exact<{
   walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  labelIds: Maybe<Array<Maybe<Scalars['Int']>>>;
   page: Maybe<Scalars['Int']>;
   limit: Maybe<Scalars['Int']>;
   unlimited: Maybe<Scalars['Boolean']>;
@@ -629,6 +632,7 @@ export type CategoriesSpendingFlowQueryVariables = Exact<{
   timezone: Maybe<Scalars['String']>;
   walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  labelIds: Maybe<Array<Maybe<Scalars['Int']>>>;
 }>;
 
 
@@ -646,6 +650,7 @@ export type CategoriesSpendingPieQueryVariables = Exact<{
   timezone: Maybe<Scalars['String']>;
   walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  labelIds: Maybe<Array<Maybe<Scalars['Int']>>>;
   type: Maybe<TransactionType>;
 }>;
 
@@ -686,6 +691,7 @@ export type TransactionSpendingFlowQueryVariables = Exact<{
   timezone: Maybe<Scalars['String']>;
   walletIds: Array<Maybe<Scalars['Int']>>;
   categoryIds: Maybe<Array<Maybe<Scalars['Int']>>>;
+  labelIds: Maybe<Array<Maybe<Scalars['Int']>>>;
 }>;
 
 
@@ -1148,8 +1154,8 @@ export type CreateTransactionMutationHookResult = ReturnType<typeof useCreateTra
 export type CreateTransactionMutationResult = ApolloReactCommon.MutationResult<CreateTransactionMutation>;
 export type CreateTransactionMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTransactionMutation, CreateTransactionMutationVariables>;
 export const TransactionsDocument = gql`
-    query Transactions($walletIds: [Int]!, $categoryIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean, $startDate: String, $endDate: String, $timezone: String) {
-  transactions(input: {walletIds: $walletIds, categoryIds: $categoryIds, page: $page, limit: $limit, unlimited: $unlimited, startDate: $startDate, endDate: $endDate, timezone: $timezone}) {
+    query Transactions($walletIds: [Int]!, $categoryIds: [Int], $labelIds: [Int], $page: Int, $limit: Int, $unlimited: Boolean, $startDate: String, $endDate: String, $timezone: String) {
+  transactions(input: {walletIds: $walletIds, categoryIds: $categoryIds, labelIds: $labelIds, page: $page, limit: $limit, unlimited: $unlimited, startDate: $startDate, endDate: $endDate, timezone: $timezone}) {
     data {
       id
       description
@@ -1200,6 +1206,7 @@ export const TransactionsDocument = gql`
  *   variables: {
  *      walletIds: // value for 'walletIds'
  *      categoryIds: // value for 'categoryIds'
+ *      labelIds: // value for 'labelIds'
  *      page: // value for 'page'
  *      limit: // value for 'limit'
  *      unlimited: // value for 'unlimited'
@@ -1402,8 +1409,8 @@ export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
 export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;
 export type CategoriesQueryResult = ApolloReactCommon.QueryResult<CategoriesQuery, CategoriesQueryVariables>;
 export const CategoriesSpendingFlowDocument = gql`
-    query CategoriesSpendingFlow($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int]) {
-  categoriesSpendingFlow(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds}) {
+    query CategoriesSpendingFlow($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int], $labelIds: [Int]) {
+  categoriesSpendingFlow(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds, labelIds: $labelIds}) {
     header
     data
     colors
@@ -1428,6 +1435,7 @@ export const CategoriesSpendingFlowDocument = gql`
  *      timezone: // value for 'timezone'
  *      walletIds: // value for 'walletIds'
  *      categoryIds: // value for 'categoryIds'
+ *      labelIds: // value for 'labelIds'
  *   },
  * });
  */
@@ -1441,8 +1449,8 @@ export type CategoriesSpendingFlowQueryHookResult = ReturnType<typeof useCategor
 export type CategoriesSpendingFlowLazyQueryHookResult = ReturnType<typeof useCategoriesSpendingFlowLazyQuery>;
 export type CategoriesSpendingFlowQueryResult = ApolloReactCommon.QueryResult<CategoriesSpendingFlowQuery, CategoriesSpendingFlowQueryVariables>;
 export const CategoriesSpendingPieDocument = gql`
-    query CategoriesSpendingPie($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int], $type: TransactionType) {
-  categoriesSpendingPieChart(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds, type: $type}) {
+    query CategoriesSpendingPie($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int], $labelIds: [Int], $type: TransactionType) {
+  categoriesSpendingPieChart(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds, labelIds: $labelIds, type: $type}) {
     header
     data
     colors
@@ -1467,6 +1475,7 @@ export const CategoriesSpendingPieDocument = gql`
  *      timezone: // value for 'timezone'
  *      walletIds: // value for 'walletIds'
  *      categoryIds: // value for 'categoryIds'
+ *      labelIds: // value for 'labelIds'
  *      type: // value for 'type'
  *   },
  * });
@@ -1548,8 +1557,8 @@ export type CurrenciesQueryHookResult = ReturnType<typeof useCurrenciesQuery>;
 export type CurrenciesLazyQueryHookResult = ReturnType<typeof useCurrenciesLazyQuery>;
 export type CurrenciesQueryResult = ApolloReactCommon.QueryResult<CurrenciesQuery, CurrenciesQueryVariables>;
 export const TransactionSpendingFlowDocument = gql`
-    query TransactionSpendingFlow($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int]) {
-  transactionSpendingFlow(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds}) {
+    query TransactionSpendingFlow($startDate: String, $endDate: String, $timezone: String, $walletIds: [Int]!, $categoryIds: [Int], $labelIds: [Int]) {
+  transactionSpendingFlow(input: {startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds, labelIds: $labelIds}) {
     header
     data
   }
@@ -1573,6 +1582,7 @@ export const TransactionSpendingFlowDocument = gql`
  *      timezone: // value for 'timezone'
  *      walletIds: // value for 'walletIds'
  *      categoryIds: // value for 'categoryIds'
+ *      labelIds: // value for 'labelIds'
  *   },
  * });
  */

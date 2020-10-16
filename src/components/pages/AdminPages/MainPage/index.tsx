@@ -46,6 +46,7 @@ const MainPage = () => {
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
+      labelIds: [],
     },
   });
 
@@ -66,8 +67,9 @@ const MainPage = () => {
       endDate: null,
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
-      categoryIds: [],
       type: TransactionType.Expense,
+      categoryIds: [],
+      labelIds: [],
     },
   });
 
@@ -88,8 +90,9 @@ const MainPage = () => {
       endDate: null,
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
-      categoryIds: [],
       type: TransactionType.Income,
+      categoryIds: [],
+      labelIds: [],
     },
   });
 
@@ -111,6 +114,7 @@ const MainPage = () => {
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
+      labelIds: []
     },
   });
 

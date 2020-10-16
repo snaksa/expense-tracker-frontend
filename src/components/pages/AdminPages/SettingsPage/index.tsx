@@ -151,9 +151,10 @@ SettingsPage.fragment = gql`
     $timezone: String
     $walletIds: [Int]!
     $categoryIds: [Int]
+    $labelIds: [Int]
   ) {
     categoriesSpendingFlow(
-      input: { startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds }
+      input: { startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds, labelIds: $labelIds }
     ) {
       header
       data
@@ -166,6 +167,7 @@ SettingsPage.fragment = gql`
     $timezone: String
     $walletIds: [Int]!
     $categoryIds: [Int]
+    $labelIds: [Int]
     $type: TransactionType
   ) {
     categoriesSpendingPieChart(
@@ -175,6 +177,7 @@ SettingsPage.fragment = gql`
         timezone: $timezone
         walletIds: $walletIds
         categoryIds: $categoryIds
+        labelIds: $labelIds
         type: $type
       }
     ) {

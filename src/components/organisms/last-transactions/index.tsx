@@ -46,6 +46,7 @@ const LastTransactions = ({
       timezone: DateUtils.getTimezone(),
       walletIds: userWallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
+      labelIds: [],
       page: 1,
       limit: 5,
       unlimited: false,
@@ -105,6 +106,7 @@ LastTransactions.fragment = gql`
   query Transactions(
     $walletIds: [Int]!
     $categoryIds: [Int]
+    $labelIds: [Int]
     $page: Int
     $limit: Int
     $unlimited: Boolean
@@ -116,6 +118,7 @@ LastTransactions.fragment = gql`
       input: {
         walletIds: $walletIds
         categoryIds: $categoryIds
+        labelIds: $labelIds
         page: $page
         limit: $limit
         unlimited: $unlimited

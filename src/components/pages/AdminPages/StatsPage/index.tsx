@@ -12,6 +12,8 @@ import {
   useTransactionSpendingFlowQuery,
   useCategoriesQuery,
   Category,
+  useLabelsQuery,
+  Label,
 } from "api";
 import useTranslations from "translations";
 import useCurrencyFormatter from "services/currency-formatter";
@@ -36,8 +38,12 @@ const StatsPage = () => {
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
+  const { data: labelsData } = useLabelsQuery();
+  const labels: any = labelsData?.labels ?? [];
+
   const [chosenWallets, setChosenWallets] = useState<number[]>([]);
   const [chosenCategories, setChosenCategories] = useState<number[]>([]);
+  const [chosenLabels, setChosenLabels] = useState<number[]>([]);
 
   const { data } = useWalletsQuery();
   const wallets: any = data ? (data.wallets ? data.wallets : []) : [];
@@ -70,6 +76,16 @@ const StatsPage = () => {
     }
   };
 
+  const onChosenLabelsClick = (labelId: number, isChecked: boolean) => {
+    const a = [...chosenLabels];
+    if (isChecked) {
+      a.push(labelId);
+      setChosenLabels(a);
+    } else {
+      setChosenLabels(a.filter((label) => label !== labelId));
+    }
+  };
+
   const {
     data: spendingFlowData,
     loading,
@@ -81,6 +97,7 @@ const StatsPage = () => {
       timezone: DateUtils.getTimezone(),
       walletIds: chosenWallets,
       categoryIds: chosenCategories,
+      labelIds: chosenLabels,
     },
     fetchPolicy: "cache-and-network",
   });
@@ -104,6 +121,7 @@ const StatsPage = () => {
       walletIds: chosenWallets,
       categoryIds: chosenCategories,
       type: TransactionType.Expense,
+      labelIds: chosenLabels,
     },
     fetchPolicy: "cache-and-network",
   });
@@ -127,6 +145,7 @@ const StatsPage = () => {
       walletIds: chosenWallets,
       categoryIds: chosenCategories,
       type: TransactionType.Income,
+      labelIds: chosenLabels,
     },
     fetchPolicy: "cache-and-network",
   });
@@ -149,6 +168,7 @@ const StatsPage = () => {
       timezone: DateUtils.getTimezone(),
       walletIds: chosenWallets,
       categoryIds: chosenCategories,
+      labelIds: chosenLabels,
     },
     fetchPolicy: "cache-and-network",
   });
@@ -196,6 +216,18 @@ const StatsPage = () => {
         };
       }),
     [categories, chosenCategories]
+  );
+
+  const labelOptions = useMemo(
+    () =>
+      labels.map((label: Label) => {
+        return {
+          id: label.id,
+          label: label.name,
+          checked: chosenLabels.includes(label.id),
+        };
+      }),
+    [labels, chosenLabels]
   );
 
   return (
@@ -253,6 +285,18 @@ const StatsPage = () => {
                 <CheckboxList
                   options={categoryOptions}
                   onChange={onChosenCategoriesClick}
+                />
+              </SummaryBox>
+            </Grid>
+            <Grid item>
+              <SummaryBox
+                header={t("Labels")}
+                responsiveHeight={true}
+                toggle={true}
+              >
+                <CheckboxList
+                  options={labelOptions}
+                  onChange={onChosenLabelsClick}
                 />
               </SummaryBox>
             </Grid>
@@ -337,7 +381,8 @@ const StatsPage = () => {
                 startDate={DateUtils.toUTCString(startDate)}
                 endDate={DateUtils.toUTCString(endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 }))}
                 walletIds={chosenWallets}
-                cateogryIds={chosenCategories}
+                categoryIds={chosenCategories}
+                labelIds={chosenLabels}
                 onDelete={refetchCharts}
                 onEdit={refetchCharts}
               />

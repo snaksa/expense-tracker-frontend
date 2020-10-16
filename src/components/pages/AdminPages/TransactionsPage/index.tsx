@@ -43,6 +43,7 @@ const TransactionsPage = () => {
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
       categoryIds: [],
+      labelIds: [],
     },
     fetchPolicy: "cache-and-network",
   });
@@ -161,9 +162,10 @@ TransactionsPage.fragment = gql`
     $timezone: String
     $walletIds: [Int]!
     $categoryIds: [Int]
+    $labelIds: [Int]
   ) {
     transactionSpendingFlow(
-      input: { startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds }
+      input: { startDate: $startDate, endDate: $endDate, timezone: $timezone, walletIds: $walletIds, categoryIds: $categoryIds, labelIds: $labelIds }
     ) {
       header
       data

@@ -26,7 +26,8 @@ interface Props {
   startDate: string;
   endDate: string;
   walletIds?: number[];
-  cateogryIds?: number[];
+  categoryIds?: number[];
+  labelIds?: number[];
   onNewClick?: Function;
   onEdit?: Function;
   onDelete?: Function;
@@ -36,7 +37,8 @@ const TransactionsTable = ({
   startDate,
   endDate,
   walletIds,
-  cateogryIds,
+  categoryIds,
+  labelIds,
   onNewClick,
   onDelete,
   onEdit,
@@ -93,7 +95,8 @@ const TransactionsTable = ({
       endDate: endDate,
       timezone: DateUtils.getTimezone(),
       walletIds: walletIds ?? [],
-      categoryIds: cateogryIds ?? [],
+      categoryIds: categoryIds ?? [],
+      labelIds: labelIds ?? [],
       page: currentPage + 1,
       limit: currentLimit,
       unlimited: false,
@@ -110,7 +113,8 @@ const TransactionsTable = ({
   }, [
     getTransactions,
     walletIds,
-    cateogryIds,
+    categoryIds,
+    labelIds,
     startDate,
     endDate,
     currentLimit,
