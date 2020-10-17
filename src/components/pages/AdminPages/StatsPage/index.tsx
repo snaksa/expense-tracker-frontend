@@ -29,7 +29,7 @@ import DateUtils, { Range } from "utils/dateUtils";
 
 const StatsPage = () => {
   const classes = useStyles();
-  const { getCurrency } = useCurrencyFormatter();
+  const { getCurrency, formatCurrency } = useCurrencyFormatter();
   const { t } = useTranslations();
 
   const [startDate, setStartDate] = useState(DateUtils.calculateBackDate(Range.Last7Days));
@@ -187,6 +187,24 @@ const StatsPage = () => {
     ),
   };
 
+  const totalSpent = useMemo(() => {
+    let total = 0;
+    spendingCategoryFlowData['data'].forEach((element: any) => {
+      total += element[1];
+    });
+
+    return total;
+  }, [spendingCategoryFlowData]);
+
+  const totalIncome = useMemo(() => {
+    let total = 0;
+    incomeData['data'].forEach((element: any) => {
+      total += element[1];
+    });
+
+    return total;
+  }, [incomeData])
+
   const refetchCharts = () => {
     refetchReport();
     refetchSpendingPie();
@@ -236,6 +254,20 @@ const StatsPage = () => {
         <title>{t("Stats | Expenses Tracker")}</title>
       </Helmet>
       <Grid container direction="row" spacing={5}>
+        <Grid item xs={12} md={12} lg={12} xl={12}>
+          <Grid container direction='row' spacing={5} justify='flex-start'>
+            <Grid item xs={12} md={2} lg={2} xl={2}>
+              <SummaryBox responsiveHeight={true} header={t('Income')} centerHeader={true}>
+                <Box mt={4} textAlign='center' style={{color: 'green'}}>{formatCurrency(totalIncome)}</Box>
+              </SummaryBox>
+            </Grid>
+            <Grid item xs={12} md={2} lg={2} xl={2}>
+              <SummaryBox responsiveHeight={true} header={t('Spent')} centerHeader={true}>
+                <Box mt={4} textAlign='center' style={{color: 'red'}}>{formatCurrency(totalSpent)}</Box>
+              </SummaryBox>
+            </Grid>
+          </Grid>
+        </Grid>
         <Grid item xs={12} md={2} lg={2} xl={2}>
           <Grid
             container
@@ -354,12 +386,7 @@ const StatsPage = () => {
             <Grid item>
               <Grid item xs={12} md={12} lg={12}>
                 <Grid container spacing={5}>
-                  <Grid item xs={12} md={6} lg={3}>
-                    <SummaryBox header={t("Income")}>
-                      <PieChart data={incomeData} />
-                    </SummaryBox>
-                  </Grid>
-                  <Grid item xs={12} md={6} lg={6}>
+                  <Grid item xs={12} md={12} lg={9}>
                     <SummaryBox header={t("Spending flow by categories")}>
                       <LineChart
                         hTitle={t("Time")}

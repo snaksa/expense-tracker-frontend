@@ -10,6 +10,7 @@ import useStyles from "./styles";
 
 interface Props {
   header?: string;
+  centerHeader?: boolean,
   children: any;
   responsiveHeight?: boolean;
   onClick?: Function;
@@ -18,6 +19,7 @@ interface Props {
 
 const SummaryBox = ({
   header,
+  centerHeader,
   children,
   responsiveHeight,
   onClick,
@@ -34,35 +36,39 @@ const SummaryBox = ({
         <Grid container direction="column">
           {
             header && <Grid item className={classes.header}>
-              <Grid container justify={"space-between"}>
+              <Grid container justify={centerHeader ? 'center' : 'space-between'}>
                 <Grid item>
                   <Box mb={toggle && !visible ? 0 : 3} pb={toggle ? 0 : 3}>
                     {header}
                   </Box>
                 </Grid>
-                <Grid item>
-                  <Box>
-                    {onClick && (
-                      <Button onClick={onClick}>
-                        <AddIcon fontSize={"small"} />
-                      </Button>
-                    )}
-                    {toggle && visible && (
-                      <ExpandLessIcon
-                        fontSize={"small"}
-                        onClick={toggleVisible}
-                        style={{ cursor: "pointer" }}
-                      />
-                    )}
-                    {toggle && !visible && (
-                      <ExpandMoreIcon
-                        fontSize={"small"}
-                        onClick={toggleVisible}
-                        style={{ cursor: "pointer" }}
-                      />
-                    )}
-                  </Box>
-                </Grid>
+                {
+                  centerHeader ?
+                    <Grid item>
+                      <Box>
+                        {onClick && (
+                          <Button onClick={onClick}>
+                            <AddIcon fontSize={"small"} />
+                          </Button>
+                        )}
+                        {toggle && visible && (
+                          <ExpandLessIcon
+                            fontSize={"small"}
+                            onClick={toggleVisible}
+                            style={{ cursor: "pointer" }}
+                          />
+                        )}
+                        {toggle && !visible && (
+                          <ExpandMoreIcon
+                            fontSize={"small"}
+                            onClick={toggleVisible}
+                            style={{ cursor: "pointer" }}
+                          />
+                        )}
+                      </Box>
+                    </Grid>
+                    : ''
+                }
               </Grid>
             </Grid>
           }
