@@ -189,12 +189,12 @@ const StatsPage = () => {
 
   const totalSpent = useMemo(() => {
     let total = 0;
-    spendingCategoryFlowData['data'].forEach((element: any) => {
+    spendingData['data'].forEach((element: any) => {
       total += element[1];
     });
 
     return total;
-  }, [spendingCategoryFlowData]);
+  }, [spendingData]);
 
   const totalIncome = useMemo(() => {
     let total = 0;

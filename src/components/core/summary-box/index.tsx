@@ -43,7 +43,7 @@ const SummaryBox = ({
                   </Box>
                 </Grid>
                 {
-                  centerHeader ?
+                  !centerHeader ?
                     <Grid item>
                       <Box>
                         {onClick && (

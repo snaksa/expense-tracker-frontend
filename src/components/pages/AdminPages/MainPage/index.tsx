@@ -4,7 +4,6 @@ import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
 import Chart from "react-google-charts";
 import moment from "moment";
-import WalletsCollection from "components/organisms/wallets-collection";
 import {
   useWalletsQuery,
   Wallet,
@@ -16,6 +15,7 @@ import {
 } from "api";
 import useTranslations from "translations";
 import useCurrencyFormatter from "services/currency-formatter";
+import WalletsCollection from "components/organisms/wallets-collection";
 import LastTransactions from "components/organisms/last-transactions";
 import PieChart from "components/charts/pie-chart";
 import LineChart from "components/charts/line-chart";

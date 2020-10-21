@@ -118,7 +118,7 @@ const SettingsPage = () => {
       <Modal
         title={t("+ New Wallet")}
         isOpen={newWalletModalIsOpen}
-        handleClose={hideNewCategoryModal}
+        handleClose={hideNewWalletModal}
       >
         <WalletForm
           onComplete={hideNewWalletModal}
