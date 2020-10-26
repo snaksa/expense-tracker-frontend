@@ -32,7 +32,7 @@ const MainPage = () => {
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
-  const { data } = useWalletsQuery();
+  const { data } = useWalletsQuery({ fetchPolicy: 'cache-and-network' });
   const wallets: any = data ? (data.wallets ? data.wallets : []) : [];
 
   const {
@@ -40,6 +40,7 @@ const MainPage = () => {
     loading,
     refetch: refetchReport,
   } = useTransactionSpendingFlowQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       startDate: null,
       endDate: null,
@@ -62,6 +63,7 @@ const MainPage = () => {
     data: spendingQueryData,
     refetch: refetchSpendingPie,
   } = useCategoriesSpendingPieQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       startDate: null,
       endDate: null,
@@ -85,6 +87,7 @@ const MainPage = () => {
     data: incomeQueryData,
     refetch: refetchIncomePie,
   } = useCategoriesSpendingPieQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       startDate: null,
       endDate: null,
@@ -108,6 +111,7 @@ const MainPage = () => {
     data: spendingFlowQueryData,
     refetch: refetchSpendingFlow,
   } = useCategoriesSpendingFlowQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       startDate: null,
       endDate: null,

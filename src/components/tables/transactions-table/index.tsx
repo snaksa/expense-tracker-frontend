@@ -55,7 +55,7 @@ const TransactionsTable = ({
   const [currentLimit, setCurrentLimit] = useState(10);
 
   const oldData: any = useRef([]);
-  const [getTransactions, { data, loading }] = useTransactionsLazyQuery();
+  const [getTransactions, { data, loading }] = useTransactionsLazyQuery({fetchPolicy: 'cache-and-network'});
 
   const showDeleteModal = useCallback(
     () => setConfirmDeleteModalIsOpen(true),

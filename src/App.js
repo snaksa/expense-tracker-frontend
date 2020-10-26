@@ -4,7 +4,6 @@ import { pink, red } from '@material-ui/core/colors';
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
-import AdminPages from './components/pages/AdminPages';
 import AuthDataProvider from "./services/auth-provider";
 import NotificationProvider from "./services/notification-provider";
 import SharedDataProvider from "./services/shared-data-provider";
@@ -13,10 +12,8 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route
 } from "react-router-dom";
-import AnonPages from './components/pages/UserPages';
+import ExpensesTracker from './components/pages/App';
 
 
 let theme = createMuiTheme({
@@ -64,14 +61,7 @@ const App = () => {
               <SharedDataProvider>
                 <UpdateDetectionProvider>
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Switch>
-                      <Route path="/admin">
-                        <AdminPages />
-                      </Route>
-                      <Route path="/">
-                        <AnonPages />
-                      </Route>
-                    </Switch>
+                    <ExpensesTracker />
                   </MuiPickersUtilsProvider>
                 </UpdateDetectionProvider>
               </SharedDataProvider>

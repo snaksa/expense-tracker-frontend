@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
+import { useHistory } from 'react-router';
 import Box from "@material-ui/core/Box";
 import {
   Home as HomeIcon,
@@ -7,6 +8,7 @@ import {
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
 } from "@material-ui/icons";
+import { useCurrentUserQuery } from 'api';
 import useTranslations from "translations";
 import { useAuthDataContext } from "services/auth-provider";
 import { useNotificationContext } from "services/notification-provider";
@@ -18,6 +20,7 @@ import MainPage from "./MainPage";
 import SettingsPage from "./SettingsPage";
 import TransactionsPage from "./TransactionsPage";
 import StatsPage from "./StatsPage";
+import SplashScreen from "../SplashScreen/splash-screen";
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {
   const { t } = useTranslations();
@@ -30,6 +33,17 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
   const hideSidebar = useCallback(() => setIsSidebarVisible(false), []);
 
   const { content, type, visible, hideNotification } = useNotificationContext();
+
+  const { data, loading } = useCurrentUserQuery();
+  const history = useHistory();
+
+  if (loading) {
+    return <SplashScreen />
+  }
+
+  if (!data) {
+    history.push('/');
+  }
 
   return (
     <Box>
