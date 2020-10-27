@@ -5,12 +5,10 @@ import {
 } from "react-router-dom";
 import { useHistory } from 'react-router';
 import Box from '@material-ui/core/Box';
-import { useCurrentUserQuery } from 'api';
 import HeroTemplate from 'components/templates/hero-template';
 import RegisterPage from './RegisterPage';
 import LoginPage from './LoginPage';
 import LandingPage from './LandingPage';
-import SplashScreen from '../SplashScreen/splash-screen';
 
 const AnonPages = () => {
 
