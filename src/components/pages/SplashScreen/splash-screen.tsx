@@ -3,6 +3,7 @@ import { Grid, Box } from "@material-ui/core";
 import { Helmet } from "react-helmet";
 import useTranslations from "translations";
 import useStyles from "./styles";
+import Loader from "components/core/loader";
 
 const SplashScreen = () => {
   const { t } = useTranslations();
@@ -21,10 +22,7 @@ const SplashScreen = () => {
         className={classes.container}
       >
         <Grid item>
-        {t("Expenses Tracker")}
-        </Grid>
-        <Grid item>
-        {t("Your Finances in One Place")}
+          <Loader loading={true} />
         </Grid>
       </Grid>
     </Box>

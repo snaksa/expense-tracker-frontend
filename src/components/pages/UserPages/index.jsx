@@ -14,14 +14,9 @@ import SplashScreen from '../SplashScreen/splash-screen';
 
 const AnonPages = () => {
 
-    const { data, loading } = useCurrentUserQuery();
     const history = useHistory();
 
-    if(loading) {
-        return <SplashScreen />
-    }
-
-    if(data) {
+    if(localStorage.getItem('token')) {
         history.push('/admin');
     }
 
