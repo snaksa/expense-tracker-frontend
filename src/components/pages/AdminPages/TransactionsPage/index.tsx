@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { Helmet } from "react-helmet";
 import { gql } from "apollo-boost";
 import Chart from "react-google-charts";
-import moment from "moment";
 import { Box, Grid } from "@material-ui/core";
 import { useWalletsQuery, useTransactionSpendingFlowQuery, Wallet } from "api";
 import useTranslations from "translations";
@@ -15,11 +14,13 @@ import Modal from "components/core/modal";
 import Loader from "components/core/loader";
 import DateUtils, { Range } from "utils/dateUtils";
 import useStyles from "./styles";
+import useChartsFormatter from "services/charts-formatter";
 
 const TransactionsPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
   const { t } = useTranslations();
+  const { formatTransactionSpendingFlow } = useChartsFormatter();
 
   const [newModalIsOpen, setNewModalIsOpen] = useState(false);
   const showNewModal = useCallback(() => setNewModalIsOpen(true), []);
@@ -48,14 +49,7 @@ const TransactionsPage = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
-  let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
-  flowChart = flowChart.map((row: any) => [
-    moment.utc(row[0]).toDate(),
-    parseFloat(row[1]),
-  ]);
-
-  const chartData = [flowColumns, ...flowChart];
+  const transactionSpendingFlowData = formatTransactionSpendingFlow(spendingFlowData);
 
   const onComplete = useCallback(() => {
     refetch();
@@ -111,8 +105,8 @@ const TransactionsPage = () => {
               height={"300px"}
               chartType="AreaChart"
               data={
-                chartData && chartData[0].length
-                  ? chartData
+                transactionSpendingFlowData && transactionSpendingFlowData[0].length
+                  ? transactionSpendingFlowData
                   : [
                     ["", ""],
                     ["", 0],

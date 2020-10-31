@@ -7,13 +7,9 @@ import {
   TransactionType,
   useDeleteTransactionMutation,
   useTransactionsLazyQuery,
-  TransactionsDocument,
-  CategoriesSpendingPieDocument,
-  TransactionSpendingFlowDocument,
-  CategoriesSpendingFlowDocument,
+  WalletsDocument,
 } from "api";
 import useTranslations from "translations";
-import { useSharedDataContext } from "services/shared-data-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import { useNotificationContext } from "services/notification-provider";
 import Table from "components/core/table";
@@ -55,7 +51,7 @@ const TransactionsTable = ({
   const [currentLimit, setCurrentLimit] = useState(10);
 
   const oldData: any = useRef([]);
-  const [getTransactions, { data, loading }] = useTransactionsLazyQuery({fetchPolicy: 'cache-and-network'});
+  const [getTransactions, { data, loading }] = useTransactionsLazyQuery({ fetchPolicy: 'cache-and-network' });
 
   const showDeleteModal = useCallback(
     () => setConfirmDeleteModalIsOpen(true),
@@ -80,11 +76,6 @@ const TransactionsTable = ({
     showErrorNotification,
   } = useNotificationContext();
 
-  const {
-    usedTranasctionParams,
-    setTransactionUsedParams,
-  } = useSharedDataContext();
-
   useEffect(() => {
     setCurrentPage(0);
   }, [startDate, endDate]);
@@ -105,11 +96,6 @@ const TransactionsTable = ({
     getTransactions({
       variables: params,
     });
-    const used: any = usedTranasctionParams;
-    if (!used.has(params)) {
-      used.add(params);
-      setTransactionUsedParams(used);
-    }
   }, [
     getTransactions,
     walletIds,
@@ -119,65 +105,10 @@ const TransactionsTable = ({
     endDate,
     currentLimit,
     currentPage,
-    usedTranasctionParams,
-    setTransactionUsedParams,
   ]);
 
   const transactionsData: any = responseData?.transactions ?? [];
   const transactions: any = transactionsData.data ?? [];
-
-  const getRefetchQueries = () => {
-    const result: any = [];
-    for (let params of usedTranasctionParams) {
-      result.push({
-        query: TransactionsDocument,
-        variables: params,
-      });
-    }
-
-    const mainPageCharts = [
-      {
-        query: CategoriesSpendingPieDocument,
-        variables: {
-          date: null,
-          walletIds: walletIds,
-          categoryIds: [],
-          type: TransactionType.Expense,
-        },
-      },
-      {
-        query: CategoriesSpendingPieDocument,
-        variables: {
-          date: null,
-          walletIds: walletIds,
-          categoryIds: [],
-          type: TransactionType.Income,
-        },
-      },
-      {
-        query: TransactionSpendingFlowDocument,
-        variables: {
-          date: null,
-          walletIds: walletIds,
-          categoryIds: [],
-        },
-      },
-      {
-        query: CategoriesSpendingFlowDocument,
-        variables: {
-          date: null,
-          walletIds: walletIds,
-          categoryIds: [],
-        },
-      },
-    ];
-
-    mainPageCharts.forEach((chart: any) => {
-      result.push(chart);
-    });
-
-    return result;
-  };
 
   const [deleteTransaction] = useDeleteTransactionMutation({
     onCompleted() {
@@ -189,7 +120,11 @@ const TransactionsTable = ({
     onError() {
       showErrorNotification(t("An error occured while deleting the record!"));
     },
-    refetchQueries: getRefetchQueries(),
+    refetchQueries: [
+      {
+        query: WalletsDocument,
+      },
+    ],
   });
 
   const handleDelete = useCallback(() => {
@@ -334,8 +269,8 @@ const TransactionsTable = ({
           transaction={
             selectedRow
               ? transactions.filter(
-                  (transaction: Transaction) => transaction.id === selectedRow
-                )[0]
+                (transaction: Transaction) => transaction.id === selectedRow
+              )[0]
               : undefined
           }
           onComplete={onComplete}

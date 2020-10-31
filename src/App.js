@@ -6,8 +6,6 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 import AuthDataProvider from "./services/auth-provider";
 import NotificationProvider from "./services/notification-provider";
-import SharedDataProvider from "./services/shared-data-provider";
-import UpdateDetectionProvider from "./services/update-detection-provider";
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -58,13 +56,9 @@ const App = () => {
         <Router>
           <AuthDataProvider>
             <NotificationProvider>
-              <SharedDataProvider>
-                <UpdateDetectionProvider>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <ExpensesTracker />
-                  </MuiPickersUtilsProvider>
-                </UpdateDetectionProvider>
-              </SharedDataProvider>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <ExpensesTracker />
+              </MuiPickersUtilsProvider>
             </NotificationProvider>
           </AuthDataProvider>
         </Router>

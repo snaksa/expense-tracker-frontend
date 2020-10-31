@@ -12,15 +12,10 @@ import {
   useCreateTransactionMutation,
   Transaction,
   useUpdateTransactionMutation,
-  TransactionsDocument,
-  CategoriesSpendingPieDocument,
-  TransactionSpendingFlowDocument,
-  CategoriesSpendingFlowDocument,
   WalletsDocument,
   Label
 } from "api";
 import { useNotificationContext } from "services/notification-provider";
-import { useSharedDataContext } from "services/shared-data-provider";
 import DatePicker from "components/forms/fields/datepicker";
 import TimePicker from "components/forms/fields/timepicker";
 import Button from "components/core/button";
@@ -99,8 +94,6 @@ const TransactionForm = ({
   } = useNotificationContext();
   const { t } = useTranslations();
 
-  const { usedTranasctionParams } = useSharedDataContext();
-
   const schema = useCallback(() => {
     return Yup.object().shape({
       date: Yup.string().required("Enter record date and time"),
@@ -110,59 +103,6 @@ const TransactionForm = ({
       walletId: Yup.number().required("Choose record wallet"),
     });
   }, []);
-
-  const getRefetchQueries = () => {
-    const result: any = [];
-    for (let params of usedTranasctionParams) {
-      result.push({
-        query: TransactionsDocument,
-        variables: params,
-      });
-    }
-
-    const mainPageCharts = [
-      {
-        query: CategoriesSpendingPieDocument,
-        variables: {
-          date: null,
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: [],
-          type: TransactionType.Expense,
-        },
-      },
-      {
-        query: CategoriesSpendingPieDocument,
-        variables: {
-          date: null,
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: [],
-          type: TransactionType.Income,
-        },
-      },
-      {
-        query: TransactionSpendingFlowDocument,
-        variables: {
-          date: null,
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: [],
-        },
-      },
-      {
-        query: CategoriesSpendingFlowDocument,
-        variables: {
-          date: null,
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: [],
-        },
-      },
-    ];
-
-    mainPageCharts.forEach((chart: any) => {
-      result.push(chart);
-    });
-
-    return result;
-  };
 
   const [createTransaction] = useCreateTransactionMutation({
     onCompleted() {
@@ -175,7 +115,11 @@ const TransactionForm = ({
         t("An error occured while saving the record data!")
       );
     },
-    refetchQueries: getRefetchQueries(),
+    refetchQueries: [
+      {
+        query: WalletsDocument,
+      },
+    ],
   });
 
   const [updateTransaction] = useUpdateTransactionMutation({
@@ -193,7 +137,6 @@ const TransactionForm = ({
       {
         query: WalletsDocument,
       },
-      ...getRefetchQueries()
     ],
   });
 
@@ -256,7 +199,7 @@ const TransactionForm = ({
           : walletOptions.length
             ? walletOptions[0].id
             : 0,
-        selectedLabels: transaction?.labels?.map((label: any) => ({key: label.id, label: label.name, value: label.id})) ?? [],
+        selectedLabels: transaction?.labels?.map((label: any) => ({ key: label.id, label: label.name, value: label.id })) ?? [],
         walletReceiverId: null,
       }}
       validationSchema={schema}
@@ -360,9 +303,9 @@ const TransactionForm = ({
               </Grid>
             )}
             <Grid item>
-              <LabelSelect placeholder={t('Labels')} selected={values.selectedLabels} options={labels} onChange={(e: any) => { 
+              <LabelSelect placeholder={t('Labels')} selected={values.selectedLabels} options={labels} onChange={(e: any) => {
                 setFieldValue('selectedLabels', e);
-               }} />
+              }} />
             </Grid>
             <Grid>
               <Box mt={1}>

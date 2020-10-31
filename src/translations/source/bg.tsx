@@ -1,11 +1,11 @@
 const source: any = {
-  "Expenses Tracker": "",
+  "Expenses Tracker": "Expenses Tracker",
   "Expenses Tracker - Your Finances in One Place": "Expenses Traker - Вашите финанси на едно място",
   "Dashboard | Expenses Tracker": "Начало | Expenses Tracker",
   "Login | Expenses Tracker": "Вход | Expenses Tracker",
   "Register | Expenses Tracker": "Регистрация | Expenses Tracker",
   "Records | Expenses Tracker": "Записи | Expenses Tracker",
-  "Stats | Expenses Tracker:" : "Статистика | Expenses Tracker",
+  "Stats | Expenses Tracker" : "Статистика | Expenses Tracker",
   "Settings | Expenses Tracker": "Настройки | Expenses Tracker",
 
   "Dashboard": "Начало",
@@ -80,6 +80,7 @@ const source: any = {
   "Type": "Тип",
   "Expense": "Разход",
   "Income": "Приход",
+  "Spent": "Разходи",
   "Transfer": "Трансфер",
   "Transfer to": "Трансфер към",
   "Description": "Описание",
@@ -111,6 +112,12 @@ const source: any = {
   "Category deleted successfully!": "Категорията е изтрита успешно!",
   "An error occured while deleting the category!": "Изникна грешка при изтриването на категорията!",
   "All transactions related to this category will be removed!": "Всички записи в тази категория ще бъдат изтрити!",
+
+  "Labels": "Етикети",
+  "# Edit Label": "# Редакция на Етикет",
+  "+ New Label": "+ Нов Етикет",
+  "Enter label color": "Изберете цвят на етикета",
+  "Enter label name": "Въведете име на етикета",
 
   "Color": "Цвят",
   "Balance": "Баланс",

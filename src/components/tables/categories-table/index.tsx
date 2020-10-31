@@ -8,19 +8,9 @@ import {
   CategoriesQuery,
   useDeleteCategoryMutation,
   WalletsDocument,
-  TransactionsDocument,
-  CategoriesSpendingPieDocument,
-  TransactionType,
-  Wallet,
-  TransactionSpendingFlowDocument,
-  CategoriesSpendingFlowDocument,
-  useWalletsQuery,
 } from "api";
 import useTranslations from "translations";
 import { useNotificationContext } from "services/notification-provider";
-import { useSharedDataContext } from "services/shared-data-provider";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
-import useCurrencyFormatter from "services/currency-formatter";
 import Table from "components/core/table";
 import ConfirmationDialog from "components/core/confirmation-dialog";
 import Modal from "components/core/modal";
@@ -34,7 +24,6 @@ interface Props {
 }
 
 const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
-  const { formatCurrency } = useCurrencyFormatter();
   const { t } = useTranslations();
   const [confirmDeleteModalIsOpen, setConfirmDeleteModalIsOpen] = useState(
     false
@@ -56,77 +45,17 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     setConfirmDeleteModalIsOpen(false);
   }, []);
 
-  const { setCategoryUpdate } = useUpdateDetectionContext();
-
-  const { usedTranasctionParams } = useSharedDataContext();
-
-  const { data: walletsData } = useWalletsQuery();
-  const wallets: any = walletsData?.wallets ?? [];
-
   const {
     showSuccessNotification,
     showErrorNotification,
   } = useNotificationContext();
-
-  const getRefetchQueries = () => {
-    const result: any = [];
-    for (let params of usedTranasctionParams) {
-      result.push({
-        query: TransactionsDocument,
-        variables: params,
-      });
-    }
-
-    const mainPageCharts = [
-      {
-        query: CategoriesSpendingPieDocument,
-        variables: {
-          date: null,
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: [],
-          type: TransactionType.Expense,
-        },
-      },
-      {
-        query: CategoriesSpendingPieDocument,
-        variables: {
-          date: null,
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: [],
-          type: TransactionType.Income,
-        },
-      },
-      {
-        query: TransactionSpendingFlowDocument,
-        variables: {
-          date: null,
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: [],
-        },
-      },
-      {
-        query: CategoriesSpendingFlowDocument,
-        variables: {
-          date: null,
-          walletIds: wallets.map((wallet: Wallet) => wallet.id),
-          categoryIds: [],
-        },
-      },
-    ];
-
-    mainPageCharts.forEach((chart: any) => {
-      result.push(chart);
-    });
-
-    return result;
-  };
 
   const [deleteCategory] = useDeleteCategoryMutation({
     onCompleted() {
       if (onDelete) {
         onDelete();
       }
-      setCategoryUpdate();
+      
       showSuccessNotification(t("Category deleted successfully!"));
     },
     onError() {
@@ -160,7 +89,6 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
       {
         query: WalletsDocument,
       },
-      ...getRefetchQueries(),
     ],
   });
 
@@ -184,15 +112,6 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
     }
   }, [setSelectedRow, showConfirm, setEditModalIsOpen]);
 
-  const currencyFormat = useCallback(
-    (value: number) => formatCurrency(value),
-    [formatCurrency]
-  );
-  const transactionColor = useCallback(
-    (row: any) => (row.balance < 0 ? "red" : "green"),
-    []
-  );
-
   const columns = [
     {
       type: "color",
@@ -207,23 +126,6 @@ const CategoriesTable = ({ categories, onClick, onEdit, onDelete }: Props) => {
       label: t("Name"),
       minWidth: 100,
       align: "left",
-    },
-    {
-      type: "number",
-      id: "transactionsCount",
-      label: t("Records"),
-      minWidth: 100,
-      align: "center",
-    },
-    {
-      type: "number",
-      id: "balance",
-      label: t("Balance"),
-      minWidth: 100,
-      align: "center",
-      prefix: "BGN",
-      format: currencyFormat,
-      color: transactionColor,
     },
     {
       type: "actions",

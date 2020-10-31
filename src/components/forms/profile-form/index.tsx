@@ -79,7 +79,7 @@ const ProfileForm = ({ user, onComplete, onError }: Props): JSX.Element => {
         email: user?.email ?? "",
         firstName: user?.firstName ?? "",
         lastName: user?.lastName ?? "",
-        currency: user?.currency ?? "",
+        currency: user?.currency && currencies.length ? user?.currency : "",
         language: user?.language ?? "",
       }}
       validationSchema={schema}

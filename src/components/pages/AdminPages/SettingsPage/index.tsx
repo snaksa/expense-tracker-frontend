@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Helmet } from "react-helmet";
 import { gql } from "apollo-boost";
 import { Box, Grid } from "@material-ui/core";
 import { useCategoriesQuery, useWalletsQuery, useLabelsQuery, useCurrentUserQuery } from "api";
 import useTranslations from "translations";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import WalletsTable from "components/tables/wallets-table";
 import CategoriesTable from "components/tables/categories-table";
 import LabelsTable from "components/tables/labels-table";
@@ -20,12 +19,6 @@ const SettingsPage = () => {
   const classes = useStyles();
   const { t } = useTranslations();
 
-  const {
-    lastTransactionAction,
-    lastCategoryAction,
-    lastWalletAction,
-  } = useUpdateDetectionContext();
-
   const [newCategoryModalIsOpen, setNewCategoryModalIsOpen] = useState(false);
   const showNewCategoryModal = useCallback(() => setNewCategoryModalIsOpen(true), []);
   const hideNewCategoryModal = useCallback(() => setNewCategoryModalIsOpen(false), []);
@@ -40,7 +33,6 @@ const SettingsPage = () => {
 
   const {
     data: categoriesData,
-    refetch: refetchCategories,
   } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
 
@@ -52,10 +44,6 @@ const SettingsPage = () => {
 
   const { data: currentUserData } = useCurrentUserQuery();
   const currentUser = currentUserData?.me ?? null;
-
-  useEffect(() => {
-    refetchCategories();
-  }, [lastTransactionAction, lastCategoryAction, lastWalletAction, refetchCategories]);
 
   return (
     <Box className={classes.main} p={10}>
@@ -135,8 +123,6 @@ SettingsPage.fragment = gql`
       id
       name
       color
-      transactionsCount
-      balance
       transactions {
         id
         value

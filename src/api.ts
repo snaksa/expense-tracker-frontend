@@ -618,7 +618,7 @@ export type CategoriesQuery = (
   { __typename?: 'Query' }
   & { categories: Maybe<Array<Maybe<(
     { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'name' | 'color' | 'transactionsCount' | 'balance'>
+    & Pick<Category, 'id' | 'name' | 'color'>
     & { transactions: Maybe<Array<Maybe<(
       { __typename?: 'Transaction' }
       & Pick<Transaction, 'id' | 'value' | 'type' | 'date'>
@@ -1372,8 +1372,6 @@ export const CategoriesDocument = gql`
     id
     name
     color
-    transactionsCount
-    balance
     transactions {
       id
       value

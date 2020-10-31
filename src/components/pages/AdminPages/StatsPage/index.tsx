@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import Chart from "react-google-charts";
-import moment from "moment";
 import { Box, Grid } from "@material-ui/core";
 import {
   useWalletsQuery,
@@ -26,11 +25,13 @@ import Loader from "components/core/loader";
 import useStyles from "./styles";
 import DatePicker from "components/forms/fields/datepicker";
 import DateUtils, { Range } from "utils/dateUtils";
+import useChartsFormatter from "services/charts-formatter";
 
 const StatsPage = () => {
   const classes = useStyles();
   const { getCurrency, formatCurrency } = useCurrencyFormatter();
   const { t } = useTranslations();
+  const { formatTransactionSpendingFlow, formatCategoriesSpendingPie, formatCategoriesSpendingFlow } = useChartsFormatter();
 
   const [startDate, setStartDate] = useState(DateUtils.calculateBackDate(Range.Last7Days));
   const [endDate, setEndDate] = useState(DateUtils.getToday());
@@ -102,14 +103,6 @@ const StatsPage = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
-  let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
-  flowChart = flowChart.map((row: any) => [
-    moment.utc(row[0]).toDate(),
-    parseFloat(row[1]),
-  ]);
-  const chartData = [flowColumns, ...flowChart];
-
   const {
     data: spendingQueryData,
     refetch: refetchSpendingPie,
@@ -125,14 +118,6 @@ const StatsPage = () => {
     },
     fetchPolicy: "cache-and-network",
   });
-
-  const spendingData: any = {
-    header: spendingQueryData?.categoriesSpendingPieChart?.header ?? [],
-    colors: spendingQueryData?.categoriesSpendingPieChart?.colors ?? [],
-    data: (
-      spendingQueryData?.categoriesSpendingPieChart?.data ?? []
-    ).map((row: any) => [row[0], parseFloat(row[1])]),
-  };
 
   const {
     data: incomeQueryData,
@@ -150,14 +135,6 @@ const StatsPage = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  const incomeData: any = {
-    header: incomeQueryData?.categoriesSpendingPieChart?.header ?? [],
-    colors: incomeQueryData?.categoriesSpendingPieChart?.colors ?? [],
-    data: (
-      incomeQueryData?.categoriesSpendingPieChart?.data ?? []
-    ).map((row: any) => [row[0], parseFloat(row[1])]),
-  };
-
   const {
     data: spendingFlowQueryData,
     refetch: refetchSpendingFlow,
@@ -173,19 +150,10 @@ const StatsPage = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  const spendingCategoryFlowData: any = {
-    header: spendingFlowQueryData?.categoriesSpendingFlow?.header ?? [],
-    colors: spendingFlowQueryData?.categoriesSpendingFlow?.colors ?? [],
-    data: (spendingFlowQueryData?.categoriesSpendingFlow?.data ?? []).map(
-      (row: any) => {
-        const result: any = [moment.utc(row[0]).toDate()];
-        for (let i = 1; i < row.length; i++) {
-          result.push(parseFloat(row[i]));
-        }
-        return result;
-      }
-    ),
-  };
+  const transactionSpendingFlowData = formatTransactionSpendingFlow(spendingFlowData);
+  const spendingData: any = formatCategoriesSpendingPie(spendingQueryData);
+  const incomeData: any = formatCategoriesSpendingPie(incomeQueryData);
+  const spendingCategoryFlowData: any = formatCategoriesSpendingFlow(spendingFlowQueryData);
 
   const totalSpent = useMemo(() => {
     let total = 0;
@@ -258,12 +226,12 @@ const StatsPage = () => {
           <Grid container direction='row' spacing={5} justify='flex-start'>
             <Grid item xs={12} md={2} lg={2} xl={2}>
               <SummaryBox responsiveHeight={true} header={t('Income')} centerHeader={true}>
-                <Box mt={4} textAlign='center' style={{color: 'green'}}>{formatCurrency(totalIncome)}</Box>
+                <Box mt={4} textAlign='center' style={{ color: 'green' }}>{formatCurrency(totalIncome)}</Box>
               </SummaryBox>
             </Grid>
             <Grid item xs={12} md={2} lg={2} xl={2}>
               <SummaryBox responsiveHeight={true} header={t('Spent')} centerHeader={true}>
-                <Box mt={4} textAlign='center' style={{color: 'red'}}>{formatCurrency(totalSpent)}</Box>
+                <Box mt={4} textAlign='center' style={{ color: 'red' }}>{formatCurrency(totalSpent)}</Box>
               </SummaryBox>
             </Grid>
           </Grid>
@@ -347,8 +315,8 @@ const StatsPage = () => {
                       chartType="AreaChart"
                       loader={<div></div>}
                       data={
-                        chartData.length > 1
-                          ? chartData
+                        transactionSpendingFlowData.length > 1
+                          ? transactionSpendingFlowData
                           : [
                             ["", ""],
                             ["", 0],

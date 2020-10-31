@@ -17,7 +17,6 @@ import {
   useWalletsQuery,
 } from "api";
 import { useNotificationContext } from "services/notification-provider";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import useTranslations from "translations";
 import Button from "components/core/button";
 import TextField from "components/forms/fields/text-field";
@@ -46,8 +45,6 @@ const CategoryForm = ({
     showErrorNotification,
   } = useNotificationContext();
 
-  const { setCategoryUpdate } = useUpdateDetectionContext();
-
   const { data: walletsData } = useWalletsQuery();
   const wallets: any = walletsData?.wallets ?? [];
 
@@ -61,7 +58,6 @@ const CategoryForm = ({
   const [createCategory] = useCreateCategoryMutation({
     onCompleted() {
       showSuccessNotification(t("Category created succesfully!"));
-      setCategoryUpdate();
       onComplete();
     },
     onError() {
@@ -96,7 +92,6 @@ const CategoryForm = ({
   const [updateCategory] = useUpdateCategoryMutation({
     onCompleted() {
       showSuccessNotification(t("Category updated succesfully!"));
-      setCategoryUpdate();
       onComplete();
     },
     onError() {

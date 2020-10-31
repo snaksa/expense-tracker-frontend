@@ -11,7 +11,6 @@ import {
 } from "api";
 import useTranslations from "translations";
 import { useNotificationContext } from "services/notification-provider";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import ColorPicker from "components/forms/fields/color-picker";
 import Button from "components/core/button";
 import TextField from "components/forms/fields/text-field";
@@ -35,8 +34,6 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
     showErrorNotification,
   } = useNotificationContext();
 
-  const { setWalletUpdate } = useUpdateDetectionContext();
-
   const schema = useCallback(() => {
     return Yup.object().shape({
       name: Yup.string().required(t("Enter wallet name")),
@@ -48,7 +45,6 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
   const [createWallet] = useCreateWalletMutation({
     onCompleted() {
       showSuccessNotification(t("Wallet created succesfully!"));
-      setWalletUpdate();
       onComplete();
     },
     onError() {
@@ -83,7 +79,6 @@ const WalletForm = ({ wallet, onComplete, onError }: Props): JSX.Element => {
   const [updateWallet] = useUpdateWalletMutation({
     onCompleted() {
       showSuccessNotification(t("Wallet updated succesfully!"));
-      setWalletUpdate();
       onComplete();
     },
     onError() {

@@ -3,15 +3,12 @@ import { Box } from "@material-ui/core";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@material-ui/icons";
 import {
   WalletsDocument,
-  TransactionsDocument,
   WalletsQuery,
   useDeleteWalletMutation,
   Wallet,
 } from "api";
 import useTranslations from "translations";
 import { useNotificationContext } from "services/notification-provider";
-import { useSharedDataContext } from "services/shared-data-provider";
-import { useUpdateDetectionContext } from "services/update-detection-provider";
 import Table from "components/core/table";
 import ConfirmationDialog from "components/core/confirmation-dialog";
 import Modal from "components/core/modal";
@@ -34,26 +31,10 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
   const showEditModal = useCallback(() => setEditModalIsOpen(true), []);
   const hideEditModal = useCallback(() => setEditModalIsOpen(false), []);
 
-  const { setWalletUpdate } = useUpdateDetectionContext();
-
-  const { usedTranasctionParams } = useSharedDataContext();
-
   const {
     showSuccessNotification,
     showErrorNotification,
   } = useNotificationContext();
-
-  const getRefetchQueries = () => {
-    const result: any = [];
-    for (let params of usedTranasctionParams) {
-      result.push({
-        query: TransactionsDocument,
-        variables: params,
-      });
-    }
-
-    return result;
-  };
 
   const [deleteWallet] = useDeleteWalletMutation({
     onCompleted() {
@@ -61,7 +42,6 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
         onDelete();
       }
 
-      setWalletUpdate();
       showSuccessNotification(t("Wallet deleted successfully!"));
     },
     onError() {
@@ -91,7 +71,6 @@ const WalletsTable = ({ wallets, onClick, onEdit, onDelete }: Props) => {
         },
       });
     },
-    refetchQueries: getRefetchQueries(),
   });
 
   const handleDelete = useCallback(() => {

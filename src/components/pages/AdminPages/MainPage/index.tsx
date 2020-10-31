@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import { Box, Grid } from "@material-ui/core";
 import { gql } from "apollo-boost";
 import Chart from "react-google-charts";
-import moment from "moment";
 import {
   useWalletsQuery,
   Wallet,
@@ -23,11 +22,13 @@ import SummaryBox from "components/core/summary-box";
 import Loader from "components/core/loader";
 import useStyles from "./styles";
 import DateUtils from "utils/dateUtils";
+import useChartsFormatter from "services/charts-formatter";
 
 const MainPage = () => {
   const classes = useStyles();
   const { getCurrency } = useCurrencyFormatter();
   const { t } = useTranslations();
+  const { formatTransactionSpendingFlow, formatCategoriesSpendingPie, formatCategoriesSpendingFlow } = useChartsFormatter();
 
   const { data: categoriesData } = useCategoriesQuery();
   const categories: any = categoriesData?.categories ?? [];
@@ -51,14 +52,6 @@ const MainPage = () => {
     },
   });
 
-  const flowColumns = spendingFlowData?.transactionSpendingFlow?.header ?? [];
-  let flowChart: any = spendingFlowData?.transactionSpendingFlow?.data ?? [];
-  flowChart = flowChart.map((row: any) => [
-    moment.utc(row[0]).toDate(),
-    parseFloat(row[1]),
-  ]);
-  const chartData = [flowColumns, ...flowChart];
-
   const {
     data: spendingQueryData,
     refetch: refetchSpendingPie,
@@ -75,13 +68,6 @@ const MainPage = () => {
     },
   });
 
-  const spendingData: any = {
-    header: spendingQueryData?.categoriesSpendingPieChart?.header ?? [],
-    colors: spendingQueryData?.categoriesSpendingPieChart?.colors ?? [],
-    data: (
-      spendingQueryData?.categoriesSpendingPieChart?.data ?? []
-    ).map((row: any) => [row[0], parseFloat(row[1])]),
-  };
 
   const {
     data: incomeQueryData,
@@ -99,14 +85,6 @@ const MainPage = () => {
     },
   });
 
-  const incomeData: any = {
-    header: incomeQueryData?.categoriesSpendingPieChart?.header ?? [],
-    colors: incomeQueryData?.categoriesSpendingPieChart?.colors ?? [],
-    data: (
-      incomeQueryData?.categoriesSpendingPieChart?.data ?? []
-    ).map((row: any) => [row[0], parseFloat(row[1])]),
-  };
-
   const {
     data: spendingFlowQueryData,
     refetch: refetchSpendingFlow,
@@ -122,19 +100,10 @@ const MainPage = () => {
     },
   });
 
-  const spendingCategoryFlowData: any = {
-    header: spendingFlowQueryData?.categoriesSpendingFlow?.header ?? [],
-    colors: spendingFlowQueryData?.categoriesSpendingFlow?.colors ?? [],
-    data: (spendingFlowQueryData?.categoriesSpendingFlow?.data ?? []).map(
-      (row: any) => {
-        const result: any = [moment.utc(row[0]).toDate()];
-        for (let i = 1; i < row.length; i++) {
-          result.push(parseFloat(row[i]));
-        }
-        return result;
-      }
-    ),
-  };
+  const transactionSpendingFlowData = formatTransactionSpendingFlow(spendingFlowData);
+  const spendingData: any = formatCategoriesSpendingPie(spendingQueryData);
+  const incomeData: any = formatCategoriesSpendingPie(incomeQueryData);
+  const spendingCategoryFlowData: any = formatCategoriesSpendingFlow(spendingFlowQueryData);
 
   const updateCharts = () => {
     refetchReport();
@@ -181,12 +150,12 @@ const MainPage = () => {
                       chartType="AreaChart"
                       loader={<div></div>}
                       data={
-                        chartData.length > 1
-                          ? chartData
+                        transactionSpendingFlowData.length > 1
+                          ? transactionSpendingFlowData
                           : [
-                              ["", ""],
-                              ["", 0],
-                            ]
+                            ["", ""],
+                            ["", 0],
+                          ]
                       }
                       formatters={[
                         {
