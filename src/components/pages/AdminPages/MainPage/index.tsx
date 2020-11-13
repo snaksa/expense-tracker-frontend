@@ -136,12 +136,12 @@ const MainPage = () => {
                   </Box>
                 </Grid>
 
-                <Grid item xs={12} md={12} lg={6} xl={3}>
+                <Grid item xs={12} md={6} lg={6} xl={3}>
                   <SummaryBox header={t("Spending")}>
                     <PieChart data={spendingData} />
                   </SummaryBox>
                 </Grid>
-                <Grid item xs={12} md={6} lg={12} xl={6}>
+                <Grid item xs={12} md={12} lg={12} xl={6}>
                   <SummaryBox header={t("Spending flow")}>
                     <Loader loading={loading} />
                     <Chart
