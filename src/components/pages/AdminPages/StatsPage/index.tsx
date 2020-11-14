@@ -306,7 +306,7 @@ const StatsPage = () => {
           <Grid container direction="column" spacing={5}>
             <Grid item xs={12} md={12} lg={12}>
               <Grid container spacing={5}>
-                <Grid item xs={12} md={6} lg={9}>
+                <Grid item xs={12} md={12} lg={9}>
                   <SummaryBox header={t("Spending flow")}>
                     <Loader loading={loading} />
                     <Chart

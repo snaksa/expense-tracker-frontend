@@ -87,7 +87,7 @@ const TransactionsPage = () => {
       </Grid>
       <Box paddingBottom={5}></Box>
       <Grid container spacing={5}>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={12} lg={6}>
           <TransactionsTable
             startDate={DateUtils.toUTCString(startDate)}
             endDate={DateUtils.toUTCString(endDate.set({ hour: 23, minute: 59, second: 59, millisecond: 59 }))}
@@ -97,7 +97,7 @@ const TransactionsPage = () => {
             onEdit={refetch}
           />
         </Grid>
-        <Grid item xs={12} md={6} lg={6}>
+        <Grid item xs={12} md={12} lg={6}>
           <SummaryBox header={t("Spending flow")}>
             <Loader loading={loading} />
             <Chart
