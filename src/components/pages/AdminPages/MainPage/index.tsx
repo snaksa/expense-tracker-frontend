@@ -21,7 +21,7 @@ import LineChart from "components/charts/line-chart";
 import SummaryBox from "components/core/summary-box";
 import Loader from "components/core/loader";
 import useStyles from "./styles";
-import DateUtils from "utils/dateUtils";
+import DateUtils, { Range } from "utils/dateUtils";
 import useChartsFormatter from "services/charts-formatter";
 
 const MainPage = () => {
@@ -43,7 +43,7 @@ const MainPage = () => {
   } = useTransactionSpendingFlowQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      startDate: null,
+      startDate: DateUtils.toUTCString(DateUtils.calculateBackDate(Range.Last7Days)),
       endDate: null,
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
@@ -58,7 +58,7 @@ const MainPage = () => {
   } = useCategoriesSpendingPieQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      startDate: null,
+      startDate: DateUtils.toUTCString(DateUtils.calculateBackDate(Range.Last7Days)),
       endDate: null,
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
@@ -75,7 +75,7 @@ const MainPage = () => {
   } = useCategoriesSpendingPieQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      startDate: null,
+      startDate: DateUtils.toUTCString(DateUtils.calculateBackDate(Range.Last7Days)),
       endDate: null,
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
@@ -91,7 +91,7 @@ const MainPage = () => {
   } = useCategoriesSpendingFlowQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      startDate: null,
+      startDate: DateUtils.toUTCString(DateUtils.calculateBackDate(Range.Last7Days)),
       endDate: null,
       timezone: DateUtils.getTimezone(),
       walletIds: wallets.map((wallet: Wallet) => wallet.id),
