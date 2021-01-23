@@ -7,6 +7,7 @@ import {
   Receipt as ReceiptIcon,
   BarChart as BarChartIcon,
   Settings as SettingsIcon,
+  MonetizationOn as BudgetsIcon,
 } from "@material-ui/icons";
 import { useCurrentUserQuery } from 'api';
 import useTranslations from "translations";
@@ -21,6 +22,7 @@ import SettingsPage from "./SettingsPage";
 import TransactionsPage from "./TransactionsPage";
 import StatsPage from "./StatsPage";
 import SplashScreen from "../SplashScreen/splash-screen";
+import BudgetsPage from "./BudgetsPage";
 
 const AdminPage: React.FunctionComponent = (): JSX.Element => {
   const { t } = useTranslations();
@@ -70,6 +72,11 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
                 icon: <BarChartIcon />,
               },
               {
+                label: t("Budgets"),
+                to: "/admin/budgets",
+                icon: <BudgetsIcon />,
+              },
+              {
                 label: t("Settings"),
                 to: "/admin/settings",
                 icon: <SettingsIcon />,
@@ -82,6 +89,7 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
             <Route path="/admin/records" component={TransactionsPage} />
             <Route path="/admin/settings" component={SettingsPage} />
             <Route path="/admin/stats" component={StatsPage} />
+            <Route path="/admin/budgets" component={BudgetsPage} />
             <Route path="/admin" component={MainPage} />
           </Switch>
         }
