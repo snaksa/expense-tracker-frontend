@@ -60,7 +60,11 @@ const AdminPage: React.FunctionComponent = (): JSX.Element => {
             onOptionClick={hideSidebar}
             isVisible={isSidebarVisible}
             options={[
-              { label: t("Dashboard"), to: "/admin", icon: <HomeIcon /> },
+              {
+                label: t("Dashboard"),
+                to: "/admin",
+                icon: <HomeIcon />
+              },
               {
                 label: t("Records"),
                 to: "/admin/records",

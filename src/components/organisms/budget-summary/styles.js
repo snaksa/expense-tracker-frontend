@@ -18,6 +18,9 @@ const useStyles = makeStyles(theme => ({
             }
         }
     },
+    content: {
+        padding: 8
+    },
     header: {
         borderBottom: '1px solid #CCC'
     },

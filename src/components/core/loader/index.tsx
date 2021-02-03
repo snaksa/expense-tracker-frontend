@@ -9,7 +9,7 @@ export interface Props {
 const Loader: React.FunctionComponent<Props> = ({
   loading,
 }: Props): JSX.Element => {
-  const classes = useStyles({});
+  const classes = useStyles();
 
   if (!loading) {
     return <Box></Box>;

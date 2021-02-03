@@ -4,11 +4,11 @@ import MaterialButton from "@material-ui/core/Button";
 interface Props {
   children?: any;
   onClick?: any;
-  style?: any;
-  type?: any;
-  color?: any;
-  variant?: any;
-  className?: any;
+  style?: object;
+  type?: 'submit';
+  color?:  'primary' | 'secondary';
+  variant?: 'outlined' | 'contained';
+  className?: string;
   disabled?: boolean;
 }
 

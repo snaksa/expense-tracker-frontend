@@ -26,15 +26,15 @@ const BudgetSummary = ({ budget }: Props) => {
   const closeEditModal = useCallback(() => setEditModalIsOpen(false), []);
 
   let percents = budget.spent / budget.value * 100;
-  if(percents > 100) {
+  if (percents > 100) {
     percents = 100;
   }
 
   let color = 'grey';
-  if(percents <= 30) {
+  if (percents <= 30) {
     color = 'green';
   }
-  else if(percents <= 60) {
+  else if (percents <= 60) {
     color = 'yellow';
   }
   else {
@@ -45,11 +45,11 @@ const BudgetSummary = ({ budget }: Props) => {
     <Box onClick={openEditModal} className={classes.box}>
       <Grid container className={classes.main} direction="column">
         <Grid item>
-          <Box style={{backgroundColor: color, width: `${percents}%`, height: '16px'}}></Box>
+          <Box style={{ backgroundColor: color, width: `${percents}%`, height: '16px' }}></Box>
         </Grid>
         <Grid item>
-          <Box p={1}>
-            <Title variant="subtitle2">{budget.name}</Title>
+          <Box p={1} className={classes.content}>
+            <Title variant="subtitle2" >{budget.name}</Title>
             <Title variant="subtitle1">{formatCurrency(budget.spent)} / {formatCurrency(budget.value)}</Title>
           </Box>
         </Grid>
