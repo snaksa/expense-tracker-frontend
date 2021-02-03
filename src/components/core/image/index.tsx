@@ -12,7 +12,7 @@ export interface Props {
 
 const Image: React.FunctionComponent<Props> = (props): JSX.Element => {
   const { src, alt, borderColor, borderWidth, borderStyle, maxWidth } = props;
-  const classes = useStyles({});
+  const classes = useStyles();
 
   return (
     <img
