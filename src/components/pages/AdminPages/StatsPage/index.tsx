@@ -53,10 +53,6 @@ const StatsPage = () => {
     setChosenWallets(wallets.map((wallet: Wallet) => wallet.id));
   }, [wallets]);
 
-  useEffect(() => {
-    setChosenCategories(categories.map((category: Category) => category.id));
-  }, [categories]);
-
   const onChosenWalletsClick = (walletId: number, isChecked: boolean) => {
     const a = [...chosenWallets];
     if (isChecked) {
