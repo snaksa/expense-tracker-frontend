@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import Chart from "react-google-charts";
 import { Box, Grid } from "@material-ui/core";
@@ -48,10 +48,6 @@ const StatsPage = () => {
 
   const { data } = useWalletsQuery();
   const wallets: any = data ? (data.wallets ? data.wallets : []) : [];
-
-  useEffect(() => {
-    setChosenWallets(wallets.map((wallet: Wallet) => wallet.id));
-  }, [wallets]);
 
   const onChosenWalletsClick = (walletId: number, isChecked: boolean) => {
     const a = [...chosenWallets];
