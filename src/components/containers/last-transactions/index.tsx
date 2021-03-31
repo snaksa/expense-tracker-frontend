@@ -10,7 +10,7 @@ import {
 } from "api";
 import useTranslations from "translations";
 import SummaryBox from "components/core/summary-box";
-import TransactionSummary from "components/organisms/transaction-summary";
+import TransactionSummary from "components/containers/transaction-summary";
 import Modal from "components/core/modal";
 import TransactionForm from "components/forms/transaction-form/form";
 import Loader from "components/core/loader";

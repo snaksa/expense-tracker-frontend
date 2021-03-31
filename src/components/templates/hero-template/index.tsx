@@ -1,6 +1,6 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import NavigationBar from "components/organisms/navigation-bar";
+import NavigationBar from "components/containers/navigation-bar";
 import useStyles from "./styles";
 
 const HeroTemplate = ({ hero }: any) => {

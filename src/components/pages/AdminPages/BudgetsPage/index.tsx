@@ -8,7 +8,7 @@ import useTranslations from "translations";
 import BudgetFormWrapper from "components/forms/budget-form";
 import Modal from "components/core/modal";
 import useStyles from "./styles";
-import BudgetSummary from "components/organisms/budget-summary";
+import BudgetSummary from "components/containers/budget-summary";
 
 const BudgetsPage = () => {
   const classes = useStyles();

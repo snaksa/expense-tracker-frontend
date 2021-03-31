@@ -13,7 +13,7 @@ import useTranslations from "translations";
 import { useNotificationContext } from "services/notification-provider";
 import useCurrencyFormatter from "services/currency-formatter";
 import Modal from "components/core/modal";
-import WalletSummary from "components/organisms/wallet-summary";
+import WalletSummary from "components/containers/wallet-summary";
 import Button from "components/core/button";
 import TextField from "components/forms/fields/text-field";
 import ColorPicker from "components/forms/fields/color-picker";

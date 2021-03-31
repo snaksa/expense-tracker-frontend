@@ -14,8 +14,8 @@ import {
 } from "api";
 import useTranslations from "translations";
 import useCurrencyFormatter from "services/currency-formatter";
-import WalletsCollection from "components/organisms/wallets-collection";
-import LastTransactions from "components/organisms/last-transactions";
+import WalletsCollection from "components/containers/wallets-collection";
+import LastTransactions from "components/containers/last-transactions";
 import PieChart from "components/charts/pie-chart";
 import LineChart from "components/charts/line-chart";
 import SummaryBox from "components/core/summary-box";

@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Grid, Box } from "@material-ui/core";
 import { Helmet } from "react-helmet";
 import useTranslations from "translations";
-import NavigationBar from "components/organisms/navigation-bar";
+import NavigationBar from "components/containers/navigation-bar";
 import Heading from "components/core/heading";
 import Image from "components/core/image";
 import Button from "components/core/button";
@@ -282,7 +282,7 @@ const LandingPage = () => {
         padding={10}
         style={{ textAlign: "center", backgroundColor: "#f6f6f6" }}
       >
-        Copyright 2020 | Sinan Shaban
+        Copyright 2021 | Sinan Shaban
       </Box>
     </Box>
   );

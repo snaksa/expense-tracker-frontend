@@ -15,7 +15,7 @@ import { useAuthDataContext } from "services/auth-provider";
 import { useNotificationContext } from "services/notification-provider";
 import Notification from "components/core/notification";
 import Sidebar from "components/core/sidebar";
-import HeaderMenu from "components/organisms/admin-header-menu";
+import HeaderMenu from "components/containers/admin-header-menu";
 import AdminTemplate from "components/templates/admin-template";
 import MainPage from "./MainPage";
 import SettingsPage from "./SettingsPage";
